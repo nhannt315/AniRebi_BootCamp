@@ -11,9 +11,6 @@ environment.loaders.append('js.erb', {
   }
 });
 
-
-
-
 environment.loaders.append('less', {
   test: /\.less$/,
   use: [{
@@ -27,8 +24,6 @@ environment.loaders.append('less', {
     }
   }]
 });
-
-
 
 environment.loaders.get('sass').use.splice(-1, 0, {
   loader: 'resolve-url-loader',
