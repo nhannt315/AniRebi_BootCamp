@@ -12,7 +12,7 @@ Step to setup and run project
 
 * gem install foreman
 
-* yarn install
+* npm install (or) yarn install
 
 * foreman start -p 3000
 
