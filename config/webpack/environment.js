@@ -12,6 +12,8 @@ environment.loaders.append('js.erb', {
 });
 
 
+
+
 environment.loaders.append('less', {
   test: /\.less$/,
   use: [{
@@ -26,11 +28,24 @@ environment.loaders.append('less', {
   }]
 });
 
+
+
 environment.loaders.get('sass').use.splice(-1, 0, {
   loader: 'resolve-url-loader',
   options: {
     attempts: 1
   }
+});
+
+environment.loaders.append('sass', {
+  test: /\.scss$/,
+  use: [{
+    loader: 'style-loader'
+  }, {
+    loader: 'css-loader'
+  }, {
+    loader: 'sass-loader'
+  }]
 });
 
 module.exports = environment;
