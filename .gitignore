@@ -33,3 +33,6 @@ yarn-debug.log*
 
 /.idea
 /config/database.yml
+/config/application.yml
+/config/credentials.yml
+/test
