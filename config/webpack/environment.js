@@ -11,6 +11,33 @@ environment.loaders.append('js.erb', {
   }
 });
 
+environment.loaders.append('babel',{
+  test: /\.js(\.erb)?$/,
+  exclude: /node_modules/,
+  loader: 'babel-loader',
+  options: {
+    presets: [
+      'es2015',
+      'stage-0'
+    ]
+  }
+});
+
+environment.loaders.append('react', {
+  test: /\.(js|jsx)?(\.erb)?$/,
+  exclude: /node_modules/,
+  loader: 'babel-loader',
+  options: {
+    presets: [
+      'es2015',
+      'react',
+      'stage-0'
+    ]
+  }
+});
+
+
+
 environment.loaders.append('less', {
   test: /\.less$/,
   use: [{
