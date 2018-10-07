@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_06_061030) do
+ActiveRecord::Schema.define(version: 2018_10_07_040029) do
 
   create_table "anime_genres", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "anime_id"
@@ -22,10 +22,15 @@ ActiveRecord::Schema.define(version: 2018_10_06_061030) do
   create_table "animes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.text "info"
-    t.boolean "status"
+    t.string "status"
     t.float "rating"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "title_english"
+    t.string "title_native"
+    t.string "banner"
+    t.string "cover_large"
+    t.string "cover_medium"
   end
 
   create_table "genres", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -50,20 +55,6 @@ ActiveRecord::Schema.define(version: 2018_10_06_061030) do
     t.float "rating"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.datetime "birthday"
-    t.string "password_digest"
-    t.boolean "admin", default: false
-    t.string "reset_digest"
-    t.string "activation_digest"
-    t.boolean "activated", default: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_users_on_email"
   end
 
 end
