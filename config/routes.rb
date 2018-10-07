@@ -8,4 +8,5 @@ Rails.application.routes.draw do
     token_validations:  'devise_token_auth/token_validations'
   }
   root to: "pages#root"
+  get "*path", to: "pages#root"
 end
