@@ -45,7 +45,7 @@ export function* loginSaga(action) {
     yield put(actions.loginSuccess(userData, tokenData));
     yield put(actions.finishProcess());
   } catch (error) {
-    put(actions.loginFailure(error.response));
+    yield put(actions.loginFailure(error.response.data.errors));
   }
 }
 
