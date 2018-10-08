@@ -33,7 +33,8 @@ namespace :crawl do
           coverImage {
             large,
             medium
-          }
+          },
+          genres
         }
       }
     GRAPHQL
@@ -55,7 +56,16 @@ namespace :crawl do
         cover_medium = result.data.media.cover_image.medium
         value = { name: name, info: info, status: status, rating: rating, title_english: title_english,
         title_native: title_native, banner: banner, cover_large: cover_large, cover_medium: cover_medium }
-        Anime.create(value)
+        anime = Anime.create(value)
+
+        result.data.media.genres.each do |item|
+          genre = Genre.find_by(name: item)
+          if genre.nil?
+            genre = Genre.create(name: item)
+          end
+          anime.anime_genres.create(genre: genre)
+        end
+
         count += 1
       end
       i += 1
