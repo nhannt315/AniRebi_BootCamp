@@ -9,9 +9,8 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-
-ActiveRecord::Schema.define(version: 2018_10_07_040029) do
-
+ActiveRecord::Schema.define(version: 2018_10_06_182615) do
+  
   create_table "anime_genres", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "anime_id"
     t.integer "genre_id"
@@ -87,5 +86,4 @@ ActiveRecord::Schema.define(version: 2018_10_07_040029) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
-
 end

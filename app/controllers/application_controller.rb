@@ -1,9 +1,4 @@
 class ApplicationController < ActionController::Base
+  protect_from_forgery with: :null_sessions, if: :devise_controller?
   include DeviseTokenAuth::Concerns::SetUserByToken
-  protect_from_forgery with: :exception, if: :verify_api
-
-  private
-  def verify_api
-    params[:controller].split('/')[0] != 'devise_token_auth'
-  end
 end
