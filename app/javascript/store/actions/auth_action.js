@@ -63,7 +63,7 @@ export const logoutSuccess = () => {
 
 export const logoutFail = () => {
   return {
-    type: actionTypes.LOGOUT_SUCCESS
+    type: actionTypes.LOGOUT_FAILURE
   };
 };
 
@@ -76,6 +76,12 @@ export const startProcess = () => {
 export const finishProcess = () => {
   return {
     type: actionTypes.FINISH_PROCESSING
+  };
+};
+
+export const authCheckState = () => {
+  return {
+    type: actionTypes.AUTH_CHECK_STATE
   };
 };
 

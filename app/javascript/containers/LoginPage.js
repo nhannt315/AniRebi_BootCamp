@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import {message} from 'antd';
 import {withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -15,10 +16,18 @@ class LoginPage extends Component {
     isAuthenticated: false
   };
 
+  componentDidMount(){
+    if(this.props.isAuthenticated){
+      this.props.history.push('/');
+    }
+  }
 
   componentDidUpdate(){
     if(this.props.isAuthenticated){
-      this.props.history.goBack();
+      this.props.history.push('/');
+    }
+    if(this.props.errors.length > 0){
+      // const messageContent =
     }
   }
 
@@ -47,7 +56,9 @@ const StyledDiv = styled.div`
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
+    errors: state.auth.errors,
+    isProcessing: state.auth.isProcessing
   };
 };
 
@@ -59,7 +70,10 @@ const mapDispatchToProps = dispatch => {
 
 LoginPage.propTypes = {
   login: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired
+  isAuthenticated: PropTypes.bool.isRequired,
+  history: PropTypes.object,
+  errors: PropTypes.array,
+  isProcessing: PropTypes.bool
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginPage));

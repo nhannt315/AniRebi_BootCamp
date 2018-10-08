@@ -1,24 +1,34 @@
 import React, { Component } from 'react';
 import { Switch } from 'react-router';
-import { Route } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 import { Layout } from 'antd';
 
 import GenrePage from './containers/GenrePage';
 import AnimePage from './containers/AnimePage';
 import HomePage from './containers/HomePage';
 import SiteMenu from './components/SiteMenu';
-
-import './App.scss';
 import NotFoundPage from './containers/NotFoundPage';
 import LoginPage from './containers/LoginPage';
 import RegisterPage from './containers/RegisterPage';
-
+import './App.scss';
+import * as actions from './store/actions';
 
 class App extends Component {
+
+  componentDidMount(){
+    this.props.tryAutoSignIn();
+  }
+
   render() {
     return (
       <Layout className="App">
-        <SiteMenu />
+        <SiteMenu
+          isAuthenticated={this.props.isAuthenticated}
+          userData={this.props.userData}
+          logout={this.props.logout}
+        />
         <div className="main-page">
           <Switch>
             <Route exact path="/" to={HomePage} render={() => <HomePage />} />
@@ -35,4 +45,26 @@ class App extends Component {
   }
 }
 
-export default App;
+App.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+  userData: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired,
+  tryAutoSignIn: PropTypes.func.isRequired
+};
+
+
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.auth.isAuthenticated,
+    userData: state.auth.userData
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: () => dispatch(actions.logout()),
+    tryAutoSignIn: () => dispatch(actions.authCheckState())
+  };
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

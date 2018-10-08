@@ -4,7 +4,7 @@ const initialState = {
   isAuthenticated: false,
   userData: {},
   tokenData: {},
-  errors: {},
+  errors: [],
   isProcessing: false
 };
 
@@ -21,7 +21,8 @@ const reducer = (state = initialState, action) => {
     case actionTypes.SIGN_UP_FAILURE:
       return {...state, errors: action.errors};
     case actionTypes.LOGOUT_SUCCESS:
-      return {...state, isAuthenticated: false, userData: {}, tokenData: {}, errors: {}};
+    case actionTypes.LOGOUT_FAILURE:
+      return {...state, isAuthenticated: false, userData: {}, tokenData: {}, errors: []};
     default:
       return state;
   }

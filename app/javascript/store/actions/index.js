@@ -9,5 +9,6 @@ export {
   logoutSuccess,
   logoutFail,
   startProcess,
-  finishProcess
+  finishProcess,
+  authCheckState
 } from './auth_action';
