@@ -35,18 +35,18 @@ class LoginForm extends Component {
       <DivForm>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
-            {getFieldDecorator('userName', {
-              rules: [{required: true, message: 'Please input your username!'}],
+            {getFieldDecorator('email', {
+              rules: [{required: true, message: 'Please input your email!'}],
             })(
-              <Input prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}} />} placeholder="Username" />
+              <Input prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>} type="email" placeholder="Email"/>
             )}
           </FormItem>
           <FormItem>
             {getFieldDecorator('password', {
               rules: [{required: true, message: 'Please input your Password!'}],
             })(
-              <Input prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}} />} type="password"
-                placeholder="Password" />
+              <Input prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>} type="password"
+                     placeholder="Password"/>
             )}
           </FormItem>
           <FormItem style={{display: 'block', textAlign: 'center'}}>
