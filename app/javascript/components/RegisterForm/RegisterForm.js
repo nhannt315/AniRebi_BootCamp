@@ -149,7 +149,7 @@ class RegistrationForm extends Component {
               </span>
             )}
           >
-            {getFieldDecorator('nickname', {
+            {getFieldDecorator('name', {
               rules: [{required: true, message: 'Please input your nickname!', whitespace: true}],
             })(
               <Input />
@@ -159,7 +159,7 @@ class RegistrationForm extends Component {
             {...formItemLayout}
             label="Birthday"
           >
-            {getFieldDecorator('birth-day', config)(
+            {getFieldDecorator('birthDay', config)(
               <DatePicker />
             )}
           </FormItem>

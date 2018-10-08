@@ -15,10 +15,15 @@ class LoginPage extends Component {
     isAuthenticated: false
   };
 
+  componentDidMount(){
+    if(this.props.isAuthenticated){
+      this.props.history.push('/');
+    }
+  }
 
   componentDidUpdate(){
     if(this.props.isAuthenticated){
-      this.props.history.goBack();
+      this.props.history.push('/');
     }
   }
 
@@ -59,7 +64,8 @@ const mapDispatchToProps = dispatch => {
 
 LoginPage.propTypes = {
   login: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired
+  isAuthenticated: PropTypes.bool.isRequired,
+  history: PropTypes.object
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginPage));

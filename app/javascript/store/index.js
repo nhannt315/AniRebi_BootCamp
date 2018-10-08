@@ -1,6 +1,5 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
-import { routerReducer } from 'react-router-redux';
 
 import authReducer from './reducers/auth_reducer';
 import { watchAuth } from './sagas';
@@ -12,8 +11,7 @@ const composeEnhancers =
     : null || compose;
 
 const rootReducer = combineReducers({
-  auth: authReducer,
-  routing: routerReducer
+  auth: authReducer
 });
 
 const sagaMiddleware = createSagaMiddleware();
