@@ -17,10 +17,10 @@ export const loginSuccess = (userData, tokenData) => {
   };
 };
 
-export const loginFailure = error => {
+export const loginFailure = errors => {
   return {
     type: actionTypes.LOGIN_FAILURE,
-    errorMsg: error
+    errors: errors
   };
 };
 
@@ -42,10 +42,28 @@ export const signUpSuccess = (userData, tokenData) => {
   };
 };
 
-export const signUpFailure = error => {
+export const signUpFailure = errors => {
   return {
     type: actionTypes.SIGN_UP_FAILURE,
-    errorMsg: error
+    errors: errors
+  };
+};
+
+export const logout = () => {
+  return {
+    type: actionTypes.LOGOUT
+  };
+};
+
+export const logoutSuccess = () => {
+  return {
+    type: actionTypes.LOGIN_SUCCESS
+  };
+};
+
+export const logoutFail = () => {
+  return {
+    type: actionTypes.LOGOUT_SUCCESS
   };
 };
 
