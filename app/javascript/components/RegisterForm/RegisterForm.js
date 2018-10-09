@@ -9,9 +9,8 @@ const StyledForm = styled.div`
   width: 50vw;
   padding: 2rem 4rem 0 0;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 10%;
+  left: 27%;
   background-color: white;
   box-shadow: 0 4px 8px 1px;
 `;
@@ -86,7 +85,7 @@ class RegistrationForm extends Component {
     };
 
     return (
-      <StyledForm>
+      <StyledForm className="animated bounceInRight">
         <Form onSubmit={this.handleSubmit}>
           <FormItem
             {...formItemLayout}
