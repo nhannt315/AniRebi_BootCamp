@@ -61,13 +61,13 @@ class Navbar extends Component {
     }else{
       authDiv = (
         <ul className="main-nav">
-          <li>
-            <NavLink className="animating_link nav-links" activeClassName="nav-links--active" to="/login">
+          <li className="animating_link">
+            <NavLink className="nav-links" activeClassName="nav-links--active" to="/login">
               <Icon type="login" theme="outlined" /> Login
             </NavLink>
           </li>
-          <li>
-            <NavLink className="animating_link nav-links" activeClassName="nav-links--active" to="/register">
+          <li className="animating_link">
+            <NavLink className="nav-links" activeClassName="nav-links--active" to="/register">
               <Icon type="user" theme="outlined" /> Register
             </NavLink>
           </li>
@@ -82,18 +82,20 @@ class Navbar extends Component {
         </span>
         <Link className="logo" to="/">AniRebi</Link>
         <ul className={'main-nav ' + (showNavMobile ? 'active-nav' : '')}>
-          <li className="">
-            <NavLink className="nav-links animating_link"  to="/">
+          <li className="animating_link">
+            <NavLink className="nav-links" exact activeClassName="nav-links--active" to="/">
               <Icon type="home" /> Home
             </NavLink>
           </li>
-          <li>
-            <NavLink className="animating_link nav-links" activeClassName="nav-links--active" to="/anime">
+          <li className="animating_link">
+            <NavLink className="nav-links" activeClassName="nav-links--active" to="/anime">
               <Icon type="ordered-list" theme="outlined" /> Anime
             </NavLink>
           </li>
-          <li>
-            <NavLink className="animating_link nav-links" activeClassName="nav-links--active" to="/genre">Genre</NavLink>
+          <li className="animating_link">
+            <NavLink className="nav-links" activeClassName="nav-links--active" to="/genre">
+              <Icon type="book" theme="outlined" /> Genre
+            </NavLink>
           </li>
         </ul>
         <div className="spacer" />
