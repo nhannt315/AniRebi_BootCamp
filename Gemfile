@@ -7,7 +7,9 @@ gem "bcrypt"
 gem "bootsnap", ">= 1.1.0", require: false
 gem "config"
 gem "devise_token_auth"
+gem "graphql-client"
 gem "jbuilder", "~> 2.5"
+gem "kaminari"
 gem "mysql2", ">= 0.4.4", "< 0.6.0"
 gem "omniauth"
 gem "puma", "~> 3.11"
@@ -16,7 +18,6 @@ gem "rails", "~> 5.2.1"
 gem "sass-rails", "~> 5.0"
 gem "uglifier", ">= 1.3.0"
 gem "webpacker"
-gem "graphql-client"
 
 group :development, :test do
   gem "pry-rails"
