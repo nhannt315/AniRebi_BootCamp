@@ -20,11 +20,10 @@ class Api::V1::AnimesController < ActionController::Base
 
   def page_params
     @per_page = params[:item_per_page] || Settings.pagination
-    @page = param[:page] || 1
+    @page = params[:page] || 1
   end
 
   def find_anime
     @anime = Anime.find_by id: params[:id]
-    render json: @anime
   end
 end
