@@ -11,4 +11,19 @@ export {
   startProcess,
   finishProcess,
   authCheckState
-} from './auth_action';
+} from "./auth_action";
+
+export {
+  getTopAnime,
+  getTopAnimeStart,
+  getTopAnimeSuccess,
+  getTopAnimeFailure,
+  getGenresList,
+  getGenresListStart,
+  getGenresListSuccess,
+  getGenresListFailure,
+  getGenreTop,
+  getGenreTopStart,
+  getGenreTopSuccess,
+  getGenreTopFailure
+} from "./anime_action";

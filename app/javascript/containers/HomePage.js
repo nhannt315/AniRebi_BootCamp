@@ -7,13 +7,21 @@ import styled from "styled-components";
 import CardBox from "../components/CardBox/CardBox";
 import BGImage from "../assets/images/background_home.png";
 import CustomList from "../components/CustomList/CustomList";
+import PropTypes from "prop-types";
 
 const { Content } = Layout;
 
 class HomePage extends Component {
+  static propTypes = {
+    getTopAnime: PropTypes.func.isRequired,
+    getGenresList: PropTypes.func.isRequired,
+    getGenreTop: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.recentlyReviewedRef = React.createRef();
+    console.log(this.props.getTopAnime);
   }
 
   handleNextBtnClick = e => {
@@ -25,35 +33,10 @@ class HomePage extends Component {
   };
 
   render() {
-    const dataRecent = [
-      { title: "Title 1" },
-      { title: "Title 2" },
-      { title: "Title 3" },
-      { title: "Title 4" },
-      { title: "Title 5" },
-      { title: "Title 6" }
-    ];
-    const dataTopGenre = [
-      { title: "Title 1" },
-      { title: "Title 2" },
-      { title: "Title 3" },
-      { title: "Title 4" },
-      { title: "Title 5" }
-    ];
-
-    const dataRank = [
-      { title: "Title 1" },
-      { title: "Title 2" },
-      { title: "Title 3" }
-    ];
-
     return (
       <StyledContent className="HomePageContent">
         <Row>
           <Carousel style={{ width: "100%" }} autoplay={true}>
-            <StyledImg src={BannerImage} />
-            <StyledImg src={BannerImage} />
-            <StyledImg src={BannerImage} />
             <StyledImg src={BannerImage} />
           </Carousel>
         </Row>
