@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Dropdown, Icon, Menu, Avatar } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -61,15 +61,15 @@ class Navbar extends Component {
     }else{
       authDiv = (
         <ul className="main-nav">
-          <li>
-            <Link className="nav-links" to="/login">
+          <li className="animating_link">
+            <NavLink className="nav-links" activeClassName="nav-links--active" to="/login">
               <Icon type="login" theme="outlined" /> Login
-            </Link>
+            </NavLink>
           </li>
-          <li>
-            <Link className="nav-links" to="/register">
+          <li className="animating_link">
+            <NavLink className="nav-links" activeClassName="nav-links--active" to="/register">
               <Icon type="user" theme="outlined" /> Register
-            </Link>
+            </NavLink>
           </li>
         </ul>
       );
@@ -81,19 +81,21 @@ class Navbar extends Component {
           <Icon type="bars" theme="outlined" />
         </span>
         <Link className="logo" to="/">AniRebi</Link>
-        <ul className={'main-nav' + (showNavMobile ? 'active' : '')}>
-          <li>
-            <Link className="nav-links" to="/">
+        <ul className={'main-nav ' + (showNavMobile ? 'active-nav' : '')}>
+          <li className="animating_link">
+            <NavLink className="nav-links" exact activeClassName="nav-links--active" to="/">
               <Icon type="home" /> Home
-            </Link>
+            </NavLink>
           </li>
-          <li>
-            <Link className="nav-links" to="/anime">
+          <li className="animating_link">
+            <NavLink className="nav-links" activeClassName="nav-links--active" to="/anime">
               <Icon type="ordered-list" theme="outlined" /> Anime
-            </Link>
+            </NavLink>
           </li>
-          <li>
-            <Link className="nav-links" to="/genre">Genre</Link>
+          <li className="animating_link">
+            <NavLink className="nav-links" activeClassName="nav-links--active" to="/genre">
+              <Icon type="book" theme="outlined" /> Genre
+            </NavLink>
           </li>
         </ul>
         <div className="spacer" />

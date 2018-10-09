@@ -11,9 +11,8 @@ const DivForm = styled.div`
   width: 400px;
   box-shadow: 0 4px 8px 1px;
   padding: 1rem;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 20%;
+  left: 35%;
   background-color: white;
   position: absolute;
 `;
@@ -32,21 +31,21 @@ class LoginForm extends Component {
     const {getFieldDecorator} = this.props.form;
 
     return (
-      <DivForm>
+      <DivForm className="animated bounceInLeft">
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
             {getFieldDecorator('email', {
               rules: [{required: true, message: 'Please input your email!'}],
             })(
-              <Input prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>} type="email" placeholder="Email"/>
+              <Input prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}} />} type="email" placeholder="Email" />
             )}
           </FormItem>
           <FormItem>
             {getFieldDecorator('password', {
               rules: [{required: true, message: 'Please input your Password!'}],
             })(
-              <Input prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>} type="password"
-                     placeholder="Password"/>
+              <Input prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}} />} type="password"
+                placeholder="Password" />
             )}
           </FormItem>
           <FormItem style={{display: 'block', textAlign: 'center'}}>
