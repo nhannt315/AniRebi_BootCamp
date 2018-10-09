@@ -48,12 +48,9 @@ class HomePage extends Component {
     ];
 
     return (
-      <StyledContent
-        className="HomePageContent"
-        style={{ padding: "0px 50px 50px" }}
-      >
+      <StyledContent className="HomePageContent">
         <Row>
-          <Carousel autoplay={true}>
+          <Carousel style={{ width: "100%" }} autoplay={true}>
             <StyledImg src={BannerImage} />
             <StyledImg src={BannerImage} />
             <StyledImg src={BannerImage} />
@@ -61,83 +58,85 @@ class HomePage extends Component {
           </Carousel>
         </Row>
         &nbsp;
-        <CardBox
-          title="Recently Reviewed"
-          content={
-            <Row type="flex" justify="center" align="middle">
-              <Col span={1} style={{ textAlign: "left" }}>
-                <Button
-                  size="large"
-                  type="primary"
-                  shape="circle"
-                  onClick={this.handlePrevBtnClick}
-                  style={{
-                    background: "#df691a",
-                    borderColor: "#df691a",
-                    borderTopRightRadius: "0",
-                    borderBottomRightRadius: "0"
-                  }}
-                >
-                  <Icon type="left" />
-                </Button>
-              </Col>
-              <Col span={22}>
-                <Carousel ref={this.recentlyReviewedRef} dots={false}>
-                  <CustomList dataSource={dataRecent} />
-                  <CustomList dataSource={dataRecent} />
-                </Carousel>
-              </Col>
-              <Col span={1} style={{ textAlign: "right" }}>
-                <Button
-                  size="large"
-                  type="primary"
-                  shape="circle"
-                  onClick={this.handleNextBtnClick}
-                  style={{
-                    background: "#df691a",
-                    borderColor: "#df691a",
-                    borderTopLeftRadius: "0",
-                    borderBottomLeftRadius: "0"
-                  }}
-                >
-                  <Icon type="right" />
-                </Button>
-              </Col>
-            </Row>
-          }
-        />
-        &nbsp;
-        <Row>
-          <Col span={17}>
-            <CardBox
-              title="Slice of life"
-              content={<CustomList dataSource={dataTopGenre} />}
-            />
-          </Col>
-          <Col span={6} offset={1}>
-            <CardBox
-              title="Ranking"
-              content={
-                <List
-                  dataSource={dataRank}
-                  renderItem={item => (
-                    <List.Item>
-                      <List.Item.Meta
-                        avatar={
-                          <img
-                            style={{ width: "50px", height: "75px" }}
-                            src={SmallCoverImage}
-                          />
-                        }
-                        title={item.title}
-                      />
-                    </List.Item>
-                  )}
-                />
-              }
-            />
-          </Col>
-        </Row>
+        <Content style={{ padding: "0px 100px 50px" }}>
+          <CardBox
+            title="Recently Reviewed"
+            content={
+              <Row type="flex" justify="center" align="middle">
+                <Col span={1} style={{ textAlign: "left" }}>
+                  <Button
+                    size="large"
+                    type="primary"
+                    shape="circle"
+                    onClick={this.handlePrevBtnClick}
+                    style={{
+                      background: "#df691a",
+                      borderColor: "#df691a",
+                      borderTopRightRadius: "0",
+                      borderBottomRightRadius: "0"
+                    }}
+                  >
+                    <Icon type="left" />
+                  </Button>
+                </Col>
+                <Col span={22}>
+                  <Carousel ref={this.recentlyReviewedRef} dots={false}>
+                    <CustomList dataSource={dataRecent} />
+                    <CustomList dataSource={dataRecent} />
+                  </Carousel>
+                </Col>
+                <Col span={1} style={{ textAlign: "right" }}>
+                  <Button
+                    size="large"
+                    type="primary"
+                    shape="circle"
+                    onClick={this.handleNextBtnClick}
+                    style={{
+                      background: "#df691a",
+                      borderColor: "#df691a",
+                      borderTopLeftRadius: "0",
+                      borderBottomLeftRadius: "0"
+                    }}
+                  >
+                    <Icon type="right" />
+                  </Button>
+                </Col>
+              </Row>
+            }
+          />
+          &nbsp;
+          <Row>
+            <Col span={17}>
+              <CardBox
+                title="Slice of life"
+                content={<CustomList dataSource={dataTopGenre} />}
+              />
+            </Col>
+            <Col span={6} offset={1}>
+              <CardBox
+                title="Ranking"
+                content={
+                  <List
+                    dataSource={dataRank}
+                    renderItem={item => (
+                      <List.Item>
+                        <List.Item.Meta
+                          avatar={
+                            <img
+                              style={{ width: "50px", height: "75px" }}
+                              src={SmallCoverImage}
+                            />
+                          }
+                          title={item.title}
+                        />
+                      </List.Item>
+                    )}
+                  />
+                }
+              />
+            </Col>
+          </Row>
+        </Content>
       </StyledContent>
     );
   }
