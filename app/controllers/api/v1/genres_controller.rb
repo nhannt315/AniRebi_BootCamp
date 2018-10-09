@@ -8,7 +8,7 @@ class Api::V1::GenresController < ActionController::Base
   end
 
   def show
-    @animes = @genre.animes.limit(@ani_limit)
+    @animes = @genre.animes.order(rating: :desc).limit(@ani_limit)
     respond_to do |format|
       format.json { render :json => {:genre => @genre,
                                      :animes => @animes }}
