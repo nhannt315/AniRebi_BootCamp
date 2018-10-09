@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       resources :animes do
         collection do
           get "top_animes"
+          get "search_by_genre"
         end
       end
       resources :genres do
