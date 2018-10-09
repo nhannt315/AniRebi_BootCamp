@@ -43,7 +43,7 @@ class HomePage extends Component {
 
   render() {
     const FilteredBannerData = this.props.topAnimeData.filter(
-      item => item.banner == null
+      item => item.banner != null
     );
     const BannerImages = FilteredBannerData.map(item => (
       <StyledImg src={item.banner} onError={this.handleBannerError} />
