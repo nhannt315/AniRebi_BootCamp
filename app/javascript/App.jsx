@@ -22,15 +22,15 @@ class App extends Component {
     showElement: true
   };
 
-  componentWillMount() {
-    this.props.getTopAnime(1, 5);
-    this.props.getGenreList();
-    this.props.getGenreTop(1);
+  constructor(props) {
+    super(props);
+    this.props.getTopAnime(2, 14);
+    this.props.getGenresList();
+    this.props.getGenreTop(1, 5);
   }
-  
+
   componentDidMount() {
     this.props.tryAutoSignIn();
-
     window.addEventListener("scroll", throttle(this.handleScroll, 250), false);
   }
 
@@ -54,37 +54,34 @@ class App extends Component {
   };
 
   render() {
-    return (
-      <Layout className="App">
-        <Navbar
-          isAuthenticated={this.props.isAuthenticated}
-          userData={this.props.userData}
-          logout={this.props.logout}
-          show={this.state.showElement}
-        />
-        <div className="main-page">
-          <Switch>
-            <Route
-              exact
-              path="/"
-              to={HomePage}
-              render={() => (
-                <HomePage
-                  topAnimeData={this.props.topAnimeData}
-                  genresListData={this.props.genresListData}
-                  genreTopData={this.props.genreTopData}
-                />
-              )}
-            />
-            <Route exact path="/anime" render={() => <AnimePage />} />
-            <Route exact path="/genre" render={() => <GenrePage />} />
-            <Route exact path="/login" render={() => <LoginPage />} />
-            <Route exact path="/register" render={() => <RegisterPage />} />
-            <Route render={() => <NotFoundPage />} />
-          </Switch>
-        </div>
-      </Layout>
-    );
+    if (
+      !this.props.topAnimeIsProcessing &&
+      !this.props.genresListIsProcessing &&
+      !this.props.genreTopIsProcessing
+    ) {
+      return (
+        <Layout className="App">
+          <Navbar
+            isAuthenticated={this.props.isAuthenticated}
+            userData={this.props.userData}
+            logout={this.props.logout}
+            show={this.state.showElement}
+          />
+          <div className="main-page">
+            <Switch>
+              <Route exact path="/" to={HomePage} render={() => <HomePage />} />
+              <Route exact path="/anime" render={() => <AnimePage />} />
+              <Route exact path="/genre" render={() => <GenrePage />} />
+              <Route exact path="/login" render={() => <LoginPage />} />
+              <Route exact path="/register" render={() => <RegisterPage />} />
+              <Route render={() => <NotFoundPage />} />
+            </Switch>
+          </div>
+        </Layout>
+      );
+    } else {
+      return null;
+    }
   }
 }
 
@@ -95,7 +92,10 @@ App.propTypes = {
   tryAutoSignIn: PropTypes.func.isRequired,
   getTopAnime: PropTypes.func.isRequired,
   getGenresList: PropTypes.func.isRequired,
-  getGenreTop: PropTypes.func.isRequired
+  getGenreTop: PropTypes.func.isRequired,
+  topAnimeIsProcessing: PropTypes.bool.isRequired,
+  genresListIsProcessing: PropTypes.bool.isRequired,
+  genreTopIsProcessing: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => {
@@ -104,7 +104,10 @@ const mapStateToProps = state => {
     userData: state.auth.userData,
     topAnimeData: state.anime.topAnimeData,
     genresListData: state.anime.genresListData,
-    genreTopData: state.anime.genreTopData
+    genreTopData: state.anime.genreTopData,
+    topAnimeIsProcessing: state.anime.topAnimeIsProcessing,
+    genresListIsProcessing: state.anime.genresListIsProcessing,
+    genreTopIsProcessing: state.anime.genreTopIsProcessing
   };
 };
 
@@ -114,9 +117,9 @@ const mapDispatchToProps = dispatch => {
     tryAutoSignIn: () => dispatch(actions.authCheckState()),
     getTopAnime: (page, itemPerPage) =>
       dispatch(actions.getTopAnime(page, itemPerPage)),
-    getGenreList: (page, itemPerPage) =>
+    getGenresList: (page, itemPerPage) =>
       dispatch(actions.getGenresList(page, itemPerPage)),
-    getGenreTop: id => dispatch(actions.getGenreTop(id))
+    getGenreTop: (id, limit) => dispatch(actions.getGenreTop(id, limit))
   };
 };
 

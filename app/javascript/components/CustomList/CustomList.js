@@ -16,8 +16,8 @@ class CustomList extends Component {
 
     const content = dataSource.map(item => (
       <CustomCard
-        title={item.title}
-        cover={CoverImage}
+        title={item.name}
+        cover={item.cover_large}
         ratingNo="10,000"
         score="5.0"
       />

@@ -22,6 +22,7 @@ const store = createStore(
   composeEnhancers(applyMiddleware(sagaMiddleware))
 );
 
-sagaMiddleware.run(watchAuth, watchAnime);
+sagaMiddleware.run(watchAuth);
+sagaMiddleware.run(watchAnime);
 
 export default store;

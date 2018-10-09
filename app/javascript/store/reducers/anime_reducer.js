@@ -5,21 +5,37 @@ const initialState = {
   genresListData: {},
   genreTopData: {},
   errors: [],
-  isProcessing: false
+  topAnimeIsProcessing: true,
+  genresListIsProcessing: true,
+  genreTopIsProcessing: true
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.GET_TOP_ANIME_START:
+      return { ...state, topAnimeIsProcessing: true };
     case actionTypes.GET_GENRES_LIST_START:
+      return { ...state, genresListIsProcessing: true };
     case actionTypes.GET_GENRE_TOP_START:
-      return { ...state, isProcessing: true };
+      return { ...state, genreTopIsProcessing: true };
     case actionTypes.GET_TOP_ANIME_SUCCESS:
-      return { ...state, topAnimeData: action.data, isProcessing: false };
-    case actionTypes.GET_GENRES_LIST_SUCCES:
-      return { ...state, genresListData: action.data, isProcessing: false };
+      return {
+        ...state,
+        topAnimeData: action.data,
+        topAnimeIsProcessing: false
+      };
+    case actionTypes.GET_GENRES_LIST_SUCCESS:
+      return {
+        ...state,
+        genresListData: action.data,
+        genresListIsProcessing: false
+      };
     case actionTypes.GET_GENRE_TOP_SUCCESS:
-      return { ...state, genreTopData: action.data, isProcessing: false };
+      return {
+        ...state,
+        genreTopData: action.data,
+        genreTopIsProcessing: false
+      };
     default:
       return state;
   }
