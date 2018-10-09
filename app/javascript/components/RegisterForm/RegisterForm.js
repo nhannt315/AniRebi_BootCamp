@@ -12,15 +12,8 @@ const StyledForm = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(115,115,115,0.6);
+  background-color: white;
   box-shadow: 0 4px 8px 1px;
-  
-  div {
-  
-    label {
-      color: white;
-    }
-  }
 `;
 
 class RegistrationForm extends Component {
@@ -168,7 +161,7 @@ class RegistrationForm extends Component {
               rules: [{required: true, message: 'You have to agree to this dude!'}],
               valuePropName: 'checked',
             })(
-              <Checkbox>I have read the <a href="" style={{color: 'yellow'}}>agreement</a></Checkbox>
+              <Checkbox>I have read the <a href="" style={{color: 'blue'}}>agreement</a></Checkbox>
             )}
           </FormItem>
           <FormItem {...tailFormItemLayout}>
