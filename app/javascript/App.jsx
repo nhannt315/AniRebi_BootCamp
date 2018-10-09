@@ -14,6 +14,7 @@ import LoginPage from './containers/LoginPage';
 import RegisterPage from './containers/RegisterPage';
 import './App.scss';
 import * as actions from './store/actions';
+import Navbar from './components/Navbar/Navbar';
 
 class App extends Component {
 
@@ -24,11 +25,12 @@ class App extends Component {
   render() {
     return (
       <Layout className="App">
-        <SiteMenu
-          isAuthenticated={this.props.isAuthenticated}
-          userData={this.props.userData}
-          logout={this.props.logout}
-        />
+        {/*<SiteMenu*/}
+          {/*isAuthenticated={this.props.isAuthenticated}*/}
+          {/*userData={this.props.userData}*/}
+          {/*logout={this.props.logout}*/}
+        {/*/>*/}
+        <Navbar/>
         <div className="main-page">
           <Switch>
             <Route exact path="/" to={HomePage} render={() => <HomePage />} />

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import {message} from 'antd';
+import {message, Spin} from 'antd';
 import {withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -23,11 +23,13 @@ class LoginPage extends Component {
   }
 
   componentDidUpdate(){
-    if(this.props.isAuthenticated){
+    const {isAuthenticated, errors} = this.props;
+    if(isAuthenticated){
       this.props.history.push('/');
     }
-    if(this.props.errors.length > 0){
-      // const messageContent =
+    if(errors.length > 0){
+      const messageContent = errors.join(' ');
+      message.error(messageContent);
     }
   }
 
@@ -37,6 +39,7 @@ class LoginPage extends Component {
   };
 
   render() {
+    const {isProcessing} = this.props;
     return (
       <StyledDiv>
         <LoginForm handleLogin={this.handleLogin} />
