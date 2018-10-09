@@ -24,6 +24,7 @@
     "i18next-browser-languagedetector": "^2.2.3",
     "less": "^3.8.1",
     "less-loader": "^4.1.0",
+    "lodash": "^4.17.11",
     "postcss-loader": "^3.0.0",
     "prop-types": "^15.6.2",
     "react": "^16.5.2",

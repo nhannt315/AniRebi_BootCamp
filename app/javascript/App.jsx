@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { Switch } from 'react-router';
 import { Route, withRouter } from 'react-router-dom';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Layout } from 'antd';
+import throttle from 'lodash/throttle';
+
 
 import GenrePage from './containers/GenrePage';
 import AnimePage from './containers/AnimePage';
 import HomePage from './containers/HomePage';
-import SiteMenu from './components/SiteMenu';
 import NotFoundPage from './containers/NotFoundPage';
 import LoginPage from './containers/LoginPage';
 import RegisterPage from './containers/RegisterPage';
@@ -18,27 +19,48 @@ import Navbar from './components/Navbar/Navbar';
 
 class App extends Component {
 
-  componentDidMount(){
+  state = {
+    scrollY: 0,
+    showElement: true
+  };
+
+  componentDidMount() {
     this.props.tryAutoSignIn();
+    window.addEventListener('scroll', throttle(this.handleScroll, 250), false);
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', throttle(this.handleScroll, 250), false);
+  }
+
+  handleScroll = () => {
+    const scrollY = window.pageYOffset;
+    if (scrollY < 40) {
+      return;
+    }
+    this.setState(prevState => ({
+      scrollY,
+      showElement: prevState.scrollY > scrollY
+    }));
+  };
 
   render() {
     return (
       <Layout className="App">
-        {/*<SiteMenu*/}
-          {/*isAuthenticated={this.props.isAuthenticated}*/}
-          {/*userData={this.props.userData}*/}
-          {/*logout={this.props.logout}*/}
-        {/*/>*/}
-        <Navbar/>
+        <Navbar
+          isAuthenticated={this.props.isAuthenticated}
+          userData={this.props.userData}
+          logout={this.props.logout}
+          show={this.state.showElement}
+        />
         <div className="main-page">
           <Switch>
-            <Route exact path="/" to={HomePage} render={() => <HomePage />} />
-            <Route exact path="/anime" render={() => <AnimePage />} />
-            <Route exact path="/genre" render={() => <GenrePage />} />
-            <Route exact path="/login" render={() => <LoginPage />} />
-            <Route exact path="/register" render={() => <RegisterPage />} />
-            <Route render={() => <NotFoundPage />} />
+            <Route exact path="/" to={HomePage} render={() => <HomePage/>}/>
+            <Route exact path="/anime" render={() => <AnimePage/>}/>
+            <Route exact path="/genre" render={() => <GenrePage/>}/>
+            <Route exact path="/login" render={() => <LoginPage/>}/>
+            <Route exact path="/register" render={() => <RegisterPage/>}/>
+            <Route render={() => <NotFoundPage/>}/>
           </Switch>
         </div>
 
