@@ -3,7 +3,7 @@ import { Card, Row, Col } from "antd";
 import styled from "styled-components";
 import "./CustomList.scss";
 import CoverImage from "../../assets/images/cover_placeholder.jpg";
-
+import CustomCard from "../CustomCard/CustomCard";
 import PropTypes from "prop-types";
 
 class CustomList extends Component {
@@ -15,11 +15,12 @@ class CustomList extends Component {
     const { dataSource } = this.props;
 
     const content = dataSource.map(item => (
-      <Col span={3}>
-        <Card hoverable cover={<img src={CoverImage} alt="cover" />}>
-          <Card.Meta title={item.title} />
-        </Card>
-      </Col>
+      <CustomCard
+        title={item.name}
+        cover={item.cover_large}
+        ratingNo="10,000"
+        score="5.0"
+      />
     ));
 
     return (

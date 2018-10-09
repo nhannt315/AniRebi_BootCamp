@@ -1,0 +1,55 @@
+.CustomCard .CustomCardCover {
+  width: 135px;
+  height: 200px;
+}
+
+.CustomCard {
+  position: relative;
+  border-color: white;
+  border-width: 2px 2px 2px 2px;
+  border-style: solid;
+  border-radius: 2px 2px 2px 2px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 5px 0 rgba(0, 0, 0, 0.19);
+}
+
+.CustomCard:hover {
+  box-shadow: 0 2px 4px 1px;
+  cursor: pointer;
+}
+
+.CustomCardCover {
+}
+
+.CustomCardTitle {
+  padding: 2px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: bold;
+  text-align: center;
+}
+
+.CustomCardRatingNo {
+  padding: 2px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+.CustomCardScore {
+  padding: 2px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  text-align: center;
+}

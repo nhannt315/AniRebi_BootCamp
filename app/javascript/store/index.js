@@ -1,17 +1,18 @@
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
-import createSagaMiddleware from 'redux-saga';
+import { applyMiddleware, combineReducers, compose, createStore } from "redux";
+import createSagaMiddleware from "redux-saga";
 
-import authReducer from './reducers/auth_reducer';
-import { watchAuth } from './sagas';
-
+import authReducer from "./reducers/auth_reducer";
+import animeReducer from "./reducers/anime_reducer";
+import { watchAuth, watchAnime } from "./sagas";
 
 const composeEnhancers =
-  process.env.NODE_ENV === 'development'
+  process.env.NODE_ENV === "development"
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : null || compose;
 
 const rootReducer = combineReducers({
-  auth: authReducer
+  auth: authReducer,
+  anime: animeReducer
 });
 
 const sagaMiddleware = createSagaMiddleware();
@@ -22,5 +23,6 @@ const store = createStore(
 );
 
 sagaMiddleware.run(watchAuth);
+sagaMiddleware.run(watchAnime);
 
 export default store;
