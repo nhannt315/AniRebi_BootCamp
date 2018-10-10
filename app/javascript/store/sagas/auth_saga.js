@@ -115,7 +115,5 @@ export function* authCheckStateSaga() {
   const tokenData = JSON.parse(localStorage.getItem(keys.TOKEN_DATA_LOCAL_KEY));
   if(userData && tokenData){
     yield put(actions.loginSuccess(userData, tokenData));
-  }else{
-    yield put(actions.logout());
   }
 }

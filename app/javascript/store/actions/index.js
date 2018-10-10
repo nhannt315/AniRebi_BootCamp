@@ -40,3 +40,12 @@ export {
   getMultipleGenreTopSuccess,
   getMultipleGenreTopFailure
 } from './anime_action';
+
+
+export {
+  searchAnime,
+  searchAnimeStart,
+  searchAnimeSuccess,
+  searchAnimeFalure,
+  clearSearchResult
+} from './search_action';
