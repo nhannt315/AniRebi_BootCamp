@@ -83,3 +83,31 @@ export const getGenreTopFailure = errors => {
     errors: errors
   };
 };
+
+export const getMultipleGenreTop = (idArr, limit) => {
+  return {
+    type: actionTypes.GET_MULTIPLE_GENRE_TOP,
+    idArr: idArr,
+    limit: limit
+  };
+};
+
+export const getMultipleGenreTopStart = () => {
+  return {
+    type: actionTypes.GET_MULTIPLE_GENRE_TOP_START
+  };
+};
+
+export const getMultipleGenreTopSuccess = result => {
+  return {
+    type: actionTypes.GET_MULTIPLE_GENRE_TOP_SUCCESS,
+    data: result
+  };
+};
+
+export const getMultipleGenreTopFailure = errors => {
+  return {
+    type: actionTypes.GET_MULTIPLE_GENRE_TOP_FAILURE,
+    errors: errors
+  };
+};

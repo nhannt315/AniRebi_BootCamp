@@ -4,10 +4,12 @@ const initialState = {
   topAnimeData: {},
   genresListData: {},
   genreTopData: {},
+  multipleGenreTopData: [],
   errors: [],
   topAnimeIsProcessing: true,
   genresListIsProcessing: true,
-  genreTopIsProcessing: true
+  genreTopIsProcessing: true,
+  multipleGenreTopIsProcessing: true
 };
 
 const reducer = (state = initialState, action) => {
@@ -18,6 +20,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, genresListIsProcessing: true };
     case actionTypes.GET_GENRE_TOP_START:
       return { ...state, genreTopIsProcessing: true };
+    case actionTypes.GET_MULTIPLE_GENRE_TOP_START:
+      return { ...state, multipleGenreTopIsProcessing: true };
     case actionTypes.GET_TOP_ANIME_SUCCESS:
       return {
         ...state,
@@ -35,6 +39,12 @@ const reducer = (state = initialState, action) => {
         ...state,
         genreTopData: action.data,
         genreTopIsProcessing: false
+      };
+    case actionTypes.GET_MULTIPLE_GENRE_TOP_SUCCESS:
+      return {
+        ...state,
+        multipleGenreTopData: action.data,
+        multipleGenreTopIsProcessing: false
       };
     default:
       return state;

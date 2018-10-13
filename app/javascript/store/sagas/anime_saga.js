@@ -50,3 +50,20 @@ export function* getGenreTop(action) {
     yield put(actions.getGenreTopFailure(error.response.data.errors));
   }
 }
+
+export function* getMultipleGenreTop(action) {
+  yield put(actions.getMultipleGenreTopStart());
+  let data = [];
+  try {
+    for (var id in action.idArr) {
+      let url = endpoints.GET_GENRE_TOP + `/${action.idArr[id]}`;
+      if (action.limit) url += `?limit=${action.limit}`;
+      let response = yield axios.get(url);
+      data.push(response.data);
+    }
+    yield put(actions.getMultipleGenreTopSuccess(data));
+  } catch (error) {
+    console.log(error);
+    yield put(actions.getMultipleGenreTopFailure(error.response.data.errors));
+  }
+}

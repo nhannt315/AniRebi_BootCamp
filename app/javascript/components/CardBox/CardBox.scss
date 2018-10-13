@@ -1,4 +1,5 @@
 .CardBoxContainer {
+  position: relative;
 }
 
 .CardBoxContent {
@@ -17,7 +18,6 @@
   border-style: solid;
   font-size: 14px;
   background-color: #df691a;
-  padding-bottom: 10px;
   width: 100%;
   padding: 0;
   display: flex;

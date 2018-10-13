@@ -9,7 +9,12 @@ import {
   signUpSaga
 } from "./auth_saga";
 
-import { getTopAnime, getGenresList, getGenreTop } from "./anime_saga";
+import {
+  getTopAnime,
+  getGenresList,
+  getGenreTop,
+  getMultipleGenreTop
+} from "./anime_saga";
 
 export function* watchAuth() {
   yield all([
@@ -24,6 +29,7 @@ export function* watchAnime() {
   yield all([
     takeLatest(actionTypes.GET_TOP_ANIME, getTopAnime),
     takeLatest(actionTypes.GET_GENRES_LIST, getGenresList),
-    takeLatest(actionTypes.GET_GENRE_TOP, getGenreTop)
+    takeLatest(actionTypes.GET_GENRE_TOP, getGenreTop),
+    takeLatest(actionTypes.GET_MULTIPLE_GENRE_TOP, getMultipleGenreTop)
   ]);
 }
