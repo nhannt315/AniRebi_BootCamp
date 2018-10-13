@@ -20,6 +20,8 @@ class Api::V1::GenresController < ActionController::Base
     render json: @top_genres
   end
 
+  private
+  
   def page_params
     @per_page = params[:item_per_page] || Settings.pagination
     @page = params[:page] || 1
