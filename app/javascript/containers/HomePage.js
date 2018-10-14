@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { Layout, Row, Col, List, Carousel, Button, Icon } from "antd";
+import { Layout, Row, Col, Carousel, Button, Icon } from "antd";
 import CoverImage from "../assets/images/cover_placeholder.jpg";
 import SmallCoverImage from "../assets/images/small_cover_placeholder.jpg";
 import BannerImage from "../assets/images/banner_placeholder.jpg";
 import styled from "styled-components";
 import CardBox from "../components/CardBox/CardBox";
 import BGImage from "../assets/images/background_home.png";
-import CustomList from "../components/CustomList/CustomList";
+import CustomHorizontalList from "../components/CustomHorizontalList/CustomHorizontalList";
+import CustomVerticalList from "../components/CustomVerticalList/CustomVerticalList";
 import PropTypes from "prop-types";
 
 const { Content } = Layout;
@@ -17,7 +18,8 @@ class HomePage extends Component {
   static propTypes = {
     topAnimeData: PropTypes.array.isRequired,
     genresListData: PropTypes.array.isRequired,
-    genreTopData: PropTypes.object.isRequired
+    genreTopData: PropTypes.object.isRequired,
+    multipleGenreTopData: PropTypes.array.isRequired
   };
 
   constructor(props) {
@@ -33,10 +35,6 @@ class HomePage extends Component {
     this.recentlyReviewedRef.current.prev();
   };
 
-  handleImgError = e => {
-    e.target.src = "https://image.ibb.co/djfJJp/placeholder.png";
-  };
-
   handleBannerError = e => {
     e.target.src = "https://image.ibb.co/hnycB9/placeholder_large.png";
   };
@@ -46,7 +44,22 @@ class HomePage extends Component {
       item => item.banner != null
     );
     const BannerImages = FilteredBannerData.map(item => (
-      <StyledImg src={item.banner} onError={this.handleBannerError} />
+      <StyledImg
+        key={item.id}
+        src={item.banner}
+        onError={this.handleBannerError}
+      />
+    ));
+
+    const TopGenreCardBoxes = this.props.multipleGenreTopData.map(item => (
+      <div key={item.genre.id}>
+        <CardBox
+          key={item.genre.id}
+          title={item.genre.name}
+          content={<CustomHorizontalList dataSource={item.animes} />}
+        />
+        &nbsp;
+      </div>
     ));
 
     const SlicedTopAnimeData1 = this.props.topAnimeData.slice(0, 7);
@@ -65,100 +78,37 @@ class HomePage extends Component {
             title="Recently Reviewed"
             content={
               <Row type="flex" justify="center" align="middle">
-                <Col span={1} style={{ textAlign: "left" }}>
-                  <Button
-                    size="large"
-                    type="primary"
-                    shape="circle"
-                    onClick={this.handlePrevBtnClick}
-                    style={{
-                      background: "#df691a",
-                      borderColor: "#df691a",
-                      borderTopRightRadius: "0",
-                      borderBottomRightRadius: "0"
-                    }}
-                  >
-                    <Icon type="left" />
-                  </Button>
-                </Col>
-                <Col span={22}>
+                <PrevCarouselNavButton
+                  size="large"
+                  type="default"
+                  onClick={this.handlePrevBtnClick}
+                >
+                  <Icon type="left" />
+                </PrevCarouselNavButton>
+                <Col span={24}>
                   <Carousel ref={this.recentlyReviewedRef} dots={false}>
-                    <CustomList dataSource={SlicedTopAnimeData1} />
-                    <CustomList dataSource={SlicedTopAnimeData2} />
+                    <CustomHorizontalList dataSource={SlicedTopAnimeData1} />
+                    <CustomHorizontalList dataSource={SlicedTopAnimeData2} />
                   </Carousel>
                 </Col>
-                <Col span={1} style={{ textAlign: "right" }}>
-                  <Button
-                    size="large"
-                    type="primary"
-                    shape="circle"
-                    onClick={this.handleNextBtnClick}
-                    style={{
-                      background: "#df691a",
-                      borderColor: "#df691a",
-                      borderTopLeftRadius: "0",
-                      borderBottomLeftRadius: "0"
-                    }}
-                  >
-                    <Icon type="right" />
-                  </Button>
-                </Col>
+                <NextCarouselNavButton
+                  size="large"
+                  type="default"
+                  onClick={this.handleNextBtnClick}
+                >
+                  <Icon type="right" />
+                </NextCarouselNavButton>
               </Row>
             }
           />
           &nbsp;
           <Row>
-            <Col span={17}>
-              <CardBox
-                title={this.props.genreTopData.genre.name}
-                content={
-                  <CustomList dataSource={this.props.genreTopData.animes} />
-                }
-              />
-            </Col>
+            <Col span={17}>{TopGenreCardBoxes}</Col>
             <Col span={6} offset={1}>
               <CardBox
                 title="Ranking"
                 content={
-                  <List
-                    dataSource={this.props.topAnimeData}
-                    renderItem={item => (
-                      <List.Item>
-                        <List.Item.Meta
-                          avatar={
-                            <img
-                              style={{
-                                width: "50px",
-                                height: "75px",
-                                borderColor: "white",
-                                borderWidth: "2px 2px 2px 2px",
-                                borderStyle: "solid",
-                                borderRadius: "2px 2px 2px 2px",
-                                boxShadow:
-                                  "0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 5px 0 rgba(0, 0, 0, 0.19)"
-                              }}
-                              src={item.cover_large}
-                              onError={this.handleImgError}
-                            />
-                          }
-                          title={<strong>{item.name}</strong>}
-                          description={
-                            <span>
-                              <span className="">
-                                <Icon type="message" theme="twoTone" />
-                                &nbsp;10,000
-                              </span>
-                              &nbsp; &nbsp;
-                              <span className="">
-                                <StyledIcon type="star" theme="filled" />
-                                &nbsp;5.0
-                              </span>
-                            </span>
-                          }
-                        />
-                      </List.Item>
-                    )}
-                  />
+                  <CustomVerticalList dataSource={this.props.topAnimeData} />
                 }
               />
             </Col>
@@ -173,7 +123,8 @@ const mapStateToProps = state => {
   return {
     topAnimeData: state.anime.topAnimeData,
     genresListData: state.anime.genresListData,
-    genreTopData: state.anime.genreTopData
+    genreTopData: state.anime.genreTopData,
+    multipleGenreTopData: state.anime.multipleGenreTopData
   };
 };
 
@@ -183,17 +134,50 @@ const mapDispatchToProps = dispatch => {
 
 const StyledImg = styled.img`
   width: 100%;
-  height: 440px;
+  height: calc(31vw);
   color: white;
   text-align: center;
+  object-fit: cover;
 `;
 
 const StyledContent = styled(Content)`
   background-image: url(${BGImage});
 `;
 
-const StyledIcon = styled(Icon)`
-  color: yellow;
+const PrevCarouselNavButton = styled(Button)`
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  position: absolute;
+  left: 0;
+  z-index: 1;
+  border: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  &:focus,
+  :hover {
+    background: rgba(255, 255, 255, 0.8);
+    color: black;
+  }
+`;
+
+const NextCarouselNavButton = styled(Button)`
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  position: absolute;
+  right: 0;
+  z-index: 1;
+  border: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  &:focus,
+  :hover {
+    background: rgba(255, 255, 255, 0.8);
+    color: black;
+  }
 `;
 
 export default withRouter(

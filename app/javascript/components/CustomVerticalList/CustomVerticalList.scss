@@ -1,0 +1,23 @@
+.VerticalListItemCover {
+  width: calc(4vw);
+  height: calc(6vw);
+  border-color: white;
+  border-width: 2px 2px 2px 2px;
+  border-style: solid;
+  border-radius: 2px 2px 2px 2px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 5px 0 rgba(0, 0, 0, 0.19);
+  object-fit: cover;
+}
+
+.VerticalListItemTitle {
+  font-weight: bold;
+  font-size: calc(1.1vw);
+}
+
+.VerticalListItemRatingNo {
+  font-size: calc(1vw);
+}
+
+.VerticalListItemScore {
+  font-size: calc(1vw);
+}

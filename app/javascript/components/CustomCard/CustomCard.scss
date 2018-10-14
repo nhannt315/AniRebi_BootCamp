@@ -1,6 +1,12 @@
-.CustomCard .CustomCardCover {
-  width: 135px;
-  height: 200px;
+.CustomCard {
+  width: calc(10vw);
+  height: calc(15vw);
+}
+
+.CustomCardCover {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
 }
 
 .CustomCard {
@@ -33,6 +39,7 @@
   text-overflow: ellipsis;
   font-weight: bold;
   text-align: center;
+  font-size: calc(1.1vw);
 }
 
 .CustomCardRatingNo {
@@ -43,7 +50,9 @@
   color: white;
   background: rgba(0, 0, 0, 0.5);
   text-align: center;
+  font-size: calc(1vw);
 }
+
 .CustomCardScore {
   padding: 2px;
   position: absolute;
@@ -52,4 +61,26 @@
   color: white;
   background: rgba(0, 0, 0, 0.5);
   text-align: center;
+  font-size: calc(1vw);
 }
+
+// @media only screen and (max-width: 1304px) {
+//   .CustomCard .CustomCardCover {
+//     width: 125px;
+//     height: 190px;
+//   }
+// }
+
+// @media only screen and (max-width: 1229px) {
+//   .CustomCard .CustomCardCover {
+//     width: 115px;
+//     height: 180px;
+//   }
+// }
+
+// @media only screen and (max-width: 1153px) {
+//   .CustomCard .CustomCardCover {
+//     width: 105px;
+//     height: 170px;
+//   }
+// }

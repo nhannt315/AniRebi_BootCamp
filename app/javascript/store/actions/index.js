@@ -25,5 +25,9 @@ export {
   getGenreTop,
   getGenreTopStart,
   getGenreTopSuccess,
-  getGenreTopFailure
+  getGenreTopFailure,
+  getMultipleGenreTop,
+  getMultipleGenreTopStart,
+  getMultipleGenreTopSuccess,
+  getMultipleGenreTopFailure
 } from "./anime_action";

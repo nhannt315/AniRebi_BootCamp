@@ -26,7 +26,7 @@ class App extends Component {
     super(props);
     this.props.getTopAnime(2, 14);
     this.props.getGenresList();
-    this.props.getGenreTop(1, 5);
+    this.props.getMultipleGenreTop([1, 2, 3, 4, 5], 5);
   }
 
   componentDidMount() {
@@ -57,7 +57,7 @@ class App extends Component {
     if (
       !this.props.topAnimeIsProcessing &&
       !this.props.genresListIsProcessing &&
-      !this.props.genreTopIsProcessing
+      !this.props.multipleGenreTopIsProcessing
     ) {
       return (
         <Layout className="App">
@@ -93,6 +93,7 @@ App.propTypes = {
   getTopAnime: PropTypes.func.isRequired,
   getGenresList: PropTypes.func.isRequired,
   getGenreTop: PropTypes.func.isRequired,
+  getMultipleGenreTop: PropTypes.func.isRequired,
   topAnimeIsProcessing: PropTypes.bool.isRequired,
   genresListIsProcessing: PropTypes.bool.isRequired,
   genreTopIsProcessing: PropTypes.bool.isRequired
@@ -107,7 +108,8 @@ const mapStateToProps = state => {
     genreTopData: state.anime.genreTopData,
     topAnimeIsProcessing: state.anime.topAnimeIsProcessing,
     genresListIsProcessing: state.anime.genresListIsProcessing,
-    genreTopIsProcessing: state.anime.genreTopIsProcessing
+    genreTopIsProcessing: state.anime.genreTopIsProcessing,
+    multipleGenreTopIsProcessing: state.anime.multipleGenreTopIsProcessing
   };
 };
 
@@ -119,7 +121,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(actions.getTopAnime(page, itemPerPage)),
     getGenresList: (page, itemPerPage) =>
       dispatch(actions.getGenresList(page, itemPerPage)),
-    getGenreTop: (id, limit) => dispatch(actions.getGenreTop(id, limit))
+    getGenreTop: (id, limit) => dispatch(actions.getGenreTop(id, limit)),
+    getMultipleGenreTop: (idArr, limit) => dispatch(actions.getMultipleGenreTop(idArr, limit)),
   };
 };
 
