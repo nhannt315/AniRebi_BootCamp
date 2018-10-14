@@ -21,6 +21,9 @@ gem "webpacker"
 
 group :development, :test do
   gem "pry-rails"
+  gem 'factory_bot_rails'
+  gem 'shoulda'
+  gem 'rspec-rails', '3.6.1'
 end
 
 group :development do
