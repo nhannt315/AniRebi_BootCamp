@@ -37,7 +37,7 @@ class Api::V1::AnimesController < ActionController::Base
     for i in 1..(@arr.length-1)
       @anime = @anime & Genre.find(@arr[i]).animes.all
     end
-    render json: @anime.paginate(:page => @page, :per_page => @per_page)
+    render json: @anime.paginate(page: @page, per_page: @per_page)
   end
 
   private
