@@ -41,7 +41,7 @@ class Api::V1::AnimesController < ActionController::Base
   end
 
   def find_genre
-    @genre_to_find = Genre.find( params[:id] )
+    @genre_to_find = Genre.find(params[:id])
   end
 
   def order_param
