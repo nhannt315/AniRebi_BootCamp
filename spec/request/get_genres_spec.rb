@@ -10,6 +10,6 @@ describe "get all genres route", :type => :request do
   end
 
   it 'returns status code 200' do
-    expect(response).to have_http_status(:success)
+    expect(response).to be_successful
   end
 end
