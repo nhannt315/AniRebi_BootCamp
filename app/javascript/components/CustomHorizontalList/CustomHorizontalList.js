@@ -1,10 +1,8 @@
-import React, { Component } from "react";
-import { Card, Row, Col } from "antd";
-import styled from "styled-components";
-import "./CustomHorizontalList.scss";
-import CoverImage from "../../assets/images/cover_placeholder.jpg";
-import CustomCard from "../CustomCard/CustomCard";
-import PropTypes from "prop-types";
+import { Row } from 'antd';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import CustomCard from '../CustomCard/CustomCard';
+import './CustomHorizontalList.scss';
 
 class CustomHorizontalList extends Component {
   static propTypes = {
@@ -16,6 +14,7 @@ class CustomHorizontalList extends Component {
 
     const content = dataSource.map(item => (
       <CustomCard
+        id={item.id}
         key={item.id}
         title={item.name}
         cover={item.cover_large}
@@ -26,7 +25,7 @@ class CustomHorizontalList extends Component {
 
     return (
       <div className="CustomHorizontalList">
-        <Row type="flex" justify="space-around" style={{ flexWrap: "nowrap" }}>
+        <Row type="flex" justify="space-around" style={{ flexWrap: 'nowrap' }}>
           {content}
         </Row>
       </div>

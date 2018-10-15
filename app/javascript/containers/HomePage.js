@@ -1,16 +1,13 @@
-import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import { Layout, Row, Col, Carousel, Button, Icon } from "antd";
-import CoverImage from "../assets/images/cover_placeholder.jpg";
-import SmallCoverImage from "../assets/images/small_cover_placeholder.jpg";
-import BannerImage from "../assets/images/banner_placeholder.jpg";
-import styled from "styled-components";
-import CardBox from "../components/CardBox/CardBox";
-import BGImage from "../assets/images/background_home.png";
-import CustomHorizontalList from "../components/CustomHorizontalList/CustomHorizontalList";
-import CustomVerticalList from "../components/CustomVerticalList/CustomVerticalList";
-import PropTypes from "prop-types";
+import { Button, Carousel, Col, Icon, Layout, Row } from 'antd';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import styled from 'styled-components';
+import BGImage from '../assets/images/background_home.png';
+import CardBox from '../components/CardBox/CardBox';
+import CustomHorizontalList from '../components/CustomHorizontalList/CustomHorizontalList';
+import CustomVerticalList from '../components/CustomVerticalList/CustomVerticalList';
 
 const { Content } = Layout;
 
@@ -36,7 +33,7 @@ class HomePage extends Component {
   };
 
   handleBannerError = e => {
-    e.target.src = "https://image.ibb.co/hnycB9/placeholder_large.png";
+    e.target.src = 'https://image.ibb.co/hnycB9/placeholder_large.png';
   };
 
   render() {
@@ -68,12 +65,12 @@ class HomePage extends Component {
     return (
       <StyledContent className="HomePageContent">
         <Row>
-          <Carousel style={{ width: "100%" }} autoplay={true}>
+          <Carousel style={{ width: '100%' }} autoplay={true}>
             {BannerImages}
           </Carousel>
         </Row>
         &nbsp;
-        <Content style={{ padding: "0px 100px 50px" }}>
+        <Content style={{ padding: '0px 100px 50px' }}>
           <CardBox
             title="Recently Reviewed"
             content={
@@ -83,7 +80,11 @@ class HomePage extends Component {
                   type="default"
                   onClick={this.handlePrevBtnClick}
                 >
-                  <Icon type="left" />
+                  <Icon
+                    theme="filled"
+                    type="caret-left"
+                    style={{ fontSize: '22px' }}
+                  />
                 </PrevCarouselNavButton>
                 <Col span={24}>
                   <Carousel ref={this.recentlyReviewedRef} dots={false}>
@@ -96,7 +97,11 @@ class HomePage extends Component {
                   type="default"
                   onClick={this.handleNextBtnClick}
                 >
-                  <Icon type="right" />
+                  <Icon
+                    theme="filled"
+                    type="caret-right"
+                    style={{ fontSize: '22px' }}
+                  />
                 </NextCarouselNavButton>
               </Row>
             }

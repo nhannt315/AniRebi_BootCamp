@@ -1,4 +1,4 @@
-import * as actionTypes from "./actionTypes";
+import * as actionTypes from './actionTypes';
 
 export const getTopAnime = (page, itemPerPage) => {
   return {
@@ -24,6 +24,33 @@ export const getTopAnimeSuccess = result => {
 export const getTopAnimeFailure = errors => {
   return {
     type: actionTypes.GET_TOP_ANIME_FAILURE,
+    errors: errors
+  };
+};
+
+export const getAnimeById = (id) => {
+  return {
+    type: actionTypes.GET_ANIME_BY_ID,
+    id: id
+  };
+};
+
+export const getAnimeByIdStart = () => {
+  return {
+    type: actionTypes.GET_ANIME_BY_ID_START
+  };
+};
+
+export const getAnimeByIdSuccess = result => {
+  return {
+    type: actionTypes.GET_ANIME_BY_ID_SUCCESS,
+    data: result
+  };
+};
+
+export const getAnimeByIdFailure = errors => {
+  return {
+    type: actionTypes.GET_ANIME_BY_ID_FAILURE,
     errors: errors
   };
 };

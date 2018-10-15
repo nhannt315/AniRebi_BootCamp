@@ -1,17 +1,26 @@
-import React, { Component } from "react";
-import { Card, Row, Col, List, Icon } from "antd";
-import styled from "styled-components";
-import "./CustomVerticalList.scss";
-import CoverImage from "../../assets/images/cover_placeholder.jpg";
-import PropTypes from "prop-types";
+import { Icon, List } from 'antd';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import styled from 'styled-components';
+import './CustomVerticalList.scss';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from '../../store/actions';
 
 class CustomVerticalList extends Component {
   static propTypes = {
-    dataSource: PropTypes.array.isRequired
+    dataSource: PropTypes.array.isRequired,
+    history: PropTypes.object,
+    getAnimeById: PropTypes.func.isRequired
   };
 
   handleImgError = e => {
-    e.target.src = "https://image.ibb.co/djfJJp/placeholder.png";
+    e.target.src = 'https://image.ibb.co/djfJJp/placeholder.png';
+  };
+
+  handleClick = id => {
+    this.props.history.push('/anime/' + id);
+    this.props.getAnimeById(id);
   };
 
   render() {
@@ -28,12 +37,20 @@ class CustomVerticalList extends Component {
                   className="VerticalListItemCover"
                   src={item.cover_large}
                   onError={this.handleImgError}
+                  onClick={() => this.handleClick(item.id)}
                 />
               }
-              title={<span class = "VerticalListItemTitle">{item.name}</span>}
+              title={
+                <span
+                  className="VerticalListItemTitle"
+                  onClick={() => this.handleClick(item.id)}
+                >
+                  {item.name}
+                </span>
+              }
               description={
                 <span>
-                  <span className="VerticalListItemRatingNo">
+                  <span className="VerticalListItemNumberOfReviews">
                     <Icon type="message" theme="twoTone" />
                     &nbsp;10,000
                   </span>
@@ -56,4 +73,19 @@ const StyledIcon = styled(Icon)`
   color: yellow;
 `;
 
-export default CustomVerticalList;
+const mapStateToProps = state => {
+  return {};
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getAnimeById: id => dispatch(actions.getAnimeById(id))
+  };
+};
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(CustomVerticalList)
+);

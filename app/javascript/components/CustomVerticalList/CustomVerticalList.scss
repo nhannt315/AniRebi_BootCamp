@@ -9,12 +9,21 @@
   object-fit: cover;
 }
 
+.VerticalListItemCover:hover {
+  box-shadow: 0 2px 4px 1px;
+  cursor: pointer;
+}
+
 .VerticalListItemTitle {
   font-weight: bold;
   font-size: calc(1.1vw);
 }
 
-.VerticalListItemRatingNo {
+.VerticalListItemTitle:hover {
+  cursor: pointer;
+}
+
+.VerticalListItemNumberOfReviews {
   font-size: calc(1vw);
 }
 

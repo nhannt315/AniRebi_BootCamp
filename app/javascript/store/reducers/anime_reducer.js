@@ -1,21 +1,25 @@
-import * as actionTypes from "../actions/actionTypes";
+import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
   topAnimeData: {},
   genresListData: {},
   genreTopData: {},
   multipleGenreTopData: [],
+  animeByIdData: {},
   errors: [],
   topAnimeIsProcessing: true,
   genresListIsProcessing: true,
   genreTopIsProcessing: true,
-  multipleGenreTopIsProcessing: true
+  multipleGenreTopIsProcessing: true,
+  animeByIdIsProcessing: false
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.GET_TOP_ANIME_START:
       return { ...state, topAnimeIsProcessing: true };
+    case actionTypes.GET_ANIME_BY_ID_START:
+      return { ...state, animeByIdIsProcessing: true };
     case actionTypes.GET_GENRES_LIST_START:
       return { ...state, genresListIsProcessing: true };
     case actionTypes.GET_GENRE_TOP_START:
@@ -27,6 +31,12 @@ const reducer = (state = initialState, action) => {
         ...state,
         topAnimeData: action.data,
         topAnimeIsProcessing: false
+      };
+    case actionTypes.GET_ANIME_BY_ID_SUCCESS:
+      return {
+        ...state,
+        animeByIdData: action.data,
+        animeByIdIsProcessing: false
       };
     case actionTypes.GET_GENRES_LIST_SUCCESS:
       return {

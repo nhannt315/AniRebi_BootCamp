@@ -89,12 +89,12 @@ class Navbar extends Component {
           </li>
           <li className="animating_link">
             <NavLink className="nav-links" activeClassName="nav-links--active" to="/anime">
-              <Icon type="ordered-list" theme="outlined" /> Anime
+              <Icon type="bars" theme="outlined" /> Anime
             </NavLink>
           </li>
           <li className="animating_link">
             <NavLink className="nav-links" activeClassName="nav-links--active" to="/genre">
-              <Icon type="book" theme="outlined" /> Genre
+              <Icon type="tags" theme="outlined" /> Genre
             </NavLink>
           </li>
         </ul>

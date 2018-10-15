@@ -1,21 +1,26 @@
-import React, { Component } from "react";
-import { Card, Row, Col, Icon } from "antd";
-import styled from "styled-components";
-import "./CustomCard.scss";
-import CoverImage from "../../assets/images/placeholder.png";
-
-import PropTypes from "prop-types";
+import { Icon } from 'antd';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import styled from 'styled-components';
+import './CustomCard.scss';
 
 class CustomCard extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     cover: PropTypes.string.isRequired,
     ratingNo: PropTypes.string.isRequired,
-    score: PropTypes.string.isRequired
+    score: PropTypes.string.isRequired,
+    history: PropTypes.object,
+    id: PropTypes.number.isRequired
   };
 
   handleImgError = e => {
-    e.target.src = "https://image.ibb.co/djfJJp/placeholder.png";
+    e.target.src = 'https://image.ibb.co/djfJJp/placeholder.png';
+  };
+
+  handleImgClick = e => {
+    this.props.history.push('/anime/' + this.props.id);
   };
 
   render() {
@@ -27,10 +32,11 @@ class CustomCard extends Component {
           className="CustomCardCover"
           src={cover}
           onError={this.handleImgError}
+          onClick={this.handleImgClick}
         />
         <span className="CustomCardTitle">{title}</span>
-        <span className="CustomCardRatingNo">
-          <Icon type="message" theme="filled" />
+        <span className="CustomCardNumberOfReviews">
+          <Icon type="message" theme="twoTone" />
           &nbsp;
           {ratingNo}
         </span>
@@ -48,4 +54,4 @@ const StyledIcon = styled(Icon)`
   color: yellow;
 `;
 
-export default CustomCard;
+export default withRouter(CustomCard);
