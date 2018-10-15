@@ -42,3 +42,5 @@ end
 
 gem "graphql-client"
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'elasticsearch-model'
+gem 'elasticsearch-rails'
