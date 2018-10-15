@@ -21,6 +21,11 @@ Rails.application.routes.draw do
           get "top_genres"
         end
       end
+      resources :search do
+        collection do
+          get "search"
+        end
+      end
     end
   end
   get "*path", to: "pages#root"
