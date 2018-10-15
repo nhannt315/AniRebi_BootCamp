@@ -14,6 +14,7 @@ Rails.application.routes.draw do
         collection do
           get "top_animes"
           get "search_by_genre"
+          get "filter"
         end
       end
       resources :genres do
