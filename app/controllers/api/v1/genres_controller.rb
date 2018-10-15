@@ -34,6 +34,6 @@ class Api::V1::GenresController < ActionController::Base
   end
 
   def find_genre
-    @genre = Genre.find_by id: params[:id]
+    @genre = Genre.friendly.find(params[:id])
   end
 end

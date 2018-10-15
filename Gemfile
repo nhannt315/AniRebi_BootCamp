@@ -7,6 +7,7 @@ gem "bcrypt"
 gem "bootsnap", ">= 1.1.0", require: false
 gem "config"
 gem "devise_token_auth"
+gem "friendly_id"
 gem "graphql-client"
 gem "jbuilder", "~> 2.5"
 gem "kaminari"

@@ -10,7 +10,14 @@ class Api::V1::AnimesController < ActionController::Base
   end
 
   def show
-    render json: @anime
+    genres_array = Array.new
+    @anime.genres.each do |genre|
+      genres_array << [genre.id, genre.name]
+    end
+    respond_to do |format|
+      format.json {render :json => {:genres_array => genres_array,
+                                    :anime => @anime}}
+    end
   end
 
   def top_animes
@@ -37,7 +44,7 @@ class Api::V1::AnimesController < ActionController::Base
   end
 
   def find_anime
-    @anime = Anime.find_by id: params[:id]
+    @anime = Anime.friendly.find(params[:id])
   end
 
   def find_genre
