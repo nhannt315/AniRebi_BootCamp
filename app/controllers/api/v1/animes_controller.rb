@@ -1,6 +1,8 @@
+require 'will_paginate/array'
+
 class Api::V1::AnimesController < ActionController::Base
   before_action :find_anime, only: [:show]
-  before_action :page_params, only: [:index, :top_animes, :search_by_genre]
+  before_action :page_params, only: [:index, :top_animes, :search_by_genre, :filter]
   before_action :find_genre, only: [:search_by_genre]
   before_action :order_param, only: [:search_by_genre]
 
@@ -27,6 +29,15 @@ class Api::V1::AnimesController < ActionController::Base
       @animes_by_genre = @genre_to_find.animes.page(@page).per(@per_page)
     end
     render json: @animes_by_genre
+  end
+
+  def filter
+    @arr = Array(params[:arr])
+    @anime = Genre.find(@arr[0]).animes.all
+    for i in 1..(@arr.length-1)
+      @anime = @anime & Genre.find(@arr[i]).animes.all
+    end
+    render json: @anime.paginate(page: @page, per_page: @per_page)
   end
 
   private
