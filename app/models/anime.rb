@@ -1,5 +1,7 @@
 require 'elasticsearch/model'
 class Anime < ApplicationRecord
+  extend FriendlyId
+  friendly_id :name, use: :slugged
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
   has_many :reviews, dependent: :destroy
