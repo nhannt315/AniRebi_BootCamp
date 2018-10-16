@@ -8,9 +8,14 @@ export {
   logout,
   logoutSuccess,
   logoutFail,
+  forgotPassword,
+  forgotPasswordComplete,
+  errorProcess,
   startProcess,
   finishProcess,
-  authCheckState
+  authCheckState,
+  resetPassword,
+  resetPasswordComplete
 } from './auth_action';
 
 export {

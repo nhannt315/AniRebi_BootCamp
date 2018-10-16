@@ -177,3 +177,4 @@ RegistrationForm.propTypes = {
 };
 
 export default Form.create()(RegistrationForm);
+
