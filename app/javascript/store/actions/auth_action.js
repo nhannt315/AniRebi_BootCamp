@@ -67,6 +67,37 @@ export const logoutFail = () => {
   };
 };
 
+export const forgotPassword = (email, redirect) => {
+  return {
+    type: actionTypes.AUTH_FORGOT_PASSWORD,
+    email: email,
+    redirect: redirect
+  };
+};
+
+export const forgotPasswordComplete = (status) => {
+  return {
+    type: actionTypes.AUTH_FORGOT_PASSWORD_COMPLETE,
+    status: status
+  };
+};
+
+export const resetPassword = (password, passwordConfirm, data) => {
+  return {
+    type: actionTypes.AUTH_RESET_PASSWORD,
+    password: password,
+    passwordConfirm: passwordConfirm,
+    data: data
+  };
+};
+
+export const resetPasswordComplete = (status) => {
+  return {
+    type: actionTypes.AUTH_RESET_PASSWORD_COMPLETE,
+    status: status
+  };
+};
+
 export const startProcess = () => {
   return {
     type: actionTypes.START_PROCESSING
@@ -79,9 +110,15 @@ export const finishProcess = () => {
   };
 };
 
+export const errorProcess = errors => {
+  return {
+    type: actionTypes.ERROR_PROCESSING,
+    errors: errors
+  };
+};
+
 export const authCheckState = () => {
   return {
     type: actionTypes.AUTH_CHECK_STATE
   };
 };
-

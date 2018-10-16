@@ -6,7 +6,9 @@ import {
   loginSaga,
   logoutSaga,
   authCheckStateSaga,
-  signUpSaga
+  signUpSaga,
+  forgotPasswordSaga,
+  resetPasswordSaga
 } from './auth_saga';
 
 import {
@@ -22,7 +24,9 @@ export function* watchAuth() {
     takeLatest(actionTypes.LOGIN, loginSaga),
     takeLatest(actionTypes.LOGOUT, logoutSaga),
     takeLatest(actionTypes.AUTH_CHECK_STATE, authCheckStateSaga),
-    takeLatest(actionTypes.SIGN_UP, signUpSaga)
+    takeLatest(actionTypes.SIGN_UP, signUpSaga),
+    takeLatest(actionTypes.AUTH_FORGOT_PASSWORD,forgotPasswordSaga),
+    takeLatest(actionTypes.AUTH_RESET_PASSWORD,resetPasswordSaga)
   ]);
 }
 

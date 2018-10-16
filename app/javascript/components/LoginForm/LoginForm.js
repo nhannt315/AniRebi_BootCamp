@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 import './LoginForm.scss';
+import {Link} from 'react-router-dom';
 
 const FormItem = Form.Item;
 
@@ -55,8 +56,7 @@ class LoginForm extends Component {
             })(
               <Checkbox style={{float: 'left'}}>Remember me</Checkbox>
             )}
-            <a className="login-form-forgot" href="" style={{float: 'right'}}>Forgot password</a>
-
+            <Link style={{float: 'right'}} className="login-form-forgot" to="/forgot_pwd">Forgot password ?</Link>
             <Button type="primary" htmlType="submit" style={{width: '100%'}}>
               Log in
             </Button>

@@ -8,19 +8,21 @@ module Auth
     # end
 
     # POST /resource/password
-    # def create
-    #   super
-    # end
+    def create
+      super
+    end
 
     # GET /resource/password/edit?reset_password_token=abcdef
-    # def edit
-    #   super
-    # end
+    def edit
+      super
+    end
 
     # PUT /resource/password
-    # def update
-    #   super
-    # end
+    def update
+      super
+    end
+
+    def reset; end
 
     # protected
 

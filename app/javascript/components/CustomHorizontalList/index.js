@@ -1,1 +1,1 @@
-export { default } from "./CustomHorizontalList";
+export { default } from './CustomHorizontalList';

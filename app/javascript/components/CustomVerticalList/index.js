@@ -1,1 +1,1 @@
-export {default} from "./CustomVerticalList";
+export {default} from './CustomVerticalList';
