@@ -7,6 +7,7 @@ gem "bcrypt"
 gem "bootsnap", ">= 1.1.0", require: false
 gem "config"
 gem "devise_token_auth"
+gem "friendly_id"
 gem "graphql-client"
 gem "jbuilder", "~> 2.5"
 gem "kaminari"
@@ -21,6 +22,9 @@ gem "webpacker"
 
 group :development, :test do
   gem "pry-rails"
+  gem 'factory_bot_rails'
+  gem 'shoulda'
+  gem 'rspec-rails', '3.6.1'
 end
 
 group :development do
@@ -29,6 +33,7 @@ group :development do
   gem "spring"
   gem "spring-watcher-listen", "~> 2.0.0"
   gem "web-console", ">= 3.3.0"
+  gem 'will_paginate', '~> 3.1.0'
 end
 
 group :test do
@@ -39,3 +44,5 @@ end
 
 gem "graphql-client"
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'elasticsearch-model'
+gem 'elasticsearch-rails'
