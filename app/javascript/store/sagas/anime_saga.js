@@ -1,8 +1,8 @@
-import "regenerator-runtime/runtime";
-import { put } from "redux-saga/effects";
-import axios from "../../axios_anime";
-import * as actions from "../actions/index";
-import * as endpoints from "../../constants/endpoint_constants";
+import 'regenerator-runtime/runtime';
+import { put } from 'redux-saga/effects';
+import axios from '../../axios_anime';
+import * as actions from '../actions/index';
+import * as endpoints from '../../constants/endpoint_constants';
 
 export function* getTopAnime(action) {
   yield put(actions.getTopAnimeStart());
@@ -17,6 +17,20 @@ export function* getTopAnime(action) {
   } catch (error) {
     console.log(error);
     yield put(actions.getTopAnimeFailure(error.response.data.errors));
+  }
+}
+
+export function* getAnimeById(action) {
+  yield put(actions.getAnimeByIdStart());
+  try {
+    let url = endpoints.GET_ANIMES_BY_ID + `/${action.id}`;
+    // console.log(url);
+    const response = yield axios.get(url);
+    // console.log(response.data);
+    yield put(actions.getAnimeByIdSuccess(response.data));
+  } catch (error) {
+    console.log(error);
+    yield put(actions.getAnimeByIdFailure(error.response.data.errors));
   }
 }
 

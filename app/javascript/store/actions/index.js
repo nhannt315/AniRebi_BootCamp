@@ -11,13 +11,17 @@ export {
   startProcess,
   finishProcess,
   authCheckState
-} from "./auth_action";
+} from './auth_action';
 
 export {
   getTopAnime,
   getTopAnimeStart,
   getTopAnimeSuccess,
   getTopAnimeFailure,
+  getAnimeById,
+  getAnimeByIdStart,
+  getAnimeByIdSuccess,
+  getAnimeByIdFailure,
   getGenresList,
   getGenresListStart,
   getGenresListSuccess,
@@ -30,4 +34,4 @@ export {
   getMultipleGenreTopStart,
   getMultipleGenreTopSuccess,
   getMultipleGenreTopFailure
-} from "./anime_action";
+} from './anime_action';

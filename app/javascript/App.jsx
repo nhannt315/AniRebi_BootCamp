@@ -1,20 +1,20 @@
-import React, { Component } from "react";
-import { Switch } from "react-router";
-import { Route, withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { Layout } from "antd";
-import throttle from "lodash/throttle";
-
-import GenrePage from "./containers/GenrePage";
-import AnimePage from "./containers/AnimePage";
-import HomePage from "./containers/HomePage";
-import NotFoundPage from "./containers/NotFoundPage";
-import LoginPage from "./containers/LoginPage";
-import RegisterPage from "./containers/RegisterPage";
-import "./App.scss";
-import * as actions from "./store/actions";
-import Navbar from "./components/Navbar/Navbar";
+import { Alert, Icon, Layout, Spin } from 'antd';
+import throttle from 'lodash/throttle';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Switch } from 'react-router';
+import { Route, withRouter } from 'react-router-dom';
+import './App.scss';
+import Navbar from './components/Navbar/Navbar';
+import AnimePage from './containers/AnimePage';
+import GenrePage from './containers/GenrePage';
+import HomePage from './containers/HomePage';
+import LoginPage from './containers/LoginPage';
+import NotFoundPage from './containers/NotFoundPage';
+import RegisterPage from './containers/RegisterPage';
+import * as actions from './store/actions';
+import AnimeDetailPage from './containers/AnimeDetailPage';
 
 class App extends Component {
   state = {
@@ -31,12 +31,12 @@ class App extends Component {
 
   componentDidMount() {
     this.props.tryAutoSignIn();
-    window.addEventListener("scroll", throttle(this.handleScroll, 250), false);
+    window.addEventListener('scroll', throttle(this.handleScroll, 250), false);
   }
 
   componentWillUnmount() {
     window.removeEventListener(
-      "scroll",
+      'scroll',
       throttle(this.handleScroll, 250),
       false
     );
@@ -71,6 +71,7 @@ class App extends Component {
             <Switch>
               <Route exact path="/" to={HomePage} render={() => <HomePage />} />
               <Route exact path="/anime" render={() => <AnimePage />} />
+              <Route path="/anime/" render={() => <AnimeDetailPage />} />
               <Route exact path="/genre" render={() => <GenrePage />} />
               <Route exact path="/login" render={() => <LoginPage />} />
               <Route exact path="/register" render={() => <RegisterPage />} />
@@ -80,7 +81,24 @@ class App extends Component {
         </Layout>
       );
     } else {
-      return null;
+      return (
+        <div>
+          <Alert
+            message="Please wait"
+            description="Page is loading..."
+            type="info"
+            showIcon
+            icon={
+              <Spin
+                size="large"
+                indicator={
+                  <Icon type="loading" style={{ fontSize: 24 }} spin />
+                }
+              />
+            }
+          />
+        </div>
+      );
     }
   }
 }
@@ -96,7 +114,10 @@ App.propTypes = {
   getMultipleGenreTop: PropTypes.func.isRequired,
   topAnimeIsProcessing: PropTypes.bool.isRequired,
   genresListIsProcessing: PropTypes.bool.isRequired,
-  genreTopIsProcessing: PropTypes.bool.isRequired
+  genreTopIsProcessing: PropTypes.bool.isRequired,
+  multipleGenreTopIsProcessing: PropTypes.bool.isRequired,
+  animeByIdIsProcessing: PropTypes.bool.isRequired,
+  history: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => {
@@ -109,7 +130,8 @@ const mapStateToProps = state => {
     topAnimeIsProcessing: state.anime.topAnimeIsProcessing,
     genresListIsProcessing: state.anime.genresListIsProcessing,
     genreTopIsProcessing: state.anime.genreTopIsProcessing,
-    multipleGenreTopIsProcessing: state.anime.multipleGenreTopIsProcessing
+    multipleGenreTopIsProcessing: state.anime.multipleGenreTopIsProcessing,
+    animeByIdIsProcessing: state.anime.animeByIdIsProcessing
   };
 };
 
@@ -122,7 +144,8 @@ const mapDispatchToProps = dispatch => {
     getGenresList: (page, itemPerPage) =>
       dispatch(actions.getGenresList(page, itemPerPage)),
     getGenreTop: (id, limit) => dispatch(actions.getGenreTop(id, limit)),
-    getMultipleGenreTop: (idArr, limit) => dispatch(actions.getMultipleGenreTop(idArr, limit)),
+    getMultipleGenreTop: (idArr, limit) =>
+      dispatch(actions.getMultipleGenreTop(idArr, limit))
   };
 };
 
