@@ -1,5 +1,3 @@
-require 'will_paginate/array'
-
 class Api::V1::SearchController < ActionController::Base
   before_action :search_anime, only: [:search]
   before_action :page_params, only: [:search]
@@ -15,7 +13,7 @@ class Api::V1::SearchController < ActionController::Base
     else
       @animes = @elasticsearch_animes
     end
-    render json: @animes.paginate(page: @page, per_page: @per_page)
+    render json: @animes.page(@page).per(@per_page)
 
   end
 

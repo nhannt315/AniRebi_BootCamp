@@ -1,20 +1,22 @@
-import { Alert, Icon, Layout, Spin } from 'antd';
-import throttle from 'lodash/throttle';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Switch } from 'react-router';
 import { Route, withRouter } from 'react-router-dom';
-import './App.scss';
-import Navbar from './components/Navbar/Navbar';
-import AnimePage from './containers/AnimePage';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { Layout, Alert, Spin, Icon } from 'antd';
+import throttle from 'lodash/throttle';
+
 import GenrePage from './containers/GenrePage';
+import AnimePage from './containers/AnimePage';
 import HomePage from './containers/HomePage';
-import LoginPage from './containers/LoginPage';
 import NotFoundPage from './containers/NotFoundPage';
+import LoginPage from './containers/LoginPage';
 import RegisterPage from './containers/RegisterPage';
+import ForgotPasswordPage from './containers/ForgotPasswordPage';
+import CheckTokenPage from './containers/ResetPasswordPage';
+import './App.scss';
 import * as actions from './store/actions';
-import AnimeDetailPage from './containers/AnimeDetailPage';
+import Navbar from './components/Navbar/Navbar';
 
 class App extends Component {
   state = {
@@ -75,6 +77,8 @@ class App extends Component {
               <Route exact path="/genre" render={() => <GenrePage />} />
               <Route exact path="/login" render={() => <LoginPage />} />
               <Route exact path="/register" render={() => <RegisterPage />} />
+              <Route exact path="/forgot_pwd" render={() => <ForgotPasswordPage />} />
+              <Route exact path="/reset_pwd" render={() => <CheckTokenPage />} />
               <Route render={() => <NotFoundPage />} />
             </Switch>
           </div>

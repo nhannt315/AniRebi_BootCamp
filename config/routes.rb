@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   mount_devise_token_auth_for "User", at: "auth", controllers: {
       confirmations: "auth/confirmations",
       passwords: "auth/passwords",
@@ -7,7 +8,10 @@ Rails.application.routes.draw do
       sessions: "auth/sessions",
       token_validations: "auth/token_validations"
   }
+
   root to: "pages#root"
+  get "/reset_pwd", to: "pages#reset"
+
   namespace :api do
     namespace :v1 do
       resources :animes do
@@ -28,5 +32,6 @@ Rails.application.routes.draw do
       end
     end
   end
+
   get "*path", to: "pages#root"
 end

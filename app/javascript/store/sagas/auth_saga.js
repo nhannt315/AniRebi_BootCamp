@@ -78,6 +78,38 @@ export function* signUpSaga(action) {
   }
 }
 
+export function* forgotPasswordSaga(action) {
+  yield put(actions.startProcess());
+  const data = {
+    email: action.email,
+    redirect_url: action.redirect,
+  };
+  try {
+    const response = yield axios.post(endpoints.FORGOT_URL, data);
+    yield put(actions.forgotPasswordComplete(response.data.success));
+    yield put(actions.finishProcess());
+  }catch (error) {
+    yield put(actions.errorProcess(error.response));
+  }
+}
+
+export function* resetPasswordSaga(action) {
+  yield put(actions.startProcess());
+  const data = {
+    password: action.password,
+    password_confirmation: action.passwordConfirm,
+  };
+  try {
+    const response = yield axios.put(endpoints.FORGOT_URL, data, {
+      headers: action.data
+    });
+    yield put(actions.resetPasswordComplete(response.data.success));
+    yield put(actions.finishProcess());
+  }catch (error) {
+    yield put(actions.errorProcess(error.response));
+  }
+}
+
 export function* authCheckStateSaga() {
   const userData = JSON.parse(localStorage.getItem(keys.USER_DATA_LOCAL_KEY));
   const tokenData = JSON.parse(localStorage.getItem(keys.TOKEN_DATA_LOCAL_KEY));
