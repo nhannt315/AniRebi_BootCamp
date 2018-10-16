@@ -3,7 +3,7 @@ import { Switch } from 'react-router';
 import { Route, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Layout } from 'antd';
+import { Layout, Alert, Spin, Icon } from 'antd';
 import throttle from 'lodash/throttle';
 
 import GenrePage from './containers/GenrePage';
