@@ -1,4 +1,13 @@
-import { Carousel, Col, Layout, Row, Divider, Icon, Breadcrumb } from 'antd';
+import {
+  Carousel,
+  Col,
+  Layout,
+  Row,
+  Divider,
+  Icon,
+  Breadcrumb,
+  Tag
+} from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -20,7 +29,8 @@ class AnimeDetailPage extends Component {
     multipleGenreTopData: PropTypes.array.isRequired,
     animeByIdData: PropTypes.object,
     history: PropTypes.object.isRequired,
-    getAnimeById: PropTypes.func.isRequired
+    getAnimeById: PropTypes.func.isRequired,
+    animeByIdIsProcessing: PropTypes.bool.isRequired
   };
 
   constructor(props) {
@@ -42,185 +52,181 @@ class AnimeDetailPage extends Component {
   };
 
   render() {
-    const FilteredBannerData = this.props.topAnimeData.filter(
-      item => item.banner != null
-    );
-    const BannerImages = FilteredBannerData.map(item => (
-      <StyledImg
-        key={item.id}
-        src={item.banner}
-        onError={this.handleBannerError}
-      />
-    ));
+    if (!this.props.animeByIdIsProcessing) {
+      const { animeByIdData } = this.props;
 
-    const { animeByIdData } = this.props;
+      const FilteredBannerData = this.props.topAnimeData.filter(
+        item => item.banner != null
+      );
+      const BannerImages = FilteredBannerData.map(item => (
+        <StyledImg
+          key={item.id}
+          src={item.banner}
+          onError={this.handleBannerError}
+        />
+      ));
 
-    return (
-      <StyledContent className="AnimePageContent">
-        <Row>
-          <Carousel style={{ width: '100%' }} autoplay={true}>
-            {BannerImages}
-          </Carousel>
-        </Row>
-        &nbsp;
-        <Content style={{ padding: '0px 100px 50px' }}>
+      const AnimeGenres = this.props.animeByIdData.genres.map(item => (
+        <Tag key={item.id}>{item.name}</Tag>
+      ));
+
+      return (
+        <StyledContent className="AnimePageContent">
           <Row>
-            <Col span={17}>
-              <CardBox
-                content={
-                  <Breadcrumb>
-                    <StyledBreadcrumbItem href="/">
-                      <Icon type="home" /> Home
-                    </StyledBreadcrumbItem>
-                    <StyledBreadcrumbItem href="/anime">
-                      <Icon type="bars" /> Anime
-                    </StyledBreadcrumbItem>
-                    <StyledBreadcrumbItem href="">
-                      {animeByIdData.name}
-                    </StyledBreadcrumbItem>
-                  </Breadcrumb>
-                }
-              />
-              &nbsp;
-              <CardBox
-                content={
-                  <Row>
-                    <Col span={8}>
-                      <Row>
-                        <div className="AnimeDetailCoverImgContainer">
-                          <AnimeDetailCoverImg
-                            className="AnimeDetailCoverImg"
-                            src={animeByIdData.cover_large}
-                            onError={this.handleImgError}
-                          />
+            <Carousel style={{ width: '100%' }} autoplay={true}>
+              {BannerImages}
+            </Carousel>
+          </Row>
+          &nbsp;
+          <Content style={{ padding: '0px 100px 50px' }}>
+            <Row>
+              <Col span={17}>
+                <CardBox
+                  content={
+                    <Breadcrumb>
+                      <StyledBreadcrumbItem href="/">
+                        <Icon type="home" /> Home
+                      </StyledBreadcrumbItem>
+                      <StyledBreadcrumbItem href="/anime">
+                        <Icon type="bars" /> Anime
+                      </StyledBreadcrumbItem>
+                      <StyledBreadcrumbItem href="">
+                        {animeByIdData.name}
+                      </StyledBreadcrumbItem>
+                    </Breadcrumb>
+                  }
+                />
+                &nbsp;
+                <CardBox
+                  content={
+                    <Row>
+                      <Col span={8}>
+                        <Row>
+                          <div className="AnimeDetailCoverImgContainer">
+                            <AnimeDetailCoverImg
+                              className="AnimeDetailCoverImg"
+                              src={animeByIdData.cover_large}
+                              onError={this.handleImgError}
+                            />
+                          </div>
+                          &nbsp;
+                          <div
+                            style={{
+                              textAlign: 'center',
+                              fontSize: 'calc(1.5vw)'
+                            }}
+                          >
+                            Rating:{' '}
+                          </div>
+                          <div
+                            style={{
+                              textAlign: 'center',
+                              fontSize: 'calc(2.5vw)'
+                            }}
+                          >
+                            <StyledIcon type="star" theme="filled" />
+
+                            <StyledIcon type="star" theme="filled" />
+
+                            <StyledIcon type="star" theme="filled" />
+
+                            <StyledIcon type="star" theme="filled" />
+
+                            <StyledIcon type="star" theme="filled" />
+                          </div>
+                        </Row>
+                      </Col>
+
+                      <Col span={15} offset={1}>
+                        <div>
+                          <strong
+                            style={{
+                              fontSize: 'calc(2.5vw)'
+                            }}
+                          >
+                            {animeByIdData.name}
+                          </strong>
                         </div>
                         &nbsp;
-                        <div
-                          style={{
-                            textAlign: 'center',
-                            fontSize: 'calc(1.5vw)'
-                          }}
-                        >
-                          Rating:{' '}
-                        </div>
-                        <div
-                          style={{
-                            textAlign: 'center',
-                            fontSize: 'calc(2.5vw)'
-                          }}
-                        >
-                          <StyledIcon type="star" theme="filled" />
-
-                          <StyledIcon type="star" theme="filled" />
-
-                          <StyledIcon type="star" theme="filled" />
-
-                          <StyledIcon type="star" theme="filled" />
-
-                          <StyledIcon type="star" theme="filled" />
-                        </div>
-                      </Row>
-                    </Col>
-
-                    <Col span={15} offset={1}>
-                      <div>
-                        <strong
-                          style={{
-                            fontSize: 'calc(2.5vw)'
-                          }}
-                        >
+                        <div>
+                          <strong>
+                            <Icon
+                              type="desktop"
+                              style={{ color: 'blue' }}
+                              theme="outlined"
+                            />{' '}
+                            NAME:{' '}
+                          </strong>
                           {animeByIdData.name}
-                        </strong>
-                      </div>
-                      &nbsp;
-                      <div>
-                        <strong>
-                          <Icon
-                            type="desktop"
-                            style={{ color: 'blue' }}
-                            theme="outlined"
-                          />{' '}
-                          NAME:{' '}
-                        </strong>
-                        {animeByIdData.name}
-                      </div>
-                      <StyledDivider dashed />
-                      <div>
-                        <strong>
-                          <Icon
-                            type="copy"
-                            style={{ color: 'orange' }}
-                            theme="outlined"
-                          />{' '}
-                          OTHER NAMES:{' '}
-                        </strong>
-                        {animeByIdData.title_native}
-                      </div>
-                      <StyledDivider dashed />
-                      <div>
-                        <strong>
-                          <Icon
-                            type="team"
-                            style={{ color: 'red' }}
-                            theme="outlined"
-                          />{' '}
-                          AUTHOR(S):{' '}
-                        </strong>
-                        {animeByIdData.name}
-                      </div>
-                      <StyledDivider dashed />
-                      <div>
-                        <strong>
-                          <Icon
-                            type="tags"
-                            style={{ color: 'purple' }}
-                            theme="filled"
-                          />{' '}
-                          GENRE(S):{' '}
-                        </strong>
-                        {animeByIdData.genre}
-                      </div>
-                      <StyledDivider dashed />
-                      <div>
-                        <strong>
-                          <Icon
-                            type="loading"
-                            style={{ color: 'teal' }}
-                            theme="outlined"
-                          />{' '}
-                          STATUS:{' '}
-                        </strong>
-                        {animeByIdData.status}
-                      </div>
-                      <StyledDivider dashed />
-                      <div style={{ whiteSpace: 'pre-line' }}>
-                        <strong>
-                          <Icon
-                            type="read"
-                            style={{ color: 'green' }}
-                            theme="outlined"
-                          />{' '}
-                          INFO:{' '}
-                        </strong>
-                        {this.toText(animeByIdData.info)}
-                      </div>
-                    </Col>
-                  </Row>
-                }
-              />
-            </Col>
-            <Col span={6} offset={1}>
-              <CardBox
-                title="Ranking"
-                content={
-                  <CustomVerticalList dataSource={this.props.topAnimeData} />
-                }
-              />
-            </Col>
-          </Row>
-        </Content>
-      </StyledContent>
-    );
+                        </div>
+                        <StyledDivider dashed />
+                        <div>
+                          <strong>
+                            <Icon
+                              type="copy"
+                              style={{ color: 'orange' }}
+                              theme="outlined"
+                            />{' '}
+                            OTHER NAMES:{' '}
+                          </strong>
+                          {animeByIdData.title_native}
+                        </div>
+                        <StyledDivider dashed />
+                        <div>
+                          <strong>
+                            <Icon
+                              type="tags"
+                              style={{ color: 'red' }}
+                              theme="outlined"
+                            />{' '}
+                            GENRE(S):{' '}
+                          </strong>
+                          {AnimeGenres}
+                        </div>
+                        <StyledDivider dashed />
+                        <div>
+                          <strong>
+                            <Icon
+                              type="loading"
+                              style={{ color: 'teal' }}
+                              theme="outlined"
+                            />{' '}
+                            STATUS:{' '}
+                          </strong>
+                          {animeByIdData.status}
+                        </div>
+                        <StyledDivider dashed />
+                        <div style={{ whiteSpace: 'pre-line' }}>
+                          <strong>
+                            <Icon
+                              type="read"
+                              style={{ color: 'green' }}
+                              theme="outlined"
+                            />{' '}
+                            INFO:{' '}
+                          </strong>
+                          {this.toText(animeByIdData.info)}
+                        </div>
+                      </Col>
+                    </Row>
+                  }
+                />
+              </Col>
+              <Col span={6} offset={1}>
+                <CardBox
+                  title="Ranking"
+                  content={
+                    <CustomVerticalList dataSource={this.props.topAnimeData} />
+                  }
+                />
+              </Col>
+            </Row>
+          </Content>
+        </StyledContent>
+      );
+    } else {
+      return null;
+    }
   }
 }
 
@@ -230,7 +236,8 @@ const mapStateToProps = state => {
     animeByIdData: state.anime.animeByIdData,
     genresListData: state.anime.genresListData,
     genreTopData: state.anime.genreTopData,
-    multipleGenreTopData: state.anime.multipleGenreTopData
+    multipleGenreTopData: state.anime.multipleGenreTopData,
+    animeByIdIsProcessing: state.anime.animeByIdIsProcessing
   };
 };
 
