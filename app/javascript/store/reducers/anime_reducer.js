@@ -11,7 +11,7 @@ const initialState = {
   genresListIsProcessing: true,
   genreTopIsProcessing: true,
   multipleGenreTopIsProcessing: true,
-  animeByIdIsProcessing: false
+  animeByIdIsProcessing: true
 };
 
 const reducer = (state = initialState, action) => {
