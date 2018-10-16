@@ -10,14 +10,8 @@ class Api::V1::AnimesController < ActionController::Base
   end
 
   def show
-    genres_array = Array.new
-    @anime.genres.each do |genre|
-      genres_array << [genre.id, genre.name]
-    end
-    respond_to do |format|
-      format.json {render :json => {:genres_array => genres_array,
-                                    :anime => @anime}}
-    end
+    @genres = @anime.genres
+    render json: @anime, include: [genres: {only: [:id, :name]}]
   end
 
   def top_animes
