@@ -17,9 +17,8 @@ import BGImage from '../assets/images/background_home.png';
 import CardBox from '../components/CardBox/CardBox';
 import CustomVerticalList from '../components/CustomVerticalList/CustomVerticalList';
 import * as actions from '../store/actions';
-import { Link } from 'react-router';
 
-const { Content } = Layout;
+const {Content} = Layout;
 
 class AnimeDetailPage extends Component {
   static propTypes = {
@@ -48,12 +47,12 @@ class AnimeDetailPage extends Component {
   };
 
   toText = content => {
-    return <p dangerouslySetInnerHTML={{ __html: content }} />;
+    return <p dangerouslySetInnerHTML={{__html: content}}/>;
   };
 
   render() {
     if (!this.props.animeByIdIsProcessing) {
-      const { animeByIdData } = this.props;
+      const {animeByIdData} = this.props;
 
       const FilteredBannerData = this.props.topAnimeData.filter(
         item => item.banner != null
@@ -72,23 +71,17 @@ class AnimeDetailPage extends Component {
 
       return (
         <StyledContent className="AnimePageContent">
-          <Row>
-            <Carousel style={{ width: '100%' }} autoplay={true}>
-              {BannerImages}
-            </Carousel>
-          </Row>
-          &nbsp;
-          <Content style={{ padding: '0px 100px 50px' }}>
+          <Content style={{padding: '0px 100px 50px'}}>
             <Row>
               <Col span={17}>
                 <CardBox
                   content={
                     <Breadcrumb>
                       <StyledBreadcrumbItem href="/">
-                        <Icon type="home" /> Home
+                        <Icon type="home"/> Home
                       </StyledBreadcrumbItem>
                       <StyledBreadcrumbItem href="/anime">
-                        <Icon type="bars" /> Anime
+                        <Icon type="bars"/> Anime
                       </StyledBreadcrumbItem>
                       <StyledBreadcrumbItem href="">
                         {animeByIdData.name}
@@ -102,7 +95,7 @@ class AnimeDetailPage extends Component {
                     <Row>
                       <Col span={8}>
                         <Row>
-                          <div className="AnimeDetailCoverImgContainer">
+                          <div className="AnimeDetailCoverImgContainer" style={{overflow: 'hidden'}}>
                             <AnimeDetailCoverImg
                               className="AnimeDetailCoverImg"
                               src={animeByIdData.cover_large}
@@ -124,15 +117,15 @@ class AnimeDetailPage extends Component {
                               fontSize: 'calc(2.5vw)'
                             }}
                           >
-                            <StyledIcon type="star" theme="filled" />
+                            <StyledIcon type="star" theme="filled"/>
 
-                            <StyledIcon type="star" theme="filled" />
+                            <StyledIcon type="star" theme="filled"/>
 
-                            <StyledIcon type="star" theme="filled" />
+                            <StyledIcon type="star" theme="filled"/>
 
-                            <StyledIcon type="star" theme="filled" />
+                            <StyledIcon type="star" theme="filled"/>
 
-                            <StyledIcon type="star" theme="filled" />
+                            <StyledIcon type="star" theme="filled"/>
                           </div>
                         </Row>
                       </Col>
@@ -152,55 +145,55 @@ class AnimeDetailPage extends Component {
                           <strong>
                             <Icon
                               type="desktop"
-                              style={{ color: 'blue' }}
+                              style={{color: 'blue'}}
                               theme="outlined"
                             />{' '}
                             NAME:{' '}
                           </strong>
                           {animeByIdData.name}
                         </div>
-                        <StyledDivider dashed />
+                        <StyledDivider dashed/>
                         <div>
                           <strong>
                             <Icon
                               type="copy"
-                              style={{ color: 'orange' }}
+                              style={{color: 'orange'}}
                               theme="outlined"
                             />{' '}
                             OTHER NAMES:{' '}
                           </strong>
                           {animeByIdData.title_native}
                         </div>
-                        <StyledDivider dashed />
+                        <StyledDivider dashed/>
                         <div>
                           <strong>
                             <Icon
                               type="tags"
-                              style={{ color: 'red' }}
+                              style={{color: 'red'}}
                               theme="outlined"
                             />{' '}
                             GENRE(S):{' '}
                           </strong>
                           {AnimeGenres}
                         </div>
-                        <StyledDivider dashed />
+                        <StyledDivider dashed/>
                         <div>
                           <strong>
                             <Icon
                               type="loading"
-                              style={{ color: 'teal' }}
+                              style={{color: 'teal'}}
                               theme="outlined"
                             />{' '}
                             STATUS:{' '}
                           </strong>
                           {animeByIdData.status}
                         </div>
-                        <StyledDivider dashed />
-                        <div style={{ whiteSpace: 'pre-line' }}>
+                        <StyledDivider dashed/>
+                        <div style={{whiteSpace: 'pre-line'}}>
                           <strong>
                             <Icon
                               type="read"
-                              style={{ color: 'green' }}
+                              style={{color: 'green'}}
                               theme="outlined"
                             />{' '}
                             INFO:{' '}
@@ -216,7 +209,7 @@ class AnimeDetailPage extends Component {
                 <CardBox
                   title="Ranking"
                   content={
-                    <CustomVerticalList dataSource={this.props.topAnimeData} />
+                    <CustomVerticalList dataSource={this.props.topAnimeData}/>
                   }
                 />
               </Col>
@@ -263,9 +256,14 @@ const AnimeDetailCoverImg = styled.img`
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 5px 0 rgba(0, 0, 0, 0.19);
   width: 100%;
   height: auto;
+  transition: all .5s;
+  &:hover {
+    transform: scale(1.25);
+  }
 `;
 
 const StyledContent = styled(Content)`
+  padding-top: 10px;
   background-image: url(${BGImage});
 `;
 

@@ -1,13 +1,13 @@
+import { Alert, Icon, Layout, Spin } from 'antd';
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Switch } from 'react-router';
 import { Route, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { Layout, Alert, Spin, Icon } from 'antd';
-import throttle from 'lodash/throttle';
-
-import GenrePage from './containers/GenrePage';
+import './App.scss';
+import Navbar from './components/Navbar/';
 import AnimePage from './containers/AnimePage';
+import GenrePage from './containers/GenrePage';
 import HomePage from './containers/HomePage';
 import NotFoundPage from './containers/NotFoundPage';
 import LoginPage from './containers/LoginPage';
@@ -16,7 +16,8 @@ import ForgotPasswordPage from './containers/ForgotPasswordPage';
 import CheckTokenPage from './containers/ResetPasswordPage';
 import './App.scss';
 import * as actions from './store/actions';
-import Navbar from './components/Navbar/Navbar';
+import AnimeDetailPage from './containers/AnimeDetailPage';
+import SearchPage from './containers/SearchPage';
 
 class App extends Component {
   state = {
@@ -33,27 +34,7 @@ class App extends Component {
 
   componentDidMount() {
     this.props.tryAutoSignIn();
-    window.addEventListener('scroll', throttle(this.handleScroll, 250), false);
   }
-
-  componentWillUnmount() {
-    window.removeEventListener(
-      'scroll',
-      throttle(this.handleScroll, 250),
-      false
-    );
-  }
-
-  handleScroll = () => {
-    const scrollY = window.pageYOffset;
-    if (scrollY < 40) {
-      return;
-    }
-    this.setState(prevState => ({
-      scrollY,
-      showElement: prevState.scrollY > scrollY
-    }));
-  };
 
   render() {
     if (
@@ -64,10 +45,16 @@ class App extends Component {
       return (
         <Layout className="App">
           <Navbar
+            clearSearchResult={this.props.clearSearchResult}
+            searchAnime={this.props.searchAnime}
+            searchResult={this.props.searchResult}
+            keyword={this.props.keywordSearch}
             isAuthenticated={this.props.isAuthenticated}
             userData={this.props.userData}
             logout={this.props.logout}
             show={this.state.showElement}
+            history={this.props.history}
+            location={this.props.location}
           />
           <div className="main-page">
             <Switch>
@@ -79,6 +66,7 @@ class App extends Component {
               <Route exact path="/register" render={() => <RegisterPage />} />
               <Route exact path="/forgot_pwd" render={() => <ForgotPasswordPage />} />
               <Route exact path="/reset_pwd" render={() => <CheckTokenPage />} />
+              <Route exact path-="/search" render={() => <SearchPage />} />
               <Route render={() => <NotFoundPage />} />
             </Switch>
           </div>
@@ -96,7 +84,7 @@ class App extends Component {
               <Spin
                 size="large"
                 indicator={
-                  <Icon type="loading" style={{ fontSize: 24 }} spin />
+                  <Icon type="loading" style={{fontSize: 24}} spin />
                 }
               />
             }
@@ -121,7 +109,11 @@ App.propTypes = {
   genreTopIsProcessing: PropTypes.bool.isRequired,
   multipleGenreTopIsProcessing: PropTypes.bool.isRequired,
   animeByIdIsProcessing: PropTypes.bool.isRequired,
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
+  searchResult: PropTypes.array,
+  clearSearchResult: PropTypes.func,
+  searchAnime: PropTypes.func,
+  keywordSearch: PropTypes.string
 };
 
 const mapStateToProps = state => {
@@ -135,7 +127,9 @@ const mapStateToProps = state => {
     genresListIsProcessing: state.anime.genresListIsProcessing,
     genreTopIsProcessing: state.anime.genreTopIsProcessing,
     multipleGenreTopIsProcessing: state.anime.multipleGenreTopIsProcessing,
-    animeByIdIsProcessing: state.anime.animeByIdIsProcessing
+    animeByIdIsProcessing: state.anime.animeByIdIsProcessing,
+    searchResult: state.search.searchResult,
+    keywordSearch: state.search.keyword
   };
 };
 
@@ -149,7 +143,9 @@ const mapDispatchToProps = dispatch => {
       dispatch(actions.getGenresList(page, itemPerPage)),
     getGenreTop: (id, limit) => dispatch(actions.getGenreTop(id, limit)),
     getMultipleGenreTop: (idArr, limit) =>
-      dispatch(actions.getMultipleGenreTop(idArr, limit))
+      dispatch(actions.getMultipleGenreTop(idArr, limit)),
+    clearSearchResult: () => dispatch(actions.clearSearchResult()),
+    searchAnime: (payload) => dispatch(actions.searchAnime(payload))
   };
 };
 
