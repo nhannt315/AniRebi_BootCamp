@@ -19,6 +19,10 @@ import {
   getMultipleGenreTop
 } from './anime_saga';
 
+import {
+  searchAnimeSaga
+} from './search_saga';
+
 export function* watchAuth() {
   yield all([
     takeLatest(actionTypes.LOGIN, loginSaga),
@@ -37,5 +41,11 @@ export function* watchAnime() {
     takeLatest(actionTypes.GET_GENRES_LIST, getGenresList),
     takeLatest(actionTypes.GET_GENRE_TOP, getGenreTop),
     takeLatest(actionTypes.GET_MULTIPLE_GENRE_TOP, getMultipleGenreTop)
+  ]);
+}
+
+export function* watchSearch(){
+  yield all([
+    takeLatest(actionTypes.SEARCH_ANIME_REQUEST, searchAnimeSaga)
   ]);
 }

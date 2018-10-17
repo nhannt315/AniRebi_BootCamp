@@ -27,7 +27,7 @@ class CustomCard extends Component {
     const { title, cover, ratingNo, score } = this.props;
 
     return (
-      <div className="CustomCard">
+      <div className="CustomCard" {...this.props}>
         <img
           className="CustomCardCover"
           src={cover}
