@@ -3,6 +3,7 @@ git_source(:github){|repo| "https://github.com/#{repo}.git"}
 
 ruby "2.5.1"
 
+gem "acts_as_votable"
 gem "bcrypt"
 gem "bootsnap", ">= 1.1.0", require: false
 gem "config"
