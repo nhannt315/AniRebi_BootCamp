@@ -16,11 +16,11 @@ class Api::V1::ReviewsController < ApplicationController
     @review = current_user.reviews.build(review_params)
     if @review.save
       render json: {
-        message: 'OK'
+          message: 'OK'
       }, status: 200
     else
       render json: {
-        error: 'Something went wrong ...'
+          error: 'Something went wrong ...'
       }, status: 400
     end
   end
@@ -29,16 +29,16 @@ class Api::V1::ReviewsController < ApplicationController
     if @review.user == current_user
       if @review.destroy
         render json: {
-          message: 'Review deleted'
+            message: 'Review deleted'
         }, status: 200
       else
         render json: {
-          message: 'Something went wrong ...'
+            message: 'Something went wrong ...'
         }, status: 400
       end
     else
       render json: {
-        message: 'Unauthorized'
+          message: 'Unauthorized'
       }, status: 401
     end
   end
@@ -47,17 +47,48 @@ class Api::V1::ReviewsController < ApplicationController
     if @review.user == current_user
       if @review.update_attributes(review_params)
         render json: {
-          message: 'Review updated'
+            message: 'Review updated'
         }, status: 200
       else
         render json: {
-          message: 'Something went wrong ...'
+            message: 'Something went wrong ...'
         }, status: 400
       end
     else
       render json: {
-        message: 'Unauthorized'
+          message: 'Unauthorized'
       }, status: 401
+    end
+  end
+
+  # gem "acts_as_votable"
+  # su dung @review.get_upvotes(downvotes).size de lay gia tri
+
+  def like
+    if current_user.voted_up_on? @review
+      @review.unliked_by current_user
+      render json: {
+          message: 'Unliked'
+      }, status: 200
+    else
+      @review.liked_by current_user
+      render json: {
+          message: 'Liked'
+      }, status: 200
+    end
+  end
+
+  def dislike
+    if current_user.voted_down_on? @review
+      @review.undisliked_by current_user
+      render json: {
+          message: 'Undisliked'
+      }, status: 200
+    else
+      @review.liked_by current_user
+      render json: {
+          message: 'Disliked'
+      }, status: 200
     end
   end
 
