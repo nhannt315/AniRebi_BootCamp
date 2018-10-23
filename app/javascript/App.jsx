@@ -64,8 +64,16 @@ class App extends Component {
               <Route exact path="/genre" render={() => <GenrePage />} />
               <Route exact path="/login" render={() => <LoginPage />} />
               <Route exact path="/register" render={() => <RegisterPage />} />
-              <Route exact path="/forgot_pwd" render={() => <ForgotPasswordPage />} />
-              <Route exact path="/reset_pwd" render={() => <CheckTokenPage />} />
+              <Route
+                exact
+                path="/forgot_pwd"
+                render={() => <ForgotPasswordPage />}
+              />
+              <Route
+                exact
+                path="/reset_pwd"
+                render={() => <CheckTokenPage />}
+              />
               <Route exact path-="/search" render={() => <SearchPage />} />
               <Route render={() => <NotFoundPage />} />
             </Switch>
@@ -84,7 +92,7 @@ class App extends Component {
               <Spin
                 size="large"
                 indicator={
-                  <Icon type="loading" style={{fontSize: 24}} spin />
+                  <Icon type="loading" style={{ fontSize: 24 }} spin />
                 }
               />
             }
@@ -145,7 +153,7 @@ const mapDispatchToProps = dispatch => {
     getMultipleGenreTop: (idArr, limit) =>
       dispatch(actions.getMultipleGenreTop(idArr, limit)),
     clearSearchResult: () => dispatch(actions.clearSearchResult()),
-    searchAnime: (payload) => dispatch(actions.searchAnime(payload))
+    searchAnime: payload => dispatch(actions.searchAnime(payload))
   };
 };
 
