@@ -51,7 +51,7 @@ class CustomCard extends Component {
 }
 
 const StyledIcon = styled(Icon)`
-  color: yellow;
+  color: #fadb14;
 `;
 
 export default withRouter(CustomCard);

@@ -70,7 +70,7 @@ class CustomVerticalList extends Component {
 }
 
 const StyledIcon = styled(Icon)`
-  color: yellow;
+  color: #fadb14;
 `;
 
 const mapStateToProps = state => {

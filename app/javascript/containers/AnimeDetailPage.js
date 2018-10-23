@@ -1,13 +1,4 @@
-import {
-  Carousel,
-  Col,
-  Layout,
-  Row,
-  Divider,
-  Icon,
-  Breadcrumb,
-  Tag
-} from 'antd';
+import { Col, Layout, Row, Divider, Icon, Breadcrumb, Tag, Rate } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -17,8 +8,10 @@ import BGImage from '../assets/images/background_home.png';
 import CardBox from '../components/CardBox/CardBox';
 import CustomVerticalList from '../components/CustomVerticalList/CustomVerticalList';
 import * as actions from '../store/actions';
+import ReviewsList from '../components/ReviewsList/ReviewsList';
+import ReviewForm from '../components/ReviewForm/ReviewForm';
 
-const {Content} = Layout;
+const { Content } = Layout;
 
 class AnimeDetailPage extends Component {
   static propTypes = {
@@ -29,14 +22,101 @@ class AnimeDetailPage extends Component {
     animeByIdData: PropTypes.object,
     history: PropTypes.object.isRequired,
     getAnimeById: PropTypes.func.isRequired,
-    animeByIdIsProcessing: PropTypes.bool.isRequired
+    animeByIdIsProcessing: PropTypes.bool.isRequired,
+    isAuthenticated: PropTypes.bool.isRequired,
+    userData: PropTypes.object.isRequired
   };
 
   constructor(props) {
     super(props);
     var splits = this.props.history.location.pathname.split('/');
     this.props.getAnimeById(splits[2]);
+    this.state = {
+      reviewsList: [
+        {
+          userName: 'OMEGALUL',
+          reviewTitle: 'Test title 1',
+          reviewContent: 'Test content 1',
+          reviewScore: 5,
+          likeNo: 1,
+          dislikeNo: 0
+        },
+        {
+          userName: 'PogChamp',
+          reviewTitle: 'Test title 2',
+          reviewContent: 'Test content 2',
+          reviewScore: 5,
+          likeNo: 0,
+          dislikeNo: 1
+        }
+      ],
+      animeScore: 0
+    };
   }
+
+  componentDidMount() {
+    this.calculateAvgScore();
+  }
+
+  calculateAvgScore = () => {
+    var totalScore = 0;
+    for (var el in this.state.reviewsList) {
+      totalScore += this.state.reviewsList[el].reviewScore;
+    }
+    var avgScore = totalScore / this.state.reviewsList.length;
+    avgScore = parseFloat((Math.round(avgScore * 2) / 2).toFixed(1));
+    this.setState(
+      {
+        animeScore: avgScore
+      },
+      () => {
+        console.log(this.state.animeScore);
+      }
+    );
+  };
+
+  handleNewReviewSubmit = review => {
+    this.setState(
+      {
+        reviewsList: [...this.state.reviewsList, review]
+      },
+      () => {
+        console.log(this.state.reviewsList);
+        this.calculateAvgScore();
+      }
+    );
+  };
+
+  handleDeleteReview = review => {
+    this.setState(
+      {
+        reviewsList: this.state.reviewsList.filter(
+          i => i.userName !== review.userName
+        )
+      },
+      () => {
+        console.log(this.state.reviewsList);
+        this.calculateAvgScore();
+      }
+    );
+  };
+
+  handleEditReview = review => {
+    var newReviewsList = this.state.reviewsList.slice();
+    var index = newReviewsList.findIndex(el => el.userName === review.userName);
+    console.log(index);
+    newReviewsList[index] = review;
+    console.log(newReviewsList);
+    this.setState(
+      {
+        reviewsList: newReviewsList
+      },
+      () => {
+        console.log(this.state.reviewsList);
+        this.calculateAvgScore();
+      }
+    );
+  };
 
   handleBannerError = e => {
     e.target.src = 'https://image.ibb.co/hnycB9/placeholder_large.png';
@@ -47,23 +127,36 @@ class AnimeDetailPage extends Component {
   };
 
   toText = content => {
-    return <p dangerouslySetInnerHTML={{__html: content}}/>;
+    return <p dangerouslySetInnerHTML={{ __html: content }} />;
+  };
+
+  checkUserReviewed = () => {
+    var index = this.state.reviewsList.findIndex(
+      el => el.userName === this.props.userData.name
+    );
+    if (index === -1) {
+      return false;
+    } else {
+      return true;
+    }
   };
 
   render() {
     if (!this.props.animeByIdIsProcessing) {
-      const {animeByIdData} = this.props;
+      const { animeByIdData, isAuthenticated } = this.props;
 
-      const FilteredBannerData = this.props.topAnimeData.filter(
-        item => item.banner != null
-      );
-      const BannerImages = FilteredBannerData.map(item => (
-        <StyledImg
-          key={item.id}
-          src={item.banner}
-          onError={this.handleBannerError}
-        />
-      ));
+      const { animeScore } = this.state;
+
+      // const FilteredBannerData = this.props.topAnimeData.filter(
+      //   item => item.banner != null
+      // );
+      // // const BannerImages = FilteredBannerData.map(item => (
+      // //   <StyledImg
+      // //     key={item.id}
+      // //     src={item.banner}
+      // //     onError={this.handleBannerError}
+      // //   />
+      // // ));
 
       const AnimeGenres = this.props.animeByIdData.genres.map(item => (
         <Tag key={item.id}>{item.name}</Tag>
@@ -71,17 +164,17 @@ class AnimeDetailPage extends Component {
 
       return (
         <StyledContent className="AnimePageContent">
-          <Content style={{padding: '0px 100px 50px'}}>
+          <Content style={{ padding: '0px 100px 50px' }}>
             <Row>
               <Col span={17}>
                 <CardBox
                   content={
                     <Breadcrumb>
                       <StyledBreadcrumbItem href="/">
-                        <Icon type="home"/> Home
+                        <Icon type="home" /> Home
                       </StyledBreadcrumbItem>
                       <StyledBreadcrumbItem href="/anime">
-                        <Icon type="bars"/> Anime
+                        <Icon type="bars" /> Anime
                       </StyledBreadcrumbItem>
                       <StyledBreadcrumbItem href="">
                         {animeByIdData.name}
@@ -95,7 +188,10 @@ class AnimeDetailPage extends Component {
                     <Row>
                       <Col span={8}>
                         <Row>
-                          <div className="AnimeDetailCoverImgContainer" style={{overflow: 'hidden'}}>
+                          <div
+                            className="AnimeDetailCoverImgContainer"
+                            style={{ overflow: 'hidden' }}
+                          >
                             <AnimeDetailCoverImg
                               className="AnimeDetailCoverImg"
                               src={animeByIdData.cover_large}
@@ -109,23 +205,29 @@ class AnimeDetailPage extends Component {
                               fontSize: 'calc(1.5vw)'
                             }}
                           >
-                            Rating:{' '}
+                            Rating
+                          </div>
+                          <div
+                            style={{
+                              textAlign: 'center'
+                            }}
+                          >
+                            <Rate
+                              disabled
+                              value={animeScore}
+                              allowHalf = {true}
+                              style={{
+                                fontSize: 'calc(2.5vw)'
+                              }}
+                            />
                           </div>
                           <div
                             style={{
                               textAlign: 'center',
-                              fontSize: 'calc(2.5vw)'
+                              fontSize: 'calc(1vw)'
                             }}
                           >
-                            <StyledIcon type="star" theme="filled"/>
-
-                            <StyledIcon type="star" theme="filled"/>
-
-                            <StyledIcon type="star" theme="filled"/>
-
-                            <StyledIcon type="star" theme="filled"/>
-
-                            <StyledIcon type="star" theme="filled"/>
+                            {animeScore} star(s)
                           </div>
                         </Row>
                       </Col>
@@ -145,58 +247,58 @@ class AnimeDetailPage extends Component {
                           <strong>
                             <Icon
                               type="desktop"
-                              style={{color: 'blue'}}
+                              style={{ color: 'blue' }}
                               theme="outlined"
                             />{' '}
-                            NAME:{' '}
+                            ENGLISH TITLE:{' '}
                           </strong>
                           {animeByIdData.name}
                         </div>
-                        <StyledDivider dashed/>
+                        <StyledDivider dashed />
                         <div>
                           <strong>
                             <Icon
                               type="copy"
-                              style={{color: 'orange'}}
+                              style={{ color: 'orange' }}
                               theme="outlined"
                             />{' '}
-                            OTHER NAMES:{' '}
+                            JAPANESE TITLE:{' '}
                           </strong>
                           {animeByIdData.title_native}
                         </div>
-                        <StyledDivider dashed/>
+                        <StyledDivider dashed />
                         <div>
                           <strong>
                             <Icon
                               type="tags"
-                              style={{color: 'red'}}
+                              style={{ color: 'red' }}
                               theme="outlined"
                             />{' '}
                             GENRE(S):{' '}
                           </strong>
                           {AnimeGenres}
                         </div>
-                        <StyledDivider dashed/>
+                        <StyledDivider dashed />
                         <div>
                           <strong>
                             <Icon
-                              type="loading"
-                              style={{color: 'teal'}}
+                              type="info-circle"
+                              style={{ color: 'teal' }}
                               theme="outlined"
                             />{' '}
                             STATUS:{' '}
                           </strong>
                           {animeByIdData.status}
                         </div>
-                        <StyledDivider dashed/>
-                        <div style={{whiteSpace: 'pre-line'}}>
+                        <StyledDivider dashed />
+                        <div style={{ whiteSpace: 'pre-line' }}>
                           <strong>
                             <Icon
                               type="read"
-                              style={{color: 'green'}}
+                              style={{ color: 'green' }}
                               theme="outlined"
                             />{' '}
-                            INFO:{' '}
+                            PLOT SYNOPSIS:{' '}
                           </strong>
                           {this.toText(animeByIdData.info)}
                         </div>
@@ -204,12 +306,32 @@ class AnimeDetailPage extends Component {
                     </Row>
                   }
                 />
+                &nbsp;
+                <CardBox
+                  title="Reviews"
+                  content={
+                    <div>
+                      <ReviewsList
+                        dataSource={this.state.reviewsList}
+                        handleDeleteReview={this.handleDeleteReview}
+                        handleEditReview={this.handleEditReview}
+                      />
+                    </div>
+                  }
+                />
+                &nbsp;
+                {isAuthenticated &&
+                  !this.checkUserReviewed() && (
+                    <ReviewForm
+                      handleNewReviewSubmit={this.handleNewReviewSubmit}
+                    />
+                  )}
               </Col>
               <Col span={6} offset={1}>
                 <CardBox
                   title="Ranking"
                   content={
-                    <CustomVerticalList dataSource={this.props.topAnimeData}/>
+                    <CustomVerticalList dataSource={this.props.topAnimeData} />
                   }
                 />
               </Col>
@@ -230,7 +352,9 @@ const mapStateToProps = state => {
     genresListData: state.anime.genresListData,
     genreTopData: state.anime.genreTopData,
     multipleGenreTopData: state.anime.multipleGenreTopData,
-    animeByIdIsProcessing: state.anime.animeByIdIsProcessing
+    animeByIdIsProcessing: state.anime.animeByIdIsProcessing,
+    isAuthenticated: state.auth.isAuthenticated,
+    userData: state.auth.userData
   };
 };
 
@@ -240,13 +364,13 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const StyledImg = styled.img`
-  width: 100%;
-  height: calc(31vw);
-  color: white;
-  text-align: center;
-  object-fit: cover;
-`;
+// const StyledImg = styled.img`
+//   width: 100%;
+//   height: calc(31vw);
+//   color: white;
+//   text-align: center;
+//   object-fit: cover;
+// `;
 
 const AnimeDetailCoverImg = styled.img`
   border-color: white;
@@ -256,7 +380,7 @@ const AnimeDetailCoverImg = styled.img`
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 5px 0 rgba(0, 0, 0, 0.19);
   width: 100%;
   height: auto;
-  transition: all .5s;
+  transition: all 0.5s;
   &:hover {
     transform: scale(1.25);
   }
@@ -268,13 +392,14 @@ const StyledContent = styled(Content)`
 `;
 
 const StyledDivider = styled(Divider)`
-  margin: 8px !important;
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
 `;
 
-const StyledIcon = styled(Icon)`
-  color: yellow;
-  margin: 1px;
-`;
+// const StyledIcon = styled(Icon)`
+//   color: yellow;
+//   margin: 1px;
+// `;
 
 const StyledBreadcrumbItem = styled(Breadcrumb.Item)`
   color: black !important;
