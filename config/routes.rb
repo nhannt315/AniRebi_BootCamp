@@ -23,6 +23,10 @@ Rails.application.routes.draw do
       resources :genres do
         collection do
           get "top_genres"
+          get "all_genres"
+        end
+        member do
+          get "anime_list"
         end
       end
       resources :search do

@@ -116,9 +116,9 @@ const mapDispatchToProps = dispatch => {
 const StyledList = styled.div`
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 32px;
 `;
 
 const StyledContent = styled(Content)`

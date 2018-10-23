@@ -5,7 +5,8 @@ import authReducer from './reducers/auth_reducer';
 import animeReducer from './reducers/anime_reducer';
 import searchReducer from './reducers/search_reducer';
 import userInfoReducer from './reducers/user_info_reducer';
-import { watchAuth, watchAnime, watchSearch, watchUserProfile } from './sagas';
+import genreReducer from './reducers/genre_reducer';
+import { watchAuth, watchAnime, watchSearch, watchGenre, watchUserProfile } from './sagas';
 
 const composeEnhancers =
   process.env.NODE_ENV === 'development'
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
   auth: authReducer,
   anime: animeReducer,
   search: searchReducer,
-  user: userInfoReducer
+  user: userInfoReducer,
+  genre: genreReducer
 });
 
 const sagaMiddleware = createSagaMiddleware();
@@ -30,5 +32,6 @@ sagaMiddleware.run(watchAuth);
 sagaMiddleware.run(watchAnime);
 sagaMiddleware.run(watchSearch);
 sagaMiddleware.run(watchUserProfile);
+sagaMiddleware.run(watchGenre);
 
 export default store;

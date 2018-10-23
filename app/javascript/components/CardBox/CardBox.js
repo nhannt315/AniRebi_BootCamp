@@ -9,10 +9,10 @@ class CardBox extends Component {
   };
 
   render() {
-    const { title, content } = this.props;
+    const { title, content, staticContext, ...rest } = this.props;
     if (title != null) {
       return (
-        <div className="CardBoxContainer">
+        <div className="CardBoxContainer" {...rest}>
           <div className="CardBoxTitleContainer">
             <h1 className="CardBoxTitle">{title}</h1>
           </div>

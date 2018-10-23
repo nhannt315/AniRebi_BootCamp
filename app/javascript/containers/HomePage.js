@@ -48,12 +48,12 @@ class HomePage extends Component {
       />
     ));
 
-    const TopGenreCardBoxes = this.props.multipleGenreTopData.map(item => (
-      <div key={item.genre.id}>
+    const TopGenreCardBoxes = this.props.multipleGenreTopData.map(genre => (
+      <div key={genre.id}>
         <CardBox
-          key={item.genre.id}
-          title={item.genre.name}
-          content={<CustomHorizontalList dataSource={item.animes} />}
+          key={genre.id}
+          title={genre.name}
+          content={<CustomHorizontalList dataSource={genre.animes} />}
         />
         &nbsp;
       </div>

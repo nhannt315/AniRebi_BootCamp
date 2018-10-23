@@ -1,6 +1,6 @@
 class Api::V1::GenresController < ActionController::Base
-  before_action :find_genre, only: [:show]
-  before_action :page_params, only: [:index, :show]
+  before_action :find_genre, only: [:show, :anime_list]
+  before_action :page_params, only: [:index, :show, :anime_list]
 
   def index
     @genres = Genre.all.page(@page).per(@per_page)
@@ -8,11 +8,18 @@ class Api::V1::GenresController < ActionController::Base
   end
 
   def show
-    @animes = @genre.animes.order(rating: :desc).limit(@ani_limit)
-    respond_to do |format|
-      format.json { render :json => {:genre => @genre,
-                                     :animes => @animes }}
-    end
+    @per_page = params[:item_per_page] || 6
+    @animes = @genre.animes.order(rating: :desc).page(@page).per(@per_page)
+  end
+
+  def anime_list
+    @per_page = params[:item_per_page] || 6
+    @animes = @genre.animes.page(@page).per(@per_page)
+    @count = @genre.animes.count
+  end
+
+  def all_genres
+    render json: Genre.all
   end
 
   def top_genres
@@ -21,7 +28,7 @@ class Api::V1::GenresController < ActionController::Base
   end
 
   private
-  
+
   def page_params
     @per_page = params[:item_per_page] || Settings.pagination
     @page = params[:page] || 1
