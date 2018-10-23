@@ -30,8 +30,13 @@ Rails.application.routes.draw do
           get "search"
         end
       end
+      resources :reviews do
+        collection do
+          get "like"
+          get "dislike"
+        end
+      end
     end
   end
-
   get "*path", to: "pages#root"
 end

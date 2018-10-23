@@ -1,3 +1,5 @@
+@import '../../styles/variables';
+
 .CardBoxContainer {
   position: relative;
 }
@@ -5,19 +7,19 @@
 .CardBoxContent {
   padding: 1.5em 1.5em 1.5em 1.5em;
   border-color: rgb(232, 232, 232);
-  border-width: 0px 1px 1px 1px;
+  border-width: 0 1px 1px 1px;
   border-style: solid;
-  border-radius: 0px 0px 3px 3px;
+  border-radius: 0 0 3px 3px;
   background: rgb(241, 241, 241);
 }
 
 .CardBoxTitleContainer {
-  border-color: #df691a;
+  border-color: $color-primary;
   border-radius: 3px 3px 0px 0px;
   border-width: 1px 1px 0px 1px;
   border-style: solid;
   font-size: 14px;
-  background-color: #df691a;
+  background-color: $color-primary;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -25,7 +27,7 @@
 }
 
 .CardBoxTitle {
-  color: white;
+  color: $color-secondary;
   margin: 0;
   font-family: "Cabin Sketch", cursive;
 }
