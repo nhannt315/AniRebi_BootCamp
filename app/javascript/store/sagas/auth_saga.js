@@ -36,7 +36,8 @@ export function* loginSaga(action) {
     const userData = {
       email: response.data.data.email,
       birthday: response.data.data.birthday,
-      name: response.data.data.name
+      name: response.data.data.name,
+      id: response.data.data.id
     };
     if (isRemember) {
       localStorage.setItem(keys.TOKEN_DATA_LOCAL_KEY, JSON.stringify(tokenData));
@@ -69,7 +70,8 @@ export function* signUpSaga(action) {
     const userData = {
       email: response.data.data.email,
       birthday: response.data.data.birthday,
-      name: response.data.data.name
+      name: response.data.data.name,
+      id: response.data.data.id
     };
     yield put(actions.signUpSuccess(userData, tokenData));
     yield put(actions.finishProcess());

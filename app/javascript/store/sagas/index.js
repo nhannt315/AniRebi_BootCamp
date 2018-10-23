@@ -23,6 +23,10 @@ import {
   searchAnimeSaga
 } from './search_saga';
 
+import {
+  fetchUserInfo
+} from './user_info_saga';
+
 export function* watchAuth() {
   yield all([
     takeLatest(actionTypes.LOGIN, loginSaga),
@@ -41,6 +45,13 @@ export function* watchAnime() {
     takeLatest(actionTypes.GET_GENRES_LIST, getGenresList),
     takeLatest(actionTypes.GET_GENRE_TOP, getGenreTop),
     takeLatest(actionTypes.GET_MULTIPLE_GENRE_TOP, getMultipleGenreTop)
+  ]);
+}
+
+
+export function* watchUserProfile() {
+  yield all([
+    takeLatest(actionTypes.GET_USER_PROFILE_INFO, fetchUserInfo)
   ]);
 }
 

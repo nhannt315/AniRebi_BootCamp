@@ -32,7 +32,7 @@ class SearchMenu extends Component {
             searchResult.slice(0, 5).map(anime => (
               <li key={anime.id} onClick={()=>this.handleImgClick(anime.id)}>
                 <div className="search-li-detail">
-                  <img  src={anime.cover_medium} onError={this.onImageError}/>
+                  <img  src={anime.cover_medium} onError={this.onImageError} />
                   <div className="search-li-info">
                     <div className="search-li-anime">
                       <Link to="/" onClick={clearSearchResult}>
