@@ -59,10 +59,10 @@ class SearchPage extends Component {
                 content={
                   <Breadcrumb>
                     <StyledBreadcrumbItem href="/">
-                      <Icon type="home"/> Home
+                      <Icon type="home" /> Home
                     </StyledBreadcrumbItem>
                     <StyledBreadcrumbItem href="/anime">
-                      <Icon type="bars"/> Anime
+                      <Icon type="bars" /> Anime
                     </StyledBreadcrumbItem>
                     <StyledBreadcrumbItem href="">
                       Search with keyword : {keyword}
@@ -77,7 +77,7 @@ class SearchPage extends Component {
               <CardBox
                 title="Ranking"
                 content={
-                  <CustomVerticalList dataSource={topAnimeData}/>
+                  <CustomVerticalList dataSource={topAnimeData} />
                 }
               />
             </Col>

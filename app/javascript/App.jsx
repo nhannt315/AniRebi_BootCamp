@@ -18,6 +18,7 @@ import './App.scss';
 import * as actions from './store/actions';
 import AnimeDetailPage from './containers/AnimeDetailPage';
 import SearchPage from './containers/SearchPage';
+import UserProfilePage from './containers/UserProfilePage';
 
 class App extends Component {
   state = {
@@ -74,6 +75,8 @@ class App extends Component {
                 path="/reset_pwd"
                 render={() => <CheckTokenPage />}
               />
+              <Route exact path="/profile/:id?" 
+                render={() => <UserProfilePage userData={this.props.userData} />} />
               <Route exact path-="/search" render={() => <SearchPage />} />
               <Route render={() => <NotFoundPage />} />
             </Switch>
