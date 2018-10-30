@@ -5,3 +5,34 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+require 'ffaker'
+
+review_count = 400
+
+review_list = Array.new
+
+for i in 1..review_count
+  lang = rand(1..4)
+  case lang
+  when 1
+    content = FFaker::LoremRU.paragraph
+  when 2
+    content = FFaker::LoremAR.paragraph
+  when 3
+    content = FFaker::LoremCN.paragraph
+  when 4
+    content = FFaker::LoremKR.paragraph
+  end
+  review_list.push({
+    user_id: User.all.ids.sample,
+    anime_id: Anime.all.ids.sample,
+    title: FFaker::Tweet.tweet,
+    content: content,
+    rating: (rand(0..10).to_f)/2
+    })
+end
+
+review_list.each do |review|
+  Review.create(review)
+end
