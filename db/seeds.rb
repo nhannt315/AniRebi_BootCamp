@@ -8,17 +8,28 @@
 
 require 'ffaker'
 
-review_count = 10
+review_count = 400
 
 review_list = Array.new
 
 for i in 1..review_count
+  lang = rand(1..4)
+  case lang
+  when 1
+    content = FFaker::LoremRU.paragraph
+  when 2
+    content = FFaker::LoremAR.paragraph
+  when 3
+    content = FFaker::LoremCN.paragraph
+  when 4
+    content = FFaker::LoremKR.paragraph
+  end
   review_list.push({
     user_id: User.all.ids.sample,
     anime_id: Anime.all.ids.sample,
     title: FFaker::Tweet.tweet,
-    content: FFaker::LoremRU.paragraph,
-    rating: (rand(1..10).to_f)/2
+    content: content,
+    rating: (rand(0..10).to_f)/2
     })
 end
 
