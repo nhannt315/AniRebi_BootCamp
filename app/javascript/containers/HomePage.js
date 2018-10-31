@@ -33,7 +33,7 @@ class HomePage extends Component {
   };
 
   handleBannerError = e => {
-    e.target.src = 'https://image.ibb.co/hnycB9/placeholder_large.png';
+    e.target.src = 'https://gazettereview.com/wp-content/uploads/2018/06/1-2.jpg';
   };
 
   render() {

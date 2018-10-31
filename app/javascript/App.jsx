@@ -92,8 +92,9 @@ class App extends Component {
       );
     } else {
       return (
-        <div>
+        <div style={{height: '100vh'}}>
           <Alert
+            style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}
             message="Please wait"
             description="Page is loading..."
             type="info"

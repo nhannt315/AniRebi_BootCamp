@@ -15,7 +15,11 @@ class AnimeItem extends Component {
       <div className="item">
         <div className="box-cover">
           <Link to={`/anime/${anime.id}`}>
-            <img src={anime.cover_medium} onError={this.handleImgError}/>
+            <img 
+              src={anime.cover_medium} 
+              placeholder="https://is4-ssl.mzstatic.com/image/thumb/Purple62/v4/c8/5b/a0/c85ba051-99e7-3bd5-29dc-c0a246334207/source/512x512bb.jpg"
+              onError={this.handleImgError}
+            />
           </Link>
         </div>
         <div className="box-description">

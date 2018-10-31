@@ -145,7 +145,7 @@ class GenreDetailPage extends Component {
               <CardBox
                 title="Ranking"
                 content={
-                  <CustomVerticalList dataSource={topAnimeData}/>
+                  <CustomVerticalList dataSource={topAnimeData} />
                 }
               />
             </Col>
