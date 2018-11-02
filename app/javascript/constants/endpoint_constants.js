@@ -9,3 +9,5 @@ export const GET_GENRES_LIST = '/api/v1/genres';
 export const GET_GENRE_TOP = '/api/v1/genres';
 
 export const SEARCH_ANIME = '/api/v1/search/search';
+
+export const USER_API = '/api/v1/users';

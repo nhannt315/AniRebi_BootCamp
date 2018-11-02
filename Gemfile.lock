@@ -133,6 +133,7 @@ GEM
       railties (>= 3.0.0)
     faraday (0.15.3)
       multipart-post (>= 1.2, < 3)
+    ffaker (2.10.0)
     ffi (1.9.25)
     friendly_id (5.2.4)
       activerecord (>= 4.0.0)
@@ -335,6 +336,7 @@ DEPENDENCIES
   elasticsearch-model
   elasticsearch-rails
   factory_bot_rails
+  ffaker
   friendly_id
   graphql-client
   jbuilder (~> 2.5)

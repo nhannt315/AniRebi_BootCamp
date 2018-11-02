@@ -54,7 +54,6 @@ class Navbar extends Component {
 
   handleSearchFormSubmit = e => {
     e.preventDefault();
-    console.log(e);
     let {term} = this.state;
     if (!term) {
       this.props.clearSearchResult();
@@ -74,16 +73,13 @@ class Navbar extends Component {
     if (isAuthenticated) {
       const userMenu = (
         <Menu>
-          <Menu.Item key="0">
-            <a href="#">{userData.email}</a>
-          </Menu.Item>
           <Menu.Item key="1">
-            <a href="#">My profile</a>
+            <Link to={`/profile/${userData.id}`}>My profile</Link>
           </Menu.Item>
           <Menu.Item key="2">
             <a href="#">Settings</a>
           </Menu.Item>
-          <Menu.Divider/>
+          <Menu.Divider />
           <Menu.Item key="3" onClick={logout}>Logout</Menu.Item>
         </Menu>
       );
@@ -144,17 +140,17 @@ class Navbar extends Component {
           <ul className="nav-menu">
             <li>
               <Link to="/" className="animating_link" activeclassname="nav-menu-link-active">
-                <Icon type="home"/>{' '}Home
+                <Icon type="home" />{' '}Home
               </Link>
             </li>
             <li>
               <Link to="/anime" className="animating_link" activeclassname="nav-menu-link-active">
-                <Icon type="bars" theme="outlined"/>{' '}Anime
+                <Icon type="bars" theme="outlined" />{' '}Anime
               </Link>
             </li>
             <li>
               <Link to="/genre" className="animating_link" activeclassname="nav-menu-link-active">
-                <Icon type="tags" theme="outlined"/>{' '}Gerne
+                <Icon type="tags" theme="outlined" />{' '}Gerne
               </Link>
             </li>
           </ul>

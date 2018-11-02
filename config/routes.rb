@@ -36,6 +36,7 @@ Rails.application.routes.draw do
           get "dislike"
         end
       end
+      resources :users, only: [:show]
     end
   end
   get "*path", to: "pages#root"

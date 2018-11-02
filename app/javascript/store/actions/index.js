@@ -49,3 +49,10 @@ export {
   searchAnimeFalure,
   clearSearchResult
 } from './search_action';
+
+
+export {
+  getProfile,
+  getProfileSuccess,
+  getProfileFailue
+} from './user_info_action';

@@ -24,7 +24,6 @@ const reducer = (state = initialState, action) => {
     case actionTypes.LOGOUT_FAILURE:
       return {...state, isAuthenticated: false, userData: {}, tokenData: {}, errors: []};
     case actionTypes.AUTH_FORGOT_PASSWORD_COMPLETE:
-      console.log(status);
       return {...state, status: action.status, errors: []};
     case actionTypes.AUTH_RESET_PASSWORD_COMPLETE:
       return {...state, status: action.status, errors: []};
