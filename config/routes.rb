@@ -34,6 +34,7 @@ Rails.application.routes.draw do
         collection do
           get "like"
           get "dislike"
+          get "get_by_anime"
         end
       end
       resources :users, only: [:show]
