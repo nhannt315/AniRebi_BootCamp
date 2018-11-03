@@ -8,9 +8,22 @@
 
 require 'ffaker'
 
+user_count = 50
 review_count = 400
 
 review_list = Array.new
+user_list = Array.new
+
+for i in 1..user_count
+  user_list.push({
+    email: FFaker::Internet.email,
+    password: '1234567'
+    })
+end
+
+user_list.each do |user|
+  User.create(user)
+end
 
 for i in 1..review_count
   lang = rand(1..4)

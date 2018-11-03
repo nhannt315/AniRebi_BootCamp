@@ -1,6 +1,6 @@
 class Api::V1::ReviewsController < ApplicationController
   before_action :authenticate_user!, only: [:create, :destroy, :update, :like, :dislike]
-  before_action :page_params, only: [:index]
+  before_action :page_params, only: [:index, :get_by_anime]
   before_action :find_review, only: [:show, :destroy, :update]
 
   def index
@@ -93,7 +93,7 @@ class Api::V1::ReviewsController < ApplicationController
   end
 
   def get_by_anime
-    render json: Anime.find(params[:id]).reviews
+    render json: Anime.find(params[:id]).reviews.page(@page).per(@per_page)
   end
 
   private
