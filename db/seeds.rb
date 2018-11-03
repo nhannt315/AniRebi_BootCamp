@@ -17,6 +17,7 @@ user_list = Array.new
 for i in 1..user_count
   user_list.push({
     email: FFaker::Internet.email,
+    name: FFaker::Name.name,
     password: '1234567'
     })
 end
