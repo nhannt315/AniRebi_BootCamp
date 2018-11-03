@@ -1,5 +1,5 @@
 class Api::V1::ReviewsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, only: [:create, :destroy, :update, :like, :dislike]
   before_action :page_params, only: [:index]
   before_action :find_review, only: [:show, :destroy, :update]
 
@@ -90,6 +90,10 @@ class Api::V1::ReviewsController < ApplicationController
           message: 'Disliked'
       }, status: 200
     end
+  end
+
+  def get_by_anime
+    render json: Anime.find(params[:id]).reviews
   end
 
   private
