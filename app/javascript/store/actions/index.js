@@ -38,7 +38,11 @@ export {
   getMultipleGenreTop,
   getMultipleGenreTopStart,
   getMultipleGenreTopSuccess,
-  getMultipleGenreTopFailure
+  getMultipleGenreTopFailure,
+  getReviewsByAnime,
+  getReviewsByAnimeStart,
+  getReviewsByAnimeSuccess,
+  getReviewsByAnimeFailure
 } from './anime_action';
 
 

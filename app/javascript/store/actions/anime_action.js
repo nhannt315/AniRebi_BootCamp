@@ -28,7 +28,7 @@ export const getTopAnimeFailure = errors => {
   };
 };
 
-export const getAnimeById = (id) => {
+export const getAnimeById = id => {
   return {
     type: actionTypes.GET_ANIME_BY_ID,
     id: id
@@ -135,6 +135,33 @@ export const getMultipleGenreTopSuccess = result => {
 export const getMultipleGenreTopFailure = errors => {
   return {
     type: actionTypes.GET_MULTIPLE_GENRE_TOP_FAILURE,
+    errors: errors
+  };
+};
+
+export const getReviewsByAnime = id => {
+  return {
+    type: actionTypes.GET_REVIEWS_BY_ANIME,
+    id: id
+  };
+};
+
+export const getReviewsByAnimeStart = () => {
+  return {
+    type: actionTypes.GET_REVIEWS_BY_ANIME_START
+  };
+};
+
+export const getReviewsByAnimeSuccess = result => {
+  return {
+    type: actionTypes.GET_REVIEWS_BY_ANIME_SUCCESS,
+    data: result
+  };
+};
+
+export const getReviewsByAnimeFailure = errors => {
+  return {
+    type: actionTypes.GET_REVIEWS_BY_ANIME_FAILURE,
     errors: errors
   };
 };

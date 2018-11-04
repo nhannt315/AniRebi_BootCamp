@@ -1,7 +1,17 @@
-import { Col, Row, Divider, Icon, Rate, Avatar, Button, Input } from 'antd';
+import {
+  Col,
+  Row,
+  Divider,
+  Icon,
+  Rate,
+  Avatar,
+  Button,
+  Input,
+  Badge,
+  Tooltip
+} from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import CardBox from '../CardBox/CardBox';
 import * as actions from '../../store/actions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -13,11 +23,14 @@ class Review extends Component {
   static propTypes = {
     userData: PropTypes.object.isRequired,
     userName: PropTypes.string.isRequired,
+    reviewId: PropTypes.number.isRequired,
     reviewTitle: PropTypes.string.isRequired,
     reviewContent: PropTypes.string.isRequired,
     reviewScore: PropTypes.number.isRequired,
     likeNo: PropTypes.number.isRequired,
     dislikeNo: PropTypes.number.isRequired,
+    createdAt: PropTypes.string.isRequired,
+    updatedAt: PropTypes.string.isRequired,
     handleEditReview: PropTypes.func.isRequired,
     handleDeleteReview: PropTypes.func.isRequired
   };
@@ -126,6 +139,34 @@ class Review extends Component {
     }
   };
 
+  showDeleteConfirm = () => {
+    confirm({
+      title: 'Are you sure you want to delete this review?',
+      content: 'Deleted reviews cannot be restored',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        this.handleDeleteClick();
+      },
+      onCancel() {}
+    });
+  };
+
+  showEditConfirm = () => {
+    confirm({
+      title: 'Are you sure you want to edit this review?',
+      content: 'Edited changes cannot be reverted',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        this.handleEditClick();
+      },
+      onCancel() {}
+    });
+  };
+
   render() {
     const {
       reviewTitle,
@@ -149,7 +190,8 @@ class Review extends Component {
                   }}
                 >
                   <span style={{ fontSize: '40px' }}>
-                    {userName.charAt(0).toUpperCase()}
+                    {/* {userName.charAt(0).toUpperCase()} */}
+                    Test
                   </span>
                 </StyledAvatar>
               </div>
@@ -199,7 +241,11 @@ class Review extends Component {
               </div>
               &nbsp;
               {userName !== userData.name && (
-                <div>
+                <div
+                  style={{
+                    marginTop: '15px'
+                  }}
+                >
                   <div
                     style={{
                       position: 'relative',
@@ -208,13 +254,13 @@ class Review extends Component {
                       alignItems: 'center'
                     }}
                   >
-                    <LikeIcon
-                      type="like"
-                      theme="filled"
-                      onClick={this.handleLikeClick}
-                    />
-                    &nbsp;
-                    <span>{likeNo}</span>
+                    <Badge count={likeNo}>
+                      <LikeIcon
+                        type="like"
+                        theme="filled"
+                        onClick={this.handleLikeClick}
+                      />
+                    </Badge>
                   </div>
                   <div
                     style={{
@@ -225,12 +271,13 @@ class Review extends Component {
                       marginLeft: '20px'
                     }}
                   >
-                    <DislikeIcon
-                      type="dislike"
-                      theme="filled"
-                      onClick={this.handleDislikeClick}
-                    />
-                    &nbsp;
+                    <Badge count={dislikeNo}>
+                      <DislikeIcon
+                        type="dislike"
+                        theme="filled"
+                        onClick={this.handleDislikeClick}
+                      />
+                    </Badge>
                     <span>{dislikeNo}</span>
                   </div>
                 </div>
@@ -245,7 +292,7 @@ class Review extends Component {
                       alignItems: 'center'
                     }}
                   >
-                    <Button type="primary" onClick={this.handleEditClick}>
+                    <Button type="primary" onClick={this.showEditConfirm}>
                       Edit
                     </Button>
                   </div>
@@ -258,7 +305,7 @@ class Review extends Component {
                       marginLeft: '20px'
                     }}
                   >
-                    <Button type="danger" onClick={this.handleDeleteClick}>
+                    <Button type="danger" onClick={this.showDeleteConfirm}>
                       Delete
                     </Button>
                   </div>
@@ -279,7 +326,8 @@ class Review extends Component {
                   style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
                 >
                   <span style={{ fontSize: '40px' }}>
-                    {userName.charAt(0).toUpperCase()}
+                    {/* {userName.charAt(0).toUpperCase()} */}
+                    Test
                   </span>
                 </StyledAvatar>
               </div>

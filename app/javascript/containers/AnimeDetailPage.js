@@ -10,19 +10,31 @@ import CustomVerticalList from '../components/CustomVerticalList/CustomVerticalL
 import * as actions from '../store/actions';
 import ReviewsList from '../components/ReviewsList/ReviewsList';
 import ReviewForm from '../components/ReviewForm/ReviewForm';
+import axios from '../axios_anime';
 
 const { Content } = Layout;
+
+var getDerivedStateFromProps = (props, state) => {
+  console.log(props);
+  console.log(state);
+  // this.setState({
+  //   reviewsList: props.reviewsData
+  // });
+};
 
 class AnimeDetailPage extends Component {
   static propTypes = {
     topAnimeData: PropTypes.array.isRequired,
+    reviewsData: PropTypes.array.isRequired,
     genresListData: PropTypes.array.isRequired,
     genreTopData: PropTypes.object.isRequired,
     multipleGenreTopData: PropTypes.array.isRequired,
     animeByIdData: PropTypes.object,
     history: PropTypes.object.isRequired,
     getAnimeById: PropTypes.func.isRequired,
+    getReviewsByAnime: PropTypes.func.isRequired,
     animeByIdIsProcessing: PropTypes.bool.isRequired,
+    reviewsByAnimeIsProcessing: PropTypes.bool.isRequired,
     isAuthenticated: PropTypes.bool.isRequired,
     userData: PropTypes.object.isRequired
   };
@@ -31,43 +43,34 @@ class AnimeDetailPage extends Component {
     super(props);
     var splits = this.props.history.location.pathname.split('/');
     this.props.getAnimeById(splits[2]);
+    this.props.getReviewsByAnime(splits[2]);
     this.state = {
-      reviewsList: [
-        {
-          userName: 'OMEGALUL',
-          reviewTitle: 'Test title 1',
-          reviewContent: 'Test content 1',
-          reviewScore: 5,
-          likeNo: 1,
-          dislikeNo: 0
-        },
-        {
-          userName: 'PogChamp',
-          reviewTitle: 'Test title 2',
-          reviewContent: 'Test content 2',
-          reviewScore: 5,
-          likeNo: 0,
-          dislikeNo: 1
-        }
-      ],
+      reviewsList: [],
       animeScore: 0
     };
   }
 
-  componentDidMount() {
-    this.calculateAvgScore();
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (this.state.reviewsList != nextProps.reviewsData) {
+      this.setState({
+        reviewsList: nextProps.reviewsData
+      }, () => {
+        this.calculateAvgScore();
+      });
+    }
   }
 
   calculateAvgScore = () => {
     var totalScore = 0;
     for (var el in this.state.reviewsList) {
-      totalScore += this.state.reviewsList[el].reviewScore;
+      totalScore += this.state.reviewsList[el].rating;
     }
+    console.log(totalScore);
     var avgScore = totalScore / this.state.reviewsList.length;
     avgScore = parseFloat((Math.round(avgScore * 2) / 2).toFixed(1));
     this.setState(
       {
-        animeScore: avgScore
+        animeScore: isNaN(avgScore) ? 0 : avgScore
       },
       () => {
         console.log(this.state.animeScore);
@@ -91,7 +94,7 @@ class AnimeDetailPage extends Component {
     this.setState(
       {
         reviewsList: this.state.reviewsList.filter(
-          i => i.userName !== review.userName
+          i => i.user_id !== review.user_id
         )
       },
       () => {
@@ -103,7 +106,7 @@ class AnimeDetailPage extends Component {
 
   handleEditReview = review => {
     var newReviewsList = this.state.reviewsList.slice();
-    var index = newReviewsList.findIndex(el => el.userName === review.userName);
+    var index = newReviewsList.findIndex(el => el.user_id === review.user_id);
     console.log(index);
     newReviewsList[index] = review;
     console.log(newReviewsList);
@@ -132,7 +135,7 @@ class AnimeDetailPage extends Component {
 
   checkUserReviewed = () => {
     var index = this.state.reviewsList.findIndex(
-      el => el.userName === this.props.userData.name
+      el => el.user_id === this.props.userData.user_id
     );
     if (index === -1) {
       return false;
@@ -142,7 +145,10 @@ class AnimeDetailPage extends Component {
   };
 
   render() {
-    if (!this.props.animeByIdIsProcessing) {
+    if (
+      !this.props.animeByIdIsProcessing &&
+      !this.props.reviewsByAnimeIsProcessing
+    ) {
       const { animeByIdData, isAuthenticated } = this.props;
 
       const { animeScore } = this.state;
@@ -215,7 +221,7 @@ class AnimeDetailPage extends Component {
                             <Rate
                               disabled
                               value={animeScore}
-                              allowHalf = {true}
+                              allowHalf={true}
                               style={{
                                 fontSize: 'calc(2.5vw)'
                               }}
@@ -348,11 +354,13 @@ class AnimeDetailPage extends Component {
 const mapStateToProps = state => {
   return {
     topAnimeData: state.anime.topAnimeData,
+    reviewsData: state.anime.reviewsData,
     animeByIdData: state.anime.animeByIdData,
     genresListData: state.anime.genresListData,
     genreTopData: state.anime.genreTopData,
     multipleGenreTopData: state.anime.multipleGenreTopData,
     animeByIdIsProcessing: state.anime.animeByIdIsProcessing,
+    reviewsByAnimeIsProcessing: state.anime.reviewsByAnimeIsProcessing,
     isAuthenticated: state.auth.isAuthenticated,
     userData: state.auth.userData
   };
@@ -360,7 +368,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getAnimeById: id => dispatch(actions.getAnimeById(id))
+    getAnimeById: id => dispatch(actions.getAnimeById(id)),
+    getReviewsByAnime: id => dispatch(actions.getReviewsByAnime(id))
   };
 };
 

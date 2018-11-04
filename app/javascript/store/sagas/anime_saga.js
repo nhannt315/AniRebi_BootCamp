@@ -8,8 +8,12 @@ export function* getTopAnime(action) {
   yield put(actions.getTopAnimeStart());
   try {
     let url = endpoints.GET_TOP_ANIMES;
-    if (action.page) {url += `?page=${action.page}`;}
-    if (action.itemPerPage) {url += `&item_per_page=${action.itemPerPage}`;}
+    if (action.page) {
+      url += `?page=${action.page}`;
+    }
+    if (action.itemPerPage) {
+      url += `&item_per_page=${action.itemPerPage}`;
+    }
     // console.log(url);
     const response = yield axios.get(url);
     // console.log(response.data);
@@ -38,8 +42,12 @@ export function* getGenresList(action) {
   yield put(actions.getGenresListStart());
   try {
     let url = endpoints.GET_GENRES_LIST;
-    if (action.page) {url += `?page=${action.page}`;}
-    if (action.itemPerPage) {url += `&item_per_page=${action.itemPerPage}`;}
+    if (action.page) {
+      url += `?page=${action.page}`;
+    }
+    if (action.itemPerPage) {
+      url += `&item_per_page=${action.itemPerPage}`;
+    }
     // console.log(url);
     const response = yield axios.get(url);
     // console.log(response.data);
@@ -54,7 +62,9 @@ export function* getGenreTop(action) {
   yield put(actions.getGenreTopStart());
   try {
     let url = endpoints.GET_GENRE_TOP + `/${action.id}`;
-    if (action.limit) {url += `?limit=${action.limit}`;}
+    if (action.limit) {
+      url += `?limit=${action.limit}`;
+    }
     // console.log(url);
     const response = yield axios.get(url);
     // console.log(response.data);
@@ -71,7 +81,9 @@ export function* getMultipleGenreTop(action) {
   try {
     for (var id in action.idArr) {
       let url = endpoints.GET_GENRE_TOP + `/${action.idArr[id]}`;
-      if (action.limit) {url += `?limit=${action.limit}`;}
+      if (action.limit) {
+        url += `?limit=${action.limit}`;
+      }
       let response = yield axios.get(url);
       data.push(response.data);
     }
@@ -79,5 +91,19 @@ export function* getMultipleGenreTop(action) {
   } catch (error) {
     console.log(error);
     yield put(actions.getMultipleGenreTopFailure(error.response.data.errors));
+  }
+}
+
+export function* getReviewsByAnime(action) {
+  yield put(actions.getReviewsByAnimeStart());
+  try {
+    let url = endpoints.GET_REVIEWS_BY_ANIME + `?id=${action.id}`;
+    // console.log(url);
+    const response = yield axios.get(url);
+    // console.log(response.data);
+    yield put(actions.getReviewsByAnimeSuccess(response.data));
+  } catch (error) {
+    console.log(error);
+    yield put(actions.getReviewsByAnimeFailure(error.response.data.errors));
   }
 }
