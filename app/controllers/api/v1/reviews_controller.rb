@@ -1,7 +1,7 @@
 class Api::V1::ReviewsController < ApplicationController
   before_action :authenticate_user!, only: [:create, :destroy, :update, :like, :dislike]
-  before_action :page_params, only: [:index]
-  before_action :find_review, only: [:show, :destroy, :update]
+  before_action :page_params, only: [:index, :get_by_anime]
+  before_action :find_review, only: [:show, :destroy, :update, :like, :dislike]
 
   def index
     @reviews = Review.all.page(@page).per(@per_page)
@@ -14,6 +14,7 @@ class Api::V1::ReviewsController < ApplicationController
 
   def create
     @review = current_user.reviews.build(review_params)
+    @review.user_name = current_user.name
     if @review.save
       render json: {
           message: 'OK'
@@ -68,11 +69,15 @@ class Api::V1::ReviewsController < ApplicationController
     if current_user.voted_up_on? @review
       @review.unliked_by current_user
       render json: {
-          message: 'Unliked'
+          like: @review.get_upvotes.size,
+          dislike: @review.get_downvotes.size,
+          message: 'Unliked',
       }, status: 200
     else
       @review.liked_by current_user
       render json: {
+          like: @review.get_upvotes.size,
+          dislike: @review.get_downvotes.size,
           message: 'Liked'
       }, status: 200
     end
@@ -82,18 +87,22 @@ class Api::V1::ReviewsController < ApplicationController
     if current_user.voted_down_on? @review
       @review.undisliked_by current_user
       render json: {
+          like: @review.get_upvotes.size,
+          dislike: @review.get_downvotes.size,
           message: 'Undisliked'
       }, status: 200
     else
       @review.liked_by current_user
       render json: {
+          like: @review.get_upvotes.size,
+          dislike: @review.get_downvotes.size,
           message: 'Disliked'
       }, status: 200
     end
   end
 
   def get_by_anime
-    render json: Anime.find(params[:id]).reviews
+    render json: Anime.find(params[:id]).reviews.page(@page).per(@per_page)
   end
 
   private
