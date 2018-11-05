@@ -1,5 +1,4 @@
 class Api::V1::ReviewsController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :destroy, :update, :like, :dislike]
   before_action :page_params, only: [:index, :get_by_anime]
   before_action :find_review, only: [:show, :destroy, :update, :like, :dislike]
 
@@ -13,8 +12,8 @@ class Api::V1::ReviewsController < ApplicationController
   end
 
   def create
-    @review = current_user.reviews.build(review_params)
-    @review.user_name = current_user.name
+    @review = User.first.reviews.build(review_params)
+    @review.user_name = User.first.name
     if @review.save
       render json: {
           message: 'OK'
@@ -27,7 +26,7 @@ class Api::V1::ReviewsController < ApplicationController
   end
 
   def destroy
-    if @review.user == current_user
+    if @review.user == User.first
       if @review.destroy
         render json: {
             message: 'Review deleted'
@@ -45,7 +44,7 @@ class Api::V1::ReviewsController < ApplicationController
   end
 
   def update
-    if @review.user == current_user
+    if @review.user == User.first
       if @review.update_attributes(review_params)
         render json: {
             message: 'Review updated'
@@ -66,39 +65,35 @@ class Api::V1::ReviewsController < ApplicationController
   # su dung @review.get_upvotes(downvotes).size de lay gia tri
 
   def like
-    if current_user.voted_up_on? @review
-      @review.unliked_by current_user
+    if User.first.voted_up_on? @review
+      @review.unliked_by User.first
       render json: {
-          like: @review.get_upvotes.size,
-          dislike: @review.get_downvotes.size,
           message: 'Unliked',
       }, status: 200
     else
-      @review.liked_by current_user
+      @review.liked_by User.first
       render json: {
-          like: @review.get_upvotes.size,
-          dislike: @review.get_downvotes.size,
           message: 'Liked'
       }, status: 200
     end
+    @review.like = @review.get_upvotes.size
+    @review.save
   end
 
   def dislike
-    if current_user.voted_down_on? @review
-      @review.undisliked_by current_user
+    if User.first.voted_down_on? @review
+      @review.undisliked_by User.first
       render json: {
-          like: @review.get_upvotes.size,
-          dislike: @review.get_downvotes.size,
           message: 'Undisliked'
       }, status: 200
     else
-      @review.liked_by current_user
+      @review.liked_by User.first
       render json: {
-          like: @review.get_upvotes.size,
-          dislike: @review.get_downvotes.size,
           message: 'Disliked'
       }, status: 200
     end
+    @review.dislike = @review.get_downvotes.size
+    @review.save
   end
 
   def get_by_anime
