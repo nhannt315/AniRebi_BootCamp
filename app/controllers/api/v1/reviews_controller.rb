@@ -1,4 +1,5 @@
 class Api::V1::ReviewsController < ApplicationController
+  before_action :authenticate_user!, only: [:create, :destroy, :update, :like, :dislike]
   before_action :page_params, only: [:index, :get_by_anime]
   before_action :find_review, only: [:show, :destroy, :update, :like, :dislike]
 
@@ -12,8 +13,8 @@ class Api::V1::ReviewsController < ApplicationController
   end
 
   def create
-    @review = User.first.reviews.build(review_params)
-    @review.user_name = User.first.name
+    @review = current_user.reviews.build(review_params)
+    @review.user_name = current_user.name
     if @review.save
       render json: {
           message: 'OK'
@@ -26,7 +27,7 @@ class Api::V1::ReviewsController < ApplicationController
   end
 
   def destroy
-    if @review.user == User.first
+    if @review.user == current_user
       if @review.destroy
         render json: {
             message: 'Review deleted'
@@ -44,7 +45,7 @@ class Api::V1::ReviewsController < ApplicationController
   end
 
   def update
-    if @review.user == User.first
+    if @review.user == current_user
       if @review.update_attributes(review_params)
         render json: {
             message: 'Review updated'
@@ -65,13 +66,13 @@ class Api::V1::ReviewsController < ApplicationController
   # su dung @review.get_upvotes(downvotes).size de lay gia tri
 
   def like
-    if User.first.voted_up_on? @review
-      @review.unliked_by User.first
+    if current_user.voted_up_on? @review
+      @review.unliked_by current_user
       render json: {
           message: 'Unliked',
       }, status: 200
     else
-      @review.liked_by User.first
+      @review.liked_by current_user
       render json: {
           message: 'Liked'
       }, status: 200
@@ -81,13 +82,13 @@ class Api::V1::ReviewsController < ApplicationController
   end
 
   def dislike
-    if User.first.voted_down_on? @review
-      @review.undisliked_by User.first
+    if current_user.voted_down_on? @review
+      @review.undisliked_by current_user
       render json: {
           message: 'Undisliked'
       }, status: 200
     else
-      @review.liked_by User.first
+      @review.liked_by current_user
       render json: {
           message: 'Disliked'
       }, status: 200
