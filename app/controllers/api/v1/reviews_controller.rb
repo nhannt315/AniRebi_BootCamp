@@ -69,36 +69,32 @@ class Api::V1::ReviewsController < ApplicationController
     if current_user.voted_up_on? @review
       @review.unliked_by current_user
       render json: {
-          like: @review.get_upvotes.size,
-          dislike: @review.get_downvotes.size,
           message: 'Unliked',
       }, status: 200
     else
       @review.liked_by current_user
       render json: {
-          like: @review.get_upvotes.size,
-          dislike: @review.get_downvotes.size,
           message: 'Liked'
       }, status: 200
     end
+    @review.like = @review.get_upvotes.size
+    @review.save
   end
 
   def dislike
     if current_user.voted_down_on? @review
       @review.undisliked_by current_user
       render json: {
-          like: @review.get_upvotes.size,
-          dislike: @review.get_downvotes.size,
           message: 'Undisliked'
       }, status: 200
     else
       @review.liked_by current_user
       render json: {
-          like: @review.get_upvotes.size,
-          dislike: @review.get_downvotes.size,
           message: 'Disliked'
       }, status: 200
     end
+    @review.dislike = @review.get_downvotes.size
+    @review.save
   end
 
   def get_by_anime
