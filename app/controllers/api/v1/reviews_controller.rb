@@ -17,7 +17,7 @@ class Api::V1::ReviewsController < ApplicationController
     @review.user_name = current_user.name
     if @review.save
       render json: {
-          message: @review
+          @review
       }, status: 200
     else
       render json: {
