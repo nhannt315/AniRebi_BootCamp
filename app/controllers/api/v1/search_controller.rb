@@ -1,4 +1,4 @@
-class Api::V1::SearchController < ActionController::Base
+class Api::V1::SearchController < ApplicationController
   before_action :search_anime, only: [:search]
   before_action :page_params, only: [:search]
 

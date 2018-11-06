@@ -1,4 +1,4 @@
-class Api::V1::AnimesController < ActionController::Base
+class Api::V1::AnimesController < ApplicationController
   before_action :find_anime, only: [:show]
   before_action :page_params, only: [:index, :top_animes, :search_by_genre]
   before_action :find_genre, only: [:search_by_genre]

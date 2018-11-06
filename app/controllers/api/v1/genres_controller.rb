@@ -1,9 +1,27 @@
-class Api::V1::GenresController < ActionController::Base
+class Api::V1::GenresController < ApplicationController
   before_action :find_genre, only: [:show, :anime_list]
   before_action :page_params, only: [:index, :show, :anime_list]
 
   def index
-    @genres = Genre.all.page(@page).per(@per_page)
+    @total = Genre.count
+    if params[:keyword]
+      @genres = Genre.where("name like ?", "%#{params[:keyword]}%").page(@page).per(@per_page)
+    else
+      @genres = Genre.all.page(@page).per(@per_page)
+    end
+  end
+
+  def create
+    @genre = Genre.new(name: params[:name])
+    if @genre.save
+      render json: {
+          message: "Ok"
+      }, status: 200
+    else
+      render json: {
+          message: "Something went wrong.."
+      }, status: 400
+    end
   end
 
   def show
@@ -24,6 +42,19 @@ class Api::V1::GenresController < ActionController::Base
   def top_genres
     @top_genres = AnimeGenre.group("genre_id").order("COUNT(anime_id) DESC").limit(5)
     render json: @top_genres
+  end
+
+  def destroy
+    @genre = Genre.find_by id: params[:id]
+    if @genre.destroy
+      render json: {
+          message: 'Review deleted'
+      }, status: 200
+    else
+      render json: {
+          message: 'Something went wrong ...'
+      }, status: 400
+    end
   end
 
   private
