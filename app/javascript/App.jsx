@@ -76,7 +76,9 @@ class App extends Component {
                 render={() => <CheckTokenPage />}
               />
               <Route exact path="/profile/:id?" 
-                render={() => <UserProfilePage userData={this.props.userData} />} />
+                render={() => <UserProfilePage userData={this.props.userData} 
+                                isAuthenticated={this.props.isAuthenticated}
+                                history={this.props.history}/>} />
               <Route exact path-="/search" render={() => <SearchPage />} />
               <Route render={() => <NotFoundPage />} />
             </Switch>

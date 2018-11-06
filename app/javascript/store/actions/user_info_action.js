@@ -23,7 +23,6 @@ export const getProfileFailue = (errors) => {
 };
 
 export const updateProfile = (id, name, email) => {
-  console.log(id + email);
   return {
     type: actionTypes.PATH_UPDATE_PROFILE,
     id: id,
