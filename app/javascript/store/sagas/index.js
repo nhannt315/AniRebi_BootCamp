@@ -24,7 +24,8 @@ import {
 } from './search_saga';
 
 import {
-  fetchUserInfo
+  fetchUserInfo,
+  updateUserInfo
 } from './user_info_saga';
 
 export function* watchAuth() {
@@ -51,7 +52,8 @@ export function* watchAnime() {
 
 export function* watchUserProfile() {
   yield all([
-    takeLatest(actionTypes.GET_USER_PROFILE_INFO, fetchUserInfo)
+    takeLatest(actionTypes.GET_USER_PROFILE_INFO, fetchUserInfo),
+    takeLatest(actionTypes.PATH_UPDATE_PROFILE, updateUserInfo)
   ]);
 }
 
