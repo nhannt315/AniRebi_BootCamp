@@ -11,16 +11,9 @@ import * as actions from '../store/actions';
 import ReviewsList from '../components/ReviewsList/ReviewsList';
 import ReviewForm from '../components/ReviewForm/ReviewForm';
 import axios from '../axios_anime';
+import * as endpoints from '../constants/endpoint_constants';
 
 const { Content } = Layout;
-
-var getDerivedStateFromProps = (props, state) => {
-  console.log(props);
-  console.log(state);
-  // this.setState({
-  //   reviewsList: props.reviewsData
-  // });
-};
 
 class AnimeDetailPage extends Component {
   static propTypes = {
@@ -36,27 +29,37 @@ class AnimeDetailPage extends Component {
     animeByIdIsProcessing: PropTypes.bool.isRequired,
     reviewsByAnimeIsProcessing: PropTypes.bool.isRequired,
     isAuthenticated: PropTypes.bool.isRequired,
-    userData: PropTypes.object.isRequired
+    userData: PropTypes.object.isRequired,
+    tokenData: PropTypes.object.isRequired
   };
 
   constructor(props) {
+    console.log('construct');
     super(props);
     var splits = this.props.history.location.pathname.split('/');
     this.props.getAnimeById(splits[2]);
     this.props.getReviewsByAnime(splits[2]);
     this.state = {
       reviewsList: [],
-      animeScore: 0
+      animeScore: 0,
+      isSubmitBtnDisabled: false
     };
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.state.reviewsList != nextProps.reviewsData) {
-      this.setState({
-        reviewsList: nextProps.reviewsData
-      }, () => {
-        this.calculateAvgScore();
-      });
+    if (this.state.reviewsList !== nextProps.reviewsData) {
+      this.setState(
+        {
+          reviewsList: nextProps.reviewsData.slice()
+        },
+        () => {
+          this.calculateAvgScore();
+        }
+      );
+    }
+    if (this.props.animeByIdData.id !== nextProps.animeByIdData.id) {
+      var splits = this.props.history.location.pathname.split('/');
+      this.props.getReviewsByAnime(splits[2]);
     }
   }
 
@@ -65,7 +68,7 @@ class AnimeDetailPage extends Component {
     for (var el in this.state.reviewsList) {
       totalScore += this.state.reviewsList[el].rating;
     }
-    console.log(totalScore);
+    // console.log(totalScore);
     var avgScore = totalScore / this.state.reviewsList.length;
     avgScore = parseFloat((Math.round(avgScore * 2) / 2).toFixed(1));
     this.setState(
@@ -73,52 +76,129 @@ class AnimeDetailPage extends Component {
         animeScore: isNaN(avgScore) ? 0 : avgScore
       },
       () => {
-        console.log(this.state.animeScore);
+        // console.log(this.state.animeScore);
       }
     );
   };
 
-  handleNewReviewSubmit = review => {
-    this.setState(
-      {
-        reviewsList: [...this.state.reviewsList, review]
-      },
-      () => {
-        console.log(this.state.reviewsList);
-        this.calculateAvgScore();
-      }
-    );
+  handleNewReviewSubmit = (review, callback) => {
+    axios
+      .post(
+        endpoints.REVIEW_API,
+        {
+          user_id: this.props.userData.id,
+          anime_id: this.props.animeByIdData.id,
+          title: review.reviewTitle,
+          content: review.reviewContent,
+          rating: review.reviewScore,
+          user_name: review.userName,
+          like: 0,
+          dislike: 0
+        },
+        {
+          headers: {
+            'access-token': this.props.tokenData.accessToken,
+            'token-type': this.props.tokenData.tokenType,
+            uid: this.props.tokenData.uid,
+            client: this.props.tokenData.client
+          }
+        }
+      )
+      .then(response => {
+        console.log(response);
+        response.data.review = { ...response.data.review, votes_for: [] };
+        this.setState(
+          {
+            reviewsList: [...this.state.reviewsList, response.data.review]
+          },
+          () => {
+            console.log(this.state.reviewsList);
+            this.calculateAvgScore();
+            callback();
+          }
+        );
+      });
   };
 
-  handleDeleteReview = review => {
-    this.setState(
-      {
-        reviewsList: this.state.reviewsList.filter(
-          i => i.user_id !== review.user_id
-        )
-      },
-      () => {
-        console.log(this.state.reviewsList);
-        this.calculateAvgScore();
-      }
-    );
+  handleDeleteReview = (review, callback) => {
+    axios
+      .delete(endpoints.REVIEW_API + `/${review.reviewId}`, {
+        headers: {
+          'access-token': this.props.tokenData.accessToken,
+          'token-type': this.props.tokenData.tokenType,
+          uid: this.props.tokenData.uid,
+          client: this.props.tokenData.client
+        }
+      })
+      .then(response => {
+        console.log(review.reviewId);
+        this.setState(
+          {
+            reviewsList: this.state.reviewsList.filter(
+              i => i.id !== review.reviewId
+            )
+          },
+          () => {
+            console.log(this.state.reviewsList);
+            this.calculateAvgScore();
+            callback();
+          }
+        );
+      });
   };
 
-  handleEditReview = review => {
-    var newReviewsList = this.state.reviewsList.slice();
-    var index = newReviewsList.findIndex(el => el.user_id === review.user_id);
-    console.log(index);
-    newReviewsList[index] = review;
-    console.log(newReviewsList);
-    this.setState(
-      {
-        reviewsList: newReviewsList
-      },
-      () => {
-        console.log(this.state.reviewsList);
-        this.calculateAvgScore();
-      }
-    );
+  handleEditReview = (review, callback) => {
+    axios
+      .put(
+        endpoints.REVIEW_API + `/${review.reviewId}`,
+        {
+          id: review.reviewId,
+          user_id: this.props.userData.id,
+          anime_id: this.props.animeByIdData.id,
+          title: review.reviewTitle,
+          content: review.reviewContent,
+          rating: review.reviewScore,
+          user_name: review.userName,
+          like: review.likeNo,
+          dislike: review.dislikeNo
+        },
+        {
+          headers: {
+            'access-token': this.props.tokenData.accessToken,
+            'token-type': this.props.tokenData.tokenType,
+            uid: this.props.tokenData.uid,
+            client: this.props.tokenData.client
+          }
+        }
+      )
+      .then(response => {
+        console.log(response);
+        var newReviewsList = this.state.reviewsList.slice();
+        var index = newReviewsList.findIndex(el => el.id === review.reviewId);
+        console.log(index);
+        newReviewsList[index] = {
+          id: review.reviewId,
+          user_id: this.props.userData.id,
+          anime_id: this.props.animeByIdData.id,
+          title: review.reviewTitle,
+          content: review.reviewContent,
+          rating: review.reviewScore,
+          user_name: review.userName,
+          like: review.likeNo,
+          dislike: review.dislikeNo
+        };
+        console.log(newReviewsList);
+        this.setState(
+          {
+            reviewsList: newReviewsList
+          },
+          () => {
+            console.log(this.state.reviewsList);
+            this.calculateAvgScore();
+            callback();
+          }
+        );
+      });
   };
 
   handleBannerError = e => {
@@ -135,7 +215,7 @@ class AnimeDetailPage extends Component {
 
   checkUserReviewed = () => {
     var index = this.state.reviewsList.findIndex(
-      el => el.user_id === this.props.userData.user_id
+      el => el.user_id === this.props.userData.id
     );
     if (index === -1) {
       return false;
@@ -362,7 +442,8 @@ const mapStateToProps = state => {
     animeByIdIsProcessing: state.anime.animeByIdIsProcessing,
     reviewsByAnimeIsProcessing: state.anime.reviewsByAnimeIsProcessing,
     isAuthenticated: state.auth.isAuthenticated,
-    userData: state.auth.userData
+    userData: state.auth.userData,
+    tokenData: state.auth.tokenData
   };
 };
 

@@ -30,6 +30,7 @@ class ReviewsList extends Component {
               reviewTitle={item.title}
               reviewScore={item.rating}
               reviewContent={item.content}
+              votesFor={item.votes_for}
               userName={item.user_name}
               likeNo={item.like}
               dislikeNo={item.dislike}

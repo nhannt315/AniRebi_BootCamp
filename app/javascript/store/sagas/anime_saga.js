@@ -98,7 +98,7 @@ export function* getReviewsByAnime(action) {
   yield put(actions.getReviewsByAnimeStart());
   try {
     let url = endpoints.GET_REVIEWS_BY_ANIME + `?id=${action.id}`;
-    // console.log(url);
+    console.log(url);
     const response = yield axios.get(url);
     // console.log(response.data);
     yield put(actions.getReviewsByAnimeSuccess(response.data));
