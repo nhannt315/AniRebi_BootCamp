@@ -17,7 +17,7 @@ class Api::V1::ReviewsController < ApplicationController
     @review.user_name = current_user.name
     if @review.save
       render json: {
-          @review
+          review: @review
       }, status: 200
     else
       render json: {
@@ -98,7 +98,8 @@ class Api::V1::ReviewsController < ApplicationController
   end
 
   def get_by_anime
-    render json: Anime.find(params[:id]).reviews.page(@page).per(@per_page)
+    @reviews = Anime.find(params[:id]).reviews.page(@page).per(@per_page)
+    render json: @reviews, include: [votes_for: {only: [:voter_id, :vote_flag]}]
   end
 
   private
