@@ -10,7 +10,6 @@ class Api::V1::AnimesController < ActionController::Base
   end
 
   def show
-    @genres = @anime.genres
     render json: @anime, include: [genres: {only: [:id, :name]}]
   end
 
