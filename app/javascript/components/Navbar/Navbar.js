@@ -118,7 +118,7 @@ class Navbar extends Component {
 
     return (
       <nav className="navbar">
-        <div className="logo">
+        <div className="nav-logo">
           <Link to="/">
             AniRebi
           </Link>

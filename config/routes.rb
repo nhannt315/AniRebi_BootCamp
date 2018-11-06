@@ -44,5 +44,9 @@ Rails.application.routes.draw do
       resources :users
     end
   end
+  scope :admin do
+    get "", to: "pages#admin"
+    get "*path", to: "pages#admin"
+  end
   get "*path", to: "pages#root"
 end

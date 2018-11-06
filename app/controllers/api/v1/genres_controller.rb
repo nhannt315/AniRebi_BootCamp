@@ -4,7 +4,6 @@ class Api::V1::GenresController < ActionController::Base
 
   def index
     @genres = Genre.all.page(@page).per(@per_page)
-    render json: @genres
   end
 
   def show
