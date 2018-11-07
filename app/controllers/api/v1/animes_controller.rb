@@ -5,8 +5,14 @@ class Api::V1::AnimesController < ApplicationController
   before_action :order_param, only: [:search_by_genre]
 
   def index
-    @animes = Anime.all.page(@page).per(@per_page)
-    render json: @animes
+    @total = Anime.count
+    keyword = params[:keyword]
+    if keyword
+      @animes = Anime.where("name like ?", "%#{params[:keyword]}%").page(@page).per(@per_page)
+    else
+      @animes = Anime.all.page(@page).per(@per_page)
+    end
+
   end
 
   def show

@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import {Tag} from 'antd';
 import PropTypes from 'prop-types';
 
+import LazyLoadImage from '../LazyLoadImage';
 import './AnimeItem.scss';
 
 class AnimeItem extends Component {
@@ -15,7 +16,8 @@ class AnimeItem extends Component {
       <div className="item">
         <div className="box-cover">
           <Link to={`/anime/${anime.id}`}>
-            <img 
+            <LazyLoadImage
+              className="anime-image"
               src={anime.cover_medium} 
               placeholder="https://is4-ssl.mzstatic.com/image/thumb/Purple62/v4/c8/5b/a0/c85ba051-99e7-3bd5-29dc-c0a246334207/source/512x512bb.jpg"
               onError={this.handleImgError}

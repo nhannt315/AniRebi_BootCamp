@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-
+import {connect} from 'react-redux';
 import { Layout, Menu, Icon } from 'antd';
 import { NavLink, Route } from 'react-router-dom';
 
 import './AdminApp.scss';
 import GenrePage from './Genre';
+import AnimePage from './Anime';
 import NotFoundPage from '../containers/NotFoundPage';
 import { Switch } from 'react-router';
 
@@ -14,6 +15,10 @@ class AdminApp extends Component {
   state = {
     collapsed: false,
   };
+
+  componentDidMount() {
+
+  }
 
   toggle = () => {
     this.setState({
@@ -34,9 +39,9 @@ class AdminApp extends Component {
               {this.state.collapsed ? 'A' : 'AniRebi'}
             </NavLink>
           </div>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={['3']}>
             <Menu.Item key="1">
-              <NavLink to="/admin/user">
+              <NavLink to="/admin/animes">
                 <Icon type="ordered-list" theme="outlined"/>
                 <span>Anime</span>
               </NavLink>
@@ -48,7 +53,7 @@ class AdminApp extends Component {
               </NavLink>
             </Menu.Item>
             <Menu.Item key="3">
-              <NavLink to="/admin/user">
+              <NavLink to="/admin/genres">
                 <Icon type="tag" theme="outlined"/>
                 <span>Genre</span>
               </NavLink>
@@ -66,6 +71,7 @@ class AdminApp extends Component {
           <Content style={{padding: 24, background: '#fff', minHeight: 280}}>
             <Switch>
               <Route exact path="/admin/genres" to={GenrePage} render={() => <GenrePage />} />
+              <Route exact path="/admin/animes" to={AnimePage} render={() => <AnimePage />} />
               <Route render={() => <NotFoundPage />} />
             </Switch>
           </Content>
@@ -75,5 +81,12 @@ class AdminApp extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.auth.isAuthenticated,
+    isAdmin: state.auth.userData
+  };
+};
 
-export default AdminApp;
+
+export default connect(mapStateToProps, null)(AdminApp);

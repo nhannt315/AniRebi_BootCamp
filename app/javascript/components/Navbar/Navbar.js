@@ -84,6 +84,9 @@ class Navbar extends Component {
           <Menu.Item key="1">
             <Link to={`/profile/${userData.id}`}>My profile</Link>
           </Menu.Item>
+          <Menu.Item key="4">
+            <a href="/admin/animes">Admin</a>
+          </Menu.Item>
           <Menu.Item key="2">
             <a href="#">Settings</a>
           </Menu.Item>

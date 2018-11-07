@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Spin, Divider, Pagination, Button, Modal, Form, Input, message } from 'antd';
-import axios from '../../axios_anime';
+import axios from '../axios_admin';
 
 import './GenrePage.scss';
 
@@ -159,7 +159,7 @@ class GenrePage extends Component {
 
   render() {
     const content = this.state.listLoading ? (
-      <div className="loadingWrapper">
+      <div className="loadingWrapper" style={{minHeight: '500px'}}>
         <Spin/>
       </div>
     ) : (
