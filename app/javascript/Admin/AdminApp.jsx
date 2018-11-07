@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
-import { NavLink, Route } from 'react-router-dom';
+import { NavLink, Route, Link } from 'react-router-dom';
 
 import './AdminApp.scss';
 import GenrePage from './Genre';
@@ -35,28 +36,28 @@ class AdminApp extends Component {
           collapsed={this.state.collapsed}
         >
           <div className="logo">
-            <NavLink to="/">
+            <a href="/">
               {this.state.collapsed ? 'A' : 'AniRebi'}
-            </NavLink>
+            </a>
           </div>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['3']}>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
             <Menu.Item key="1">
-              <NavLink to="/admin/animes">
+              <Link to="/admin/animes">
                 <Icon type="ordered-list" theme="outlined"/>
                 <span>Anime</span>
-              </NavLink>
+              </Link>
             </Menu.Item>
             <Menu.Item key="2">
-              <NavLink to="/admin/user">
+              <Link to="/admin/user">
                 <Icon type="bar-chart" theme="outlined"/>
                 <span>Review</span>
-              </NavLink>
+              </Link>
             </Menu.Item>
             <Menu.Item key="3">
-              <NavLink to="/admin/genres">
+              <Link to="/admin/genres">
                 <Icon type="tag" theme="outlined"/>
                 <span>Genre</span>
-              </NavLink>
+              </Link>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -70,9 +71,9 @@ class AdminApp extends Component {
           </Header>
           <Content style={{padding: 24, background: '#fff', minHeight: 280}}>
             <Switch>
-              <Route exact path="/admin/genres" to={GenrePage} render={() => <GenrePage />} />
-              <Route exact path="/admin/animes" to={AnimePage} render={() => <AnimePage />} />
-              <Route render={() => <NotFoundPage />} />
+              <Route path="/admin/genres" render={() => <GenrePage/>}/>
+              <Route path="/admin/animes" render={() => <AnimePage/>}/>
+              <Route render={() => <NotFoundPage/>}/>
             </Switch>
           </Content>
         </Layout>
@@ -89,4 +90,6 @@ const mapStateToProps = state => {
 };
 
 
-export default connect(mapStateToProps, null)(AdminApp);
+export default withRouter(
+  connect(mapStateToProps, null)(AdminApp)
+);

@@ -1,4 +1,4 @@
-require 'elasticsearch/model'
+require "elasticsearch/model"
 class Anime < ApplicationRecord
   extend FriendlyId
   friendly_id :name, use: :slugged
@@ -8,7 +8,7 @@ class Anime < ApplicationRecord
   has_many :anime_genres
   has_many :genres, through: :anime_genres
 
- # Anime.import force: true
+  # Anime.import force: true
   settings do
     mappings dynamic: false do
       indexes :name, type: :text

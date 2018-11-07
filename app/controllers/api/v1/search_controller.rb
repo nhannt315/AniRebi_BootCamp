@@ -3,18 +3,17 @@ class Api::V1::SearchController < ApplicationController
   before_action :page_params, only: [:search]
 
   def search
-    unless params[:arr].nil?
+    if params[:arr].nil?
+      @animes = @elasticsearch_animes
+    else
       @arr = Array(params[:arr])
       @animes = Genre.find(@arr[0]).animes.all
-      for i in 1..(@arr.length-1)
-        @animes = @animes & Genre.find(@arr[i]).animes.all
+      for i in 1..(@arr.length - 1)
+        @animes &= Genre.find(@arr[i]).animes.all
       end
-      @animes = @animes & @elasticsearch_animes
-    else
-      @animes = @elasticsearch_animes
+      @animes &= @elasticsearch_animes
     end
     render json: @animes.page(@page).per(@per_page)
-
   end
 
   private
@@ -25,10 +24,10 @@ class Api::V1::SearchController < ApplicationController
   end
 
   def search_anime
-    if params[:q].nil?
-      @elasticsearch_animes = []
-    else
-      @elasticsearch_animes = (Anime.search params[:q]).records
-    end
+    @elasticsearch_animes = if params[:q].nil?
+                              []
+                            else
+                              (Anime.search params[:q]).records
+                            end
   end
 end

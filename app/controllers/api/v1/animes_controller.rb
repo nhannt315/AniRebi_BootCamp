@@ -12,7 +12,6 @@ class Api::V1::AnimesController < ApplicationController
     else
       @animes = Anime.all.page(@page).per(@per_page)
     end
-
   end
 
   def show
@@ -25,9 +24,9 @@ class Api::V1::AnimesController < ApplicationController
   end
 
   def search_by_genre
-    if @order == 'latest'
+    if @order == "latest"
       @animes_by_genre = @genre_to_find.animes.order(id: :desc).page(@page).per(@per_page)
-    elsif @order == 'popular'
+    elsif @order == "popular"
       @animes_by_genre = @genre_to_find.animes.order(rating: :desc).page(@page).per(@per_page)
     else
       @animes_by_genre = @genre_to_find.animes.page(@page).per(@per_page)

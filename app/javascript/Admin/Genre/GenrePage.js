@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {withRouter} from 'react-router-dom';
 import { Table, Spin, Divider, Pagination, Button, Modal, Form, Input, message } from 'antd';
 import axios from '../axios_admin';
 
@@ -111,7 +112,17 @@ class GenrePage extends Component {
   };
 
   updateGenre = () => {
-
+    axios.put(`/api/v1/genres/${this.state.modalConfig.genreId}`, {name: this.state.modalConfig.genreName})
+      .then(response => {
+        this.setState(prevState => ({modalConfig: {...prevState.modalConfig, visible: false, loading: false}}));
+        message.success('Update genre successfully!');
+        this.getGenreList();
+      })
+      .catch(error => {
+        this.setState(prevState => ({modalConfig: {...prevState.modalConfig, visible: false, loading: false}}));
+        message.error('Something went wrong...');
+        console.log(error);
+      });
   };
 
   getGenreList = (keyword = '') => {
@@ -210,4 +221,4 @@ class GenrePage extends Component {
   }
 }
 
-export default GenrePage;
+export default withRouter(GenrePage);

@@ -28,11 +28,11 @@ class AnimeForm extends Component {
             {getFieldDecorator('jptitle', {
               rules: [{ required: true, message: 'Please input the japanese title of collection!' }],
             })(
-              <Input.TextArea rows={4} />
+              <Input />
             )}
           </FormItem>
           <FormItem label="Description">
-            {getFieldDecorator('description')(<Input type="textarea" />)}
+            {getFieldDecorator('description')( <Input.TextArea rows={4} />)}
           </FormItem>
           <FormItem label="Genres">
             {getFieldDecorator('genres')(

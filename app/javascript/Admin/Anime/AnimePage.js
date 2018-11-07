@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from '../axios_admin';
+import {withRouter} from 'react-router-dom';
 import { Button, Spin, Input, Pagination } from 'antd';
 
 import AnimeItem from '../../components/AnimeItemHorizontal';
@@ -135,4 +136,4 @@ class AnimePage extends Component {
 }
 
 
-export default AnimePage;
+export default withRouter(AnimePage);

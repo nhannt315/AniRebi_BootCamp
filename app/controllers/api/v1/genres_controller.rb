@@ -15,11 +15,11 @@ class Api::V1::GenresController < ApplicationController
     @genre = Genre.new(name: params[:name])
     if @genre.save
       render json: {
-          message: "Ok"
+        message: "Ok"
       }, status: 200
     else
       render json: {
-          message: "Something went wrong.."
+        message: "Something went wrong.."
       }, status: 400
     end
   end
@@ -27,6 +27,19 @@ class Api::V1::GenresController < ApplicationController
   def show
     @per_page = params[:item_per_page] || 6
     @animes = @genre.animes.order(rating: :desc).page(@page).per(@per_page)
+  end
+
+  def update
+    @genre = Genre.find_by(id: params[:id])
+    if @genre.update_attributes(name: params[:name])
+      render json: {
+        message: "Ok"
+      }, status: 200
+    else
+      render json: {
+        message: "Something went wrong.."
+      }, status: 400
+    end
   end
 
   def anime_list
@@ -48,11 +61,11 @@ class Api::V1::GenresController < ApplicationController
     @genre = Genre.find_by id: params[:id]
     if @genre.destroy
       render json: {
-          message: 'Review deleted'
+        message: "Review deleted"
       }, status: 200
     else
       render json: {
-          message: 'Something went wrong ...'
+        message: "Something went wrong ..."
       }, status: 400
     end
   end
