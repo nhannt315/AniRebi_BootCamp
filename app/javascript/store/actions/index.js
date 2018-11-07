@@ -54,5 +54,8 @@ export {
 export {
   getProfile,
   getProfileSuccess,
-  getProfileFailue
+  getProfileFailue,
+  updateProfile,
+  updateProfileSuccess,
+  updateProfileFailue
 } from './user_info_action';
