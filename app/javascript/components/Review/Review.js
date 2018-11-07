@@ -27,7 +27,7 @@ class Review extends Component {
   static propTypes = {
     reviewId: PropTypes.number.isRequired,
     userData: PropTypes.object.isRequired,
-    userName: PropTypes.string.isRequired,
+    userName: PropTypes.string,
     reviewTitle: PropTypes.string.isRequired,
     reviewContent: PropTypes.string.isRequired,
     reviewScore: PropTypes.number.isRequired,
@@ -62,7 +62,7 @@ class Review extends Component {
   };
 
   toText = content => {
-    return <p dangerouslySetInnerHTML={{ __html: content }} />;
+    return <p dangerouslySetInnerHTML={{__html: content}}/>;
   };
 
   onTitleChange = e => {
@@ -271,7 +271,8 @@ class Review extends Component {
       onOk() {
         context.handleDeleteClick();
       },
-      onCancel() {}
+      onCancel() {
+      }
     });
   };
 
@@ -286,7 +287,8 @@ class Review extends Component {
       onOk() {
         context.handleSaveClick();
       },
-      onCancel() {}
+      onCancel() {
+      }
     });
   };
 
@@ -298,13 +300,13 @@ class Review extends Component {
       dislikeNo,
       reviewScore
     } = this.state;
-    const { userData, userName } = this.props;
+    const {userData, userName} = this.props;
     if (!this.state.isEditFormOpen) {
       return (
-        <div className="Review" style={{ width: '100%' }}>
+        <div className="Review" style={{width: '100%'}}>
           <Row>
             <Col span={4}>
-              <div style={{ width: '100%', textAlign: 'center' }}>
+              <div style={{width: '100%', textAlign: 'center'}}>
                 <StyledAvatar
                   size={100}
                   style={{
@@ -312,8 +314,8 @@ class Review extends Component {
                     backgroundColor: '#fde3cf'
                   }}
                 >
-                  <span style={{ fontSize: '40px' }}>
-                    {userName.charAt(0).toUpperCase()}
+                  <span style={{fontSize: '40px'}}>
+                    {userName != null && userName.charAt(0).toUpperCase()}
                   </span>
                 </StyledAvatar>
               </div>
@@ -357,8 +359,8 @@ class Review extends Component {
                   </div>
                 </Col>
               </Row>
-              <StyledDivider />
-              <div style={{ minHeight: '100px' }} className="ReviewContent">
+              <StyledDivider/>
+              <div style={{minHeight: '100px'}} className="ReviewContent">
                 {reviewContent}
               </div>
               &nbsp;
@@ -378,14 +380,14 @@ class Review extends Component {
                   >
                     <Badge
                       count={likeNo}
-                      style={{ backgroundColor: '#52c41a' }}
+                      style={{backgroundColor: '#52c41a'}}
                     >
                       <LikeButton
                         shape="circle"
                         onClick={this.handleLikeClick}
                         disabled={!this.props.isAuthenticated}
                       >
-                        <LikeIcon type="like" theme="filled" />
+                        <LikeIcon type="like" theme="filled"/>
                       </LikeButton>
                     </Badge>
                   </div>
@@ -404,7 +406,7 @@ class Review extends Component {
                         onClick={this.handleDislikeClick}
                         disabled={!this.props.isAuthenticated}
                       >
-                        <DislikeIcon type="dislike" theme="filled" />
+                        <DislikeIcon type="dislike" theme="filled"/>
                       </DislikeButton>
                     </Badge>
                   </div>
@@ -454,21 +456,21 @@ class Review extends Component {
       );
     } else {
       return (
-        <div className="EditForm" style={{ width: '100%' }}>
+        <div className="EditForm" style={{width: '100%'}}>
           <Row>
             <Col span={4}>
-              <div style={{ width: '100%', textAlign: 'center' }}>
+              <div style={{width: '100%', textAlign: 'center'}}>
                 <StyledAvatar
                   size={100}
-                  style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
+                  style={{color: '#f56a00', backgroundColor: '#fde3cf'}}
                 >
-                  <span style={{ fontSize: '40px' }}>
+                  <span style={{fontSize: '40px'}}>
                     {userName.charAt(0).toUpperCase()}
                   </span>
                 </StyledAvatar>
               </div>
               &nbsp;
-              <div style={{ textAlign: 'center', fontSize: 'calc(1.5vw)' }}>
+              <div style={{textAlign: 'center', fontSize: 'calc(1.5vw)'}}>
                 {userName}
               </div>
             </Col>
@@ -493,7 +495,7 @@ class Review extends Component {
                 &nbsp;
                 <span>{reviewScore} star(s)</span>
               </div>
-              <StyledDivider />
+              <StyledDivider/>
               <span className="ReviewFormTitle">
                 <Input
                   placeholder="Enter review's title"
@@ -501,8 +503,8 @@ class Review extends Component {
                   onChange={this.onTitleChange}
                 />
               </span>
-              <StyledDivider />
-              <div style={{ minHeight: '100px' }} className="ReviewFormContent">
+              <StyledDivider/>
+              <div style={{minHeight: '100px'}} className="ReviewFormContent">
                 <Input.TextArea
                   placeholder="Enter review's content"
                   value={reviewContent}
@@ -579,13 +581,9 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {};
-};
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Review)
-);
+export default connect(
+  mapStateToProps,
+  null
+)(Review)
+;

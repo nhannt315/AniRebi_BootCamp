@@ -88,11 +88,7 @@ class UserProfilePage extends Component{
             </Col>
             <Col span={ 18 }>
               {
-<<<<<<< HEAD
-                this.state.isEdit ? <EditProfile handleUpdate={this.updateProfileInfo}/> : <ProfileInfo dataSource={userInfo.reviews} />
-=======
                 this.props.isAuthenticated && this.state.isEdit ? <EditProfile handleUpdate={this.updateProfileInfo}/> : <ProfileInfo dataSource={userInfo.reviews} />
->>>>>>> Update user profile
               }
             </Col>
           </Row>

@@ -22,11 +22,11 @@ import {
 
 import { searchAnimeSaga } from './search_saga';
 
-
 import {
   fetchUserInfo,
   updateUserInfo
 } from './user_info_saga';
+import { getGenreDetail, getAnimeListGenre } from './genre_saga';
 
 
 export function* watchAuth() {
@@ -61,4 +61,11 @@ export function* watchUserProfile() {
 
 export function* watchSearch() {
   yield all([takeLatest(actionTypes.SEARCH_ANIME_REQUEST, searchAnimeSaga)]);
+}
+
+export function* watchGenre() {
+  yield all([
+    takeLatest(actionTypes.GET_GENRE_DETAIL, getGenreDetail),
+    takeLatest(actionTypes.GET_ANIME_LIST_GENRE, getAnimeListGenre)
+  ]);
 }

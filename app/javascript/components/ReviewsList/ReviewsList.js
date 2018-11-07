@@ -19,12 +19,11 @@ class ReviewsList extends Component {
 
   render() {
     const { dataSource, handleEditReview, handleDeleteReview } = this.props;
-
     return (
       <List
         dataSource={dataSource}
         renderItem={item => (
-          <List.Item>
+          <List.Item key={item.id}>
             <Review
               reviewId={item.id}
               reviewTitle={item.title}

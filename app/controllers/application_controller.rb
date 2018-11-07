@@ -1,4 +1,4 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :null_sessions, if: :devise_controller?
+  protect_from_forgery with: :null_sessions
   include DeviseTokenAuth::Concerns::SetUserByToken
 end

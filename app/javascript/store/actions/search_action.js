@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 
+
 export const searchAnime = (payload) => {
   return {
     type: actionTypes.SEARCH_ANIME_REQUEST,

@@ -1,18 +1,55 @@
-class Api::V1::GenresController < ActionController::Base
-  before_action :find_genre, only: [:show]
-  before_action :page_params, only: [:index, :show]
+class Api::V1::GenresController < ApplicationController
+  before_action :find_genre, only: [:show, :anime_list]
+  before_action :page_params, only: [:index, :show, :anime_list]
 
   def index
-    @genres = Genre.all.page(@page).per(@per_page)
-    render json: @genres
+    @total = Genre.count
+    if params[:keyword]
+      @genres = Genre.where("name like ?", "%#{params[:keyword]}%").page(@page).per(@per_page)
+    else
+      @genres = Genre.all.page(@page).per(@per_page)
+    end
+  end
+
+  def create
+    @genre = Genre.new(name: params[:name])
+    if @genre.save
+      render json: {
+        message: "Ok"
+      }, status: 200
+    else
+      render json: {
+        message: "Something went wrong.."
+      }, status: 400
+    end
   end
 
   def show
-    @animes = @genre.animes.order(rating: :desc).limit(@ani_limit)
-    respond_to do |format|
-      format.json { render :json => {:genre => @genre,
-                                     :animes => @animes }}
+    @per_page = params[:item_per_page] || 6
+    @animes = @genre.animes.order(rating: :desc).page(@page).per(@per_page)
+  end
+
+  def update
+    @genre = Genre.find_by(id: params[:id])
+    if @genre.update_attributes(name: params[:name])
+      render json: {
+        message: "Ok"
+      }, status: 200
+    else
+      render json: {
+        message: "Something went wrong.."
+      }, status: 400
     end
+  end
+
+  def anime_list
+    @per_page = params[:item_per_page] || 6
+    @animes = @genre.animes.page(@page).per(@per_page)
+    @count = @genre.animes.count
+  end
+
+  def all_genres
+    render json: Genre.all
   end
 
   def top_genres
@@ -20,8 +57,21 @@ class Api::V1::GenresController < ActionController::Base
     render json: @top_genres
   end
 
+  def destroy
+    @genre = Genre.find_by id: params[:id]
+    if @genre.destroy
+      render json: {
+        message: "Review deleted"
+      }, status: 200
+    else
+      render json: {
+        message: "Something went wrong ..."
+      }, status: 400
+    end
+  end
+
   private
-  
+
   def page_params
     @per_page = params[:item_per_page] || Settings.pagination
     @page = params[:page] || 1

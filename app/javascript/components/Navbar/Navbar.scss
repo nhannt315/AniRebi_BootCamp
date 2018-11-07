@@ -16,7 +16,7 @@ nav {
 }
 
 
-.logo{
+.nav-logo{
   height: 100%;
   float: left;
   width: 15%;
@@ -55,6 +55,10 @@ nav {
 }
 
 
+
+
+
+
 .search-wrapper{
   background-color: white;
   position: relative;
@@ -87,6 +91,9 @@ nav {
     &:link {
       text-decoration: none;
     }
+  }
+  li {
+    position: relative;
   }
   &-link-active {
     &:before {

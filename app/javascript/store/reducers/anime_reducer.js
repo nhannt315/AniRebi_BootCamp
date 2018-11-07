@@ -2,7 +2,7 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
   topAnimeData: {},
-  genresListData: {},
+  genresListData: [],
   genreTopData: {},
   multipleGenreTopData: [],
   animeByIdData: {},
