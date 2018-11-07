@@ -2,6 +2,7 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
   isFetching: true,
+  isUpdating: false,
   errors: null,
   userInfo: {}
 };
@@ -14,6 +15,12 @@ const reducer = (state = initialState, action) => {
       return {...state, isFetching: false, userInfo: action.userInfo};
     case actionTypes.GET_USER_PROFILE_INFO_FAILUE:
       return {...state, isFetching: false, errors: action.errors};
+    case actionTypes.PATH_UPDATE_PROFILE:
+      return {...state, isUpdating: true};
+      case actionTypes.GET_USER_PROFILE_INFO_SUCCESS:
+      return {...state, isUpdating: false, userInfo: action.userInfo};
+    case actionTypes.GET_USER_PROFILE_INFO_FAILUE:
+      return {...state, isUpdating: false, errors: action.errors};
     default:
       return state;
   }

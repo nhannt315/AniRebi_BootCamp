@@ -22,7 +22,12 @@ import {
 
 import { searchAnimeSaga } from './search_saga';
 
-import { fetchUserInfo } from './user_info_saga';
+
+import {
+  fetchUserInfo,
+  updateUserInfo
+} from './user_info_saga';
+
 
 export function* watchAuth() {
   yield all([
@@ -47,7 +52,11 @@ export function* watchAnime() {
 }
 
 export function* watchUserProfile() {
-  yield all([takeLatest(actionTypes.GET_USER_PROFILE_INFO, fetchUserInfo)]);
+  yield all([
+    takeLatest(actionTypes.GET_USER_PROFILE_INFO, fetchUserInfo),
+    takeLatest(actionTypes.PATH_UPDATE_PROFILE, updateUserInfo)
+  ]);
+
 }
 
 export function* watchSearch() {

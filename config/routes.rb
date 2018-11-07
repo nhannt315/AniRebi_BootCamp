@@ -37,7 +37,7 @@ Rails.application.routes.draw do
           get "get_by_anime"
         end
       end
-      resources :users, only: [:show]
+      resources :users
     end
   end
   get "*path", to: "pages#root"

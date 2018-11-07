@@ -30,7 +30,8 @@ export function* loginSaga(action) {
       accessToken: response.headers['access-token'],
       client: response.headers['client'],
       uid: response.headers['uid'],
-      tokenType: response.headers['token-type']
+      tokenType: response.headers['token-type'],
+      expiry: response.headers['expiry']
     };
 
     const userData = {
