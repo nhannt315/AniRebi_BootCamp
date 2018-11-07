@@ -26,13 +26,16 @@ class ReviewsList extends Component {
         renderItem={item => (
           <List.Item>
             <Review
-              reviewTitle={item.reviewTitle}
-              reviewScore={item.reviewScore}
-              reviewContent={item.reviewContent}
-              userAvatar={item.userAvatar}
-              userName={item.userName}
-              likeNo={item.likeNo}
-              dislikeNo={item.dislikeNo}
+              reviewId={item.id}
+              reviewTitle={item.title}
+              reviewScore={item.rating}
+              reviewContent={item.content}
+              votesFor={item.votes_for}
+              userName={item.user_name}
+              likeNo={item.like}
+              dislikeNo={item.dislike}
+              createdAt={item.created_at}
+              updatedAt={item.updated_at}
               handleEditReview={handleEditReview}
               handleDeleteReview={handleDeleteReview}
             />

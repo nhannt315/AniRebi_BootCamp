@@ -19,7 +19,8 @@ class ReviewForm extends Component {
     this.state = {
       reviewTitle: '',
       reviewContent: '',
-      reviewScore: 0
+      reviewScore: 0,
+      isSubmitBtnDisabled: false
     };
   }
 
@@ -61,15 +62,26 @@ class ReviewForm extends Component {
     if (this.state.reviewTitle === '' || this.state.reviewContent === '') {
       alert('All fields must be filled!');
     } else {
-      var review = {
-        userName: this.props.userData.name,
-        reviewTitle: this.state.reviewTitle,
-        reviewContent: this.state.reviewContent,
-        reviewScore: this.state.reviewScore,
-        likeNo: 0,
-        dislikeNo: 0
-      };
-      this.props.handleNewReviewSubmit(review);
+      this.setState(
+        {
+          isSubmitBtnDisabled: true
+        },
+        () => {
+          var review = {
+            userName: this.props.userData.name,
+            reviewTitle: this.state.reviewTitle,
+            reviewContent: this.state.reviewContent,
+            reviewScore: this.state.reviewScore,
+            likeNo: 0,
+            dislikeNo: 0
+          };
+          this.props.handleNewReviewSubmit(review, () => {
+            this.setState({
+              isSubmitBtnDisabled: false
+            });
+          });
+        }
+      );
     }
   };
 
@@ -155,7 +167,11 @@ class ReviewForm extends Component {
                       alignItems: 'center'
                     }}
                   >
-                    <Button type="primary" onClick={this.handleSubmitClick}>
+                    <Button
+                      type="primary"
+                      loading={this.state.isSubmitBtnDisabled}
+                      onClick={this.handleSubmitClick}
+                    >
                       Submit
                     </Button>
                   </div>

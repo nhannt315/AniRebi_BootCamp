@@ -88,7 +88,7 @@ class Api::V1::ReviewsController < ApplicationController
           message: 'Undisliked'
       }, status: 200
     else
-      @review.liked_by current_user
+      @review.disliked_by current_user
       render json: {
           message: 'Disliked'
       }, status: 200

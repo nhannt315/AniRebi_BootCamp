@@ -1,16 +1,31 @@
-import { Col, Row, Divider, Icon, Rate, Avatar, Button, Input } from 'antd';
+import {
+  Col,
+  Row,
+  Divider,
+  Icon,
+  Rate,
+  Avatar,
+  Button,
+  Input,
+  Badge,
+  Modal
+} from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import CardBox from '../CardBox/CardBox';
 import * as actions from '../../store/actions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import './Review.scss';
 import { callbackify } from 'util';
+import axios from '../../axios_anime';
+import * as endpoints from '../../constants/endpoint_constants';
+
+const confirm = Modal.confirm;
 
 class Review extends Component {
   static propTypes = {
+    reviewId: PropTypes.number.isRequired,
     userData: PropTypes.object.isRequired,
     userName: PropTypes.string.isRequired,
     reviewTitle: PropTypes.string.isRequired,
@@ -18,8 +33,13 @@ class Review extends Component {
     reviewScore: PropTypes.number.isRequired,
     likeNo: PropTypes.number.isRequired,
     dislikeNo: PropTypes.number.isRequired,
+    createdAt: PropTypes.string.isRequired,
+    updatedAt: PropTypes.string.isRequired,
     handleEditReview: PropTypes.func.isRequired,
-    handleDeleteReview: PropTypes.func.isRequired
+    handleDeleteReview: PropTypes.func.isRequired,
+    votesFor: PropTypes.array.isRequired,
+    tokenData: PropTypes.object.isRequired,
+    isAuthenticated: PropTypes.bool.isRequired
   };
 
   constructor(props) {
@@ -30,7 +50,10 @@ class Review extends Component {
       reviewContent: this.props.reviewContent,
       reviewScore: this.props.reviewScore,
       likeNo: this.props.likeNo,
-      dislikeNo: this.props.dislikeNo
+      dislikeNo: this.props.dislikeNo,
+      isSaveBtnDisabled: false,
+      isDeleteBtnDisabled: false,
+      votesFor: this.props.votesFor.slice()
     };
   }
 
@@ -71,39 +94,139 @@ class Review extends Component {
     });
   };
 
+  checkUserLiked = () => {
+    for (var el in this.state.votesFor) {
+      if (
+        this.state.votesFor[el].voter_id === this.props.userData.id &&
+        this.state.votesFor[el].vote_flag === true
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  checkUserDisliked = () => {
+    for (var el in this.state.votesFor) {
+      if (
+        this.state.votesFor[el].voter_id === this.props.userData.id &&
+        this.state.votesFor[el].vote_flag === false
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   handleSaveClick = () => {
     if (this.state.reviewTitle === '' || this.state.reviewContent === '') {
       alert('All fields must be filled!');
     } else {
-      var review = {
-        userName: this.props.userData.name,
-        reviewTitle: this.state.reviewTitle,
-        reviewContent: this.state.reviewContent,
-        reviewScore: this.state.reviewScore,
-        likeNo: this.props.likeNo,
-        dislikeNo: this.props.dislikeNo
-      };
-      this.props.handleEditReview(review);
-      this.setState({
-        isEditFormOpen: false
-      });
+      this.setState(
+        {
+          isSaveBtnDisabled: true
+        },
+        () => {
+          var review = {
+            reviewId: this.props.reviewId,
+            userName: this.props.userData.name,
+            reviewTitle: this.state.reviewTitle,
+            reviewContent: this.state.reviewContent,
+            reviewScore: this.state.reviewScore,
+            likeNo: this.props.likeNo,
+            dislikeNo: this.props.dislikeNo
+          };
+          this.props.handleEditReview(review, () => {
+            this.setState({
+              isEditFormOpen: false,
+              isSaveBtnDisabled: false
+            });
+          });
+        }
+      );
     }
   };
 
   handleLikeClick = e => {
-    this.setState({
-      likeNo: this.state.likeNo + 1
-    });
+    axios
+      .get(endpoints.REVIEW_API + `/like?id=${this.props.reviewId}`, {
+        headers: {
+          'access-token': this.props.tokenData.accessToken,
+          'token-type': this.props.tokenData.tokenType,
+          uid: this.props.tokenData.uid,
+          client: this.props.tokenData.client
+        }
+      })
+      .then(response => {
+        console.log(response);
+        if (!this.checkUserLiked()) {
+          console.log('liked');
+          this.setState({
+            votesFor: [
+              ...this.state.votesFor,
+              {
+                voter_id: this.props.userData.id,
+                vote_flag: true
+              }
+            ],
+            likeNo: this.state.likeNo + 1
+          });
+          console.log(this.state.votesFor);
+        } else {
+          console.log('unliked');
+          this.setState({
+            votesFor: this.state.votesFor.filter(
+              i => i.voter_id !== this.props.userData.id || i.vote_flag === false
+            ),
+            likeNo: this.state.likeNo - 1
+          });
+          console.log(this.state.votesFor);
+        }
+      });
   };
 
   handleDislikeClick = e => {
-    this.setState({
-      dislikeNo: this.state.dislikeNo + 1
-    });
+    axios
+      .get(endpoints.REVIEW_API + `/dislike?id=${this.props.reviewId}`, {
+        headers: {
+          'access-token': this.props.tokenData.accessToken,
+          'token-type': this.props.tokenData.tokenType,
+          uid: this.props.tokenData.uid,
+          client: this.props.tokenData.client
+        }
+      })
+      .then(response => {
+        console.log(response);
+        if (!this.checkUserDisliked()) {
+          console.log('disliked');
+          this.setState({
+            votesFor: [
+              ...this.state.votesFor,
+              {
+                voter_id: this.props.userData.id,
+                vote_flag: false
+              }
+            ],
+            dislikeNo: this.state.dislikeNo + 1
+          });
+          console.log(this.state.votesFor);
+        } else {
+          console.log('undisliked');
+          this.setState({
+            votesFor: this.state.votesFor.filter(
+              i =>
+                i.voter_id !== this.props.userData.id || i.vote_flag === true
+            ),
+            dislikeNo: this.state.dislikeNo - 1
+          });
+          console.log(this.state.votesFor);
+        }
+      });
   };
 
   handleDeleteClick = e => {
     var review = {
+      reviewId: this.props.reviewId,
       userName: this.props.userName,
       reviewTitle: this.state.reviewTitle,
       reviewContent: this.state.reviewContent,
@@ -111,7 +234,18 @@ class Review extends Component {
       likeNo: this.state.likeNo,
       dislikeNo: this.state.dislikeNo
     };
-    this.props.handleDeleteReview(review);
+    this.setState(
+      {
+        isDeleteBtnDisabled: true
+      },
+      () => {
+        this.props.handleDeleteReview(review, () => {
+          this.setState({
+            isDeleteBtnDisabled: false
+          });
+        });
+      }
+    );
   };
 
   handleEditClick = e => {
@@ -124,6 +258,36 @@ class Review extends Component {
         isEditFormOpen: true
       });
     }
+  };
+
+  showDeleteConfirm = () => {
+    var context = this;
+    confirm({
+      title: 'Are you sure you want to delete this review?',
+      content: 'Deleted reviews cannot be restored',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        context.handleDeleteClick();
+      },
+      onCancel() {}
+    });
+  };
+
+  showEditConfirm = () => {
+    var context = this;
+    confirm({
+      title: 'Are you sure you want to edit this review?',
+      content: 'Edited changes cannot be reverted',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        context.handleSaveClick();
+      },
+      onCancel() {}
+    });
   };
 
   render() {
@@ -199,7 +363,11 @@ class Review extends Component {
               </div>
               &nbsp;
               {userName !== userData.name && (
-                <div>
+                <div
+                  style={{
+                    marginTop: '15px'
+                  }}
+                >
                   <div
                     style={{
                       position: 'relative',
@@ -208,13 +376,18 @@ class Review extends Component {
                       alignItems: 'center'
                     }}
                   >
-                    <LikeIcon
-                      type="like"
-                      theme="filled"
-                      onClick={this.handleLikeClick}
-                    />
-                    &nbsp;
-                    <span>{likeNo}</span>
+                    <Badge
+                      count={likeNo}
+                      style={{ backgroundColor: '#52c41a' }}
+                    >
+                      <LikeButton
+                        shape="circle"
+                        onClick={this.handleLikeClick}
+                        disabled={!this.props.isAuthenticated}
+                      >
+                        <LikeIcon type="like" theme="filled" />
+                      </LikeButton>
+                    </Badge>
                   </div>
                   <div
                     style={{
@@ -225,13 +398,15 @@ class Review extends Component {
                       marginLeft: '20px'
                     }}
                   >
-                    <DislikeIcon
-                      type="dislike"
-                      theme="filled"
-                      onClick={this.handleDislikeClick}
-                    />
-                    &nbsp;
-                    <span>{dislikeNo}</span>
+                    <Badge count={dislikeNo}>
+                      <DislikeButton
+                        shape="circle"
+                        onClick={this.handleDislikeClick}
+                        disabled={!this.props.isAuthenticated}
+                      >
+                        <DislikeIcon type="dislike" theme="filled" />
+                      </DislikeButton>
+                    </Badge>
                   </div>
                 </div>
               )}
@@ -245,7 +420,11 @@ class Review extends Component {
                       alignItems: 'center'
                     }}
                   >
-                    <Button type="primary" onClick={this.handleEditClick}>
+                    <Button
+                      type="primary"
+                      disabled={this.state.isDeleteBtnDisabled}
+                      onClick={this.handleEditClick}
+                    >
                       Edit
                     </Button>
                   </div>
@@ -258,7 +437,12 @@ class Review extends Component {
                       marginLeft: '20px'
                     }}
                   >
-                    <Button type="danger" onClick={this.handleDeleteClick}>
+                    <Button
+                      type="danger"
+                      disabled={this.state.isSaveBtnDisabled}
+                      loading={this.state.isDeleteBtnDisabled}
+                      onClick={this.showDeleteConfirm}
+                    >
                       Delete
                     </Button>
                   </div>
@@ -334,7 +518,11 @@ class Review extends Component {
                     alignItems: 'center'
                   }}
                 >
-                  <Button type="primary" onClick={this.handleSaveClick}>
+                  <Button
+                    type="primary"
+                    loading={this.state.isSaveBtnDisabled}
+                    onClick={this.showEditConfirm}
+                  >
                     Save
                   </Button>
                 </div>
@@ -347,7 +535,11 @@ class Review extends Component {
                     marginLeft: '20px'
                   }}
                 >
-                  <Button type="default" onClick={this.handleCancelClick}>
+                  <Button
+                    type="default"
+                    disabled={this.state.isSaveBtnDisabled}
+                    onClick={this.handleCancelClick}
+                  >
                     Cancel
                   </Button>
                 </div>
@@ -371,31 +563,25 @@ const StyledDivider = styled(Divider)`
   margin-bottom: 8px !important;
 `;
 
-const LikeIcon = styled(Icon)`
-  font-size: 26px;
-  &:hover {
-    color: darkblue;
-    cursor: pointer;
-  }
-`;
+const LikeIcon = styled(Icon)``;
+
+const DislikeIcon = styled(Icon)``;
+
+const LikeButton = styled(Button)``;
+
+const DislikeButton = styled(Button)``;
 
 const mapStateToProps = state => {
   return {
-    userData: state.auth.userData
+    userData: state.auth.userData,
+    tokenData: state.auth.tokenData,
+    isAuthenticated: state.auth.isAuthenticated
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {};
 };
-
-const DislikeIcon = styled(Icon)`
-  font-size: 26px;
-  &:hover {
-    color: darkred;
-    cursor: pointer;
-  }
-`;
 
 export default withRouter(
   connect(

@@ -16,17 +16,18 @@ import {
   getAnimeById,
   getGenresList,
   getGenreTop,
-  getMultipleGenreTop
+  getMultipleGenreTop,
+  getReviewsByAnime
 } from './anime_saga';
 
-import {
-  searchAnimeSaga
-} from './search_saga';
+import { searchAnimeSaga } from './search_saga';
+
 
 import {
   fetchUserInfo,
   updateUserInfo
 } from './user_info_saga';
+
 
 export function* watchAuth() {
   yield all([
@@ -34,8 +35,8 @@ export function* watchAuth() {
     takeLatest(actionTypes.LOGOUT, logoutSaga),
     takeLatest(actionTypes.AUTH_CHECK_STATE, authCheckStateSaga),
     takeLatest(actionTypes.SIGN_UP, signUpSaga),
-    takeLatest(actionTypes.AUTH_FORGOT_PASSWORD,forgotPasswordSaga),
-    takeLatest(actionTypes.AUTH_RESET_PASSWORD,resetPasswordSaga)
+    takeLatest(actionTypes.AUTH_FORGOT_PASSWORD, forgotPasswordSaga),
+    takeLatest(actionTypes.AUTH_RESET_PASSWORD, resetPasswordSaga)
   ]);
 }
 
@@ -45,20 +46,19 @@ export function* watchAnime() {
     takeLatest(actionTypes.GET_ANIME_BY_ID, getAnimeById),
     takeLatest(actionTypes.GET_GENRES_LIST, getGenresList),
     takeLatest(actionTypes.GET_GENRE_TOP, getGenreTop),
-    takeLatest(actionTypes.GET_MULTIPLE_GENRE_TOP, getMultipleGenreTop)
+    takeLatest(actionTypes.GET_MULTIPLE_GENRE_TOP, getMultipleGenreTop),
+    takeLatest(actionTypes.GET_REVIEWS_BY_ANIME, getReviewsByAnime)
   ]);
 }
-
 
 export function* watchUserProfile() {
   yield all([
     takeLatest(actionTypes.GET_USER_PROFILE_INFO, fetchUserInfo),
     takeLatest(actionTypes.PATH_UPDATE_PROFILE, updateUserInfo)
   ]);
+
 }
 
-export function* watchSearch(){
-  yield all([
-    takeLatest(actionTypes.SEARCH_ANIME_REQUEST, searchAnimeSaga)
-  ]);
+export function* watchSearch() {
+  yield all([takeLatest(actionTypes.SEARCH_ANIME_REQUEST, searchAnimeSaga)]);
 }
