@@ -22,10 +22,10 @@ gem "uglifier", ">= 1.3.0"
 gem "webpacker"
 
 group :development, :test do
+  gem "factory_bot_rails"
   gem "pry-rails"
-  gem 'factory_bot_rails'
-  gem 'shoulda'
-  gem 'rspec-rails', '3.6.1'
+  gem "rspec-rails", "3.6.1"
+  gem "shoulda"
 end
 
 group :development do
@@ -42,8 +42,8 @@ group :test do
   gem "selenium-webdriver"
 end
 
+gem "elasticsearch-model"
+gem "elasticsearch-rails"
+gem "ffaker"
 gem "graphql-client"
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-gem 'elasticsearch-model'
-gem 'elasticsearch-rails'
-gem 'ffaker'

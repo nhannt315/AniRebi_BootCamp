@@ -33,7 +33,7 @@ class HomePage extends Component {
   };
 
   handleBannerError = e => {
-    e.target.src = 'https://image.ibb.co/hnycB9/placeholder_large.png';
+    e.target.src = 'https://gazettereview.com/wp-content/uploads/2018/06/1-2.jpg';
   };
 
   render() {
@@ -48,12 +48,12 @@ class HomePage extends Component {
       />
     ));
 
-    const TopGenreCardBoxes = this.props.multipleGenreTopData.map(item => (
-      <div key={item.genre.id}>
+    const TopGenreCardBoxes = this.props.multipleGenreTopData.map(genre => (
+      <div key={genre.id}>
         <CardBox
-          key={item.genre.id}
-          title={item.genre.name}
-          content={<CustomHorizontalList dataSource={item.animes} />}
+          key={genre.id}
+          title={genre.name}
+          content={<CustomHorizontalList dataSource={genre.animes} />}
         />
         &nbsp;
       </div>

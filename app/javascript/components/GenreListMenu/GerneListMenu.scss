@@ -1,0 +1,40 @@
+@import '../../styles/variables';
+
+.genre-list {
+  background: $genre-list;
+  width: 500px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 10px;
+  z-index: 4;
+  .genre-list-link {
+    text-transform: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    display: inline-block;
+    width: 25%;
+    height: 50px;
+    color: $color-secondary;
+    text-align: center;
+    &:hover {
+      background: rgba($color-primary, 0.8);
+      box-shadow: 0 0 7px rgba(0, 0, 0, 1) inset;
+    }
+  }
+}
+
+.genre-list-wrapper {
+  transition: max-height 1s ease-out;
+  opacity: 0;
+  max-height: 0;
+  position: absolute;
+  top: 50px;
+  left: 0;
+  overflow: hidden;
+}
+.show {
+  opacity: 1;
+  max-height: 500px;
+}

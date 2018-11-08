@@ -48,14 +48,27 @@ export function* updateUserInfo(action) {
   const headers =  {
     "access-token": tokenData.accessToken,
     "client": tokenData.client,
-    "uid": tokenData.uid,
-    "expiry": tokenData.expiry
+    "uid": tokenData.uid
   };
   try {
     const response = yield axios.patch(url, data, {
       headers: headers
     });
-    console.log(response);
+    
+    const tokenDatas = {
+      accessToken: response.headers['access-token'],
+      client: response.headers['client'],
+      uid: response.headers['uid'],
+      tokenType: response.headers['token-type'],
+      expiry: response.headers['expiry']
+    };
+
+    if(tokenDatas.accessToken)
+      localStorage.setItem(keys.TOKEN_DATA_LOCAL_KEY, JSON.stringify(tokenDatas));
+    else {
+      tokenData.uid = response.data.email;
+      localStorage.setItem(keys.TOKEN_DATA_LOCAL_KEY, JSON.stringify(tokenData));
+    }
     if (response.data.success === false){
       yield put(actions.updateProfileFailue(response.data.errors));
     } else {

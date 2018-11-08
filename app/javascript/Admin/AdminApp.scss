@@ -1,0 +1,30 @@
+html {
+  font-size: 100% !important;
+}
+
+.trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: color .3s;
+}
+
+.trigger:hover {
+  color: #1890ff;
+}
+
+.logo {
+  height: 50px;
+  background: rgba(255,255,255,.2);
+  margin: 16px;
+  a {
+    display: inline-block;
+    color: white;
+    line-height: 50px;
+    font-size: 32px;
+    font-family: 'Cabin Sketch', cursive;
+    width: 100%;
+    text-align: center;
+  }
+}

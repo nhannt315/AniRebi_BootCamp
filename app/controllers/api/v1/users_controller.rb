@@ -4,22 +4,23 @@ class Api::V1::UsersController < ApplicationController
   def show
     @user = User.find_by id: params[:id]
     if @user.present?
-      reviewsData = @user.reviews.map{|item| 
+      reviewsData = @user.reviews.map do |item|
         {
-          review: item, 
+          review: item,
           anime: {cover: item.anime.cover_medium}
         }
-      }
+      end
       render json: {
-          id: @user.id,
-          uid: @user.uid,
-          name: @user.name,
-          nickname: @user.nickname,
-          email: @user.email,
-          birthday: @user.birthday,
-          slug: @user.slug,
-          success: true,
-          reviews: reviewsData}.to_json
+        id: @user.id,
+        uid: @user.uid,
+        name: @user.name,
+        nickname: @user.nickname,
+        email: @user.email,
+        birthday: @user.birthday,
+        slug: @user.slug,
+        success: true,
+        reviews: reviewsData
+      }.to_json
     else
       render json: {errors: "Can't find this user !",
                     success: false}.to_json
@@ -29,9 +30,23 @@ class Api::V1::UsersController < ApplicationController
   def update
     @user = current_user
     if @user.update_attributes update_user_params
-      render json: {data: @user,
-                    reviews: @user.reviews,
-                    success: true}.to_json
+      reviewsData = @user.reviews.map do |item|
+        {
+          review: item,
+          anime: {cover: item.anime.cover_medium}
+        }
+      end
+      render json: {
+        id: @user.id,
+        uid: @user.uid,
+        name: @user.name,
+        nickname: @user.nickname,
+        email: @user.email,
+        birthday: @user.birthday,
+        slug: @user.slug,
+        success: true,
+        reviews: reviewsData
+      }.to_json
     else
       render json: {errors: "Can't update this user !",
                     success: false}.to_json

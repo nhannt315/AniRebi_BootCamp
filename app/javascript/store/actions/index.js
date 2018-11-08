@@ -63,3 +63,14 @@ export {
   updateProfileSuccess,
   updateProfileFailue
 } from './user_info_action';
+export {
+  getGenreDetail,
+  getGenreStart,
+  getGenreSuccess,
+  getGenreFailure,
+  getAnimeListGenre,
+  getAnimeListGenreStart,
+  getAnimeListGenreSuccess,
+  getAnimeListGenreFailure,
+  clearAnimeListGenre
+} from './genre_action';

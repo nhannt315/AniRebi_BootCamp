@@ -19,6 +19,7 @@ import * as actions from './store/actions';
 import AnimeDetailPage from './containers/AnimeDetailPage';
 import SearchPage from './containers/SearchPage';
 import UserProfilePage from './containers/UserProfilePage';
+import GenreDetailPage from './containers/GenreDetailPage';
 
 class App extends Component {
   state = {
@@ -56,6 +57,7 @@ class App extends Component {
             show={this.state.showElement}
             history={this.props.history}
             location={this.props.location}
+            genreList={this.props.genresListData}
           />
           <div className="main-page">
             <Switch>
@@ -76,7 +78,12 @@ class App extends Component {
                 render={() => <CheckTokenPage />}
               />
               <Route exact path="/profile/:id?" 
-                render={() => <UserProfilePage userData={this.props.userData} />} />
+                render={() => <UserProfilePage userData={this.props.userData} 
+                                isAuthenticated={this.props.isAuthenticated}
+                                history={this.props.history}/>} />
+              <Route exact path="/forgot_pwd" render={() => <ForgotPasswordPage />} />
+              <Route exact path="/reset_pwd" render={() => <CheckTokenPage />} />
+              <Route exact path="/genre/:id" render={() => <GenreDetailPage />} />
               <Route exact path-="/search" render={() => <SearchPage />} />
               <Route render={() => <NotFoundPage />} />
             </Switch>
@@ -85,8 +92,9 @@ class App extends Component {
       );
     } else {
       return (
-        <div>
+        <div style={{height: '100vh'}}>
           <Alert
+            style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}
             message="Please wait"
             description="Page is loading..."
             type="info"
@@ -95,7 +103,7 @@ class App extends Component {
               <Spin
                 size="large"
                 indicator={
-                  <Icon type="loading" style={{ fontSize: 24 }} spin />
+                  <Icon type="loading" style={{fontSize: 24}} spin />
                 }
               />
             }
@@ -124,7 +132,9 @@ App.propTypes = {
   searchResult: PropTypes.array,
   clearSearchResult: PropTypes.func,
   searchAnime: PropTypes.func,
-  keywordSearch: PropTypes.string
+  keywordSearch: PropTypes.string,
+  genresListData: PropTypes.array,
+  location: PropTypes.object
 };
 
 const mapStateToProps = state => {
@@ -156,7 +166,7 @@ const mapDispatchToProps = dispatch => {
     getMultipleGenreTop: (idArr, limit) =>
       dispatch(actions.getMultipleGenreTop(idArr, limit)),
     clearSearchResult: () => dispatch(actions.clearSearchResult()),
-    searchAnime: payload => dispatch(actions.searchAnime(payload))
+    searchAnime: (payload) => dispatch(actions.searchAnime(payload))
   };
 };
 

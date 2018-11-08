@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import {Breadcrumb, Layout, Row, Card, Col, Icon, Avatar, List} from 'antd';
+import {Breadcrumb, Layout, Row, Card, Col, Icon, Avatar, message} from 'antd';
 import * as actions from '../store/actions';
 import styled from 'styled-components';
 import BGImage from '../assets/images/background_home.png';
@@ -15,15 +15,21 @@ class UserProfilePage extends Component{
   
   state = {
     isEdit: false,
-    isUpdating: false
+    isUpdating: false,
+    isAuthenticated: false,
+    isUpdated: false
   };
 
   componentDidMount(){
     const splits = this.props.history.location.pathname.split('/');
     this.props.getProfileById(splits[2]);
   };
+
   componentDidUpdate(){
-    
+    if(this.props.isUpdated === true){
+      window.location.reload();
+      message.success("User info has been updated!");
+    }
   }
 
   editProfile = () => {
@@ -82,7 +88,7 @@ class UserProfilePage extends Component{
             </Col>
             <Col span={ 18 }>
               {
-                this.state.isEdit ? <EditProfile handleUpdate={this.updateProfileInfo}/> : <ProfileInfo dataSource={userInfo.reviews} />
+                this.props.isAuthenticated && this.state.isEdit ? <EditProfile handleUpdate={this.updateProfileInfo}/> : <ProfileInfo dataSource={userInfo.reviews} />
               }
             </Col>
           </Row>
@@ -101,10 +107,12 @@ class UserProfilePage extends Component{
   static propTypes = {
     isFetching: PropTypes.bool.isRequired,
     userInfo: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired,
+    history: PropTypes.object,
     getProfileById: PropTypes.func.isRequired,
     userData: PropTypes.object.isRequired,
-    errors: PropTypes.string
+    errors: PropTypes.string,
+    isUpdated: PropTypes.bool.isRequired,
+    isAuthenticated: PropTypes.bool.isRequired
   };
 }
 
@@ -113,7 +121,8 @@ const mapStateToProps = state => {
     isFetching: state.user.isFetching,
     isUpdating: state.user.isUpdating,
     userInfo: state.user.userInfo,
-    errors: state.user.errors
+    errors: state.user.errors,
+    isUpdated: state.user.updated
   };
 };
 

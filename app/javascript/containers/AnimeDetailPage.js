@@ -1,4 +1,13 @@
-import { Col, Layout, Row, Divider, Icon, Breadcrumb, Tag, Rate } from 'antd';
+import {
+  Col,
+  Layout,
+  Row,
+  Divider,
+  Icon,
+  Breadcrumb,
+  Tag,
+  Rate
+} from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
