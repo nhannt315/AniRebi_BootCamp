@@ -1,5 +1,5 @@
 class Api::V1::AnimesController < ApplicationController
-  before_action :find_anime, only: [:show]
+  before_action :find_anime, only: [:show, :update, :destroy]
   before_action :page_params, only: [:index, :top_animes, :search_by_genre]
   before_action :find_genre, only: [:search_by_genre]
   before_action :order_param, only: [:search_by_genre]
@@ -14,8 +14,45 @@ class Api::V1::AnimesController < ApplicationController
     end
   end
 
-  def show
-    render json: @anime, include: [genres: {only: [:id, :name]}]
+  def show; end
+
+  def create
+    @anime = Anime.new(anime_params)
+    if @anime.save
+      render json: {
+          anime: @anime,
+          message: "Ok"
+      }, status: 200
+    else
+      render json: {
+          message: "Something went wrong.."
+      }, status: 400
+    end
+  end
+
+  def update
+    if @anime.update_attributes(anime_params)
+      render json: {
+          anime: @anime,
+          message: "Ok"
+      }, status: 200
+    else
+      render json: {
+          message: "Something went wrong.."
+      }, status: 400
+    end
+  end
+
+  def destroy
+    if @anime.destroy
+      render json: {
+          message: "Anime deleted"
+      }, status: 200
+    else
+      render json: {
+          message: "Something went wrong ..."
+      }, status: 400
+    end
   end
 
   def top_animes
@@ -51,5 +88,9 @@ class Api::V1::AnimesController < ApplicationController
 
   def order_param
     @order = params[:order]
+  end
+
+  def anime_params
+    params.require(:anime).permit(:name, :status, :rating, :title_english, :banner, :cover_large, :cover_medium)
   end
 end
