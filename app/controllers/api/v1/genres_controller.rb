@@ -61,7 +61,7 @@ class Api::V1::GenresController < ApplicationController
     @genre = Genre.find_by id: params[:id]
     if @genre.destroy
       render json: {
-        message: "Review deleted"
+        message: "Genre deleted"
       }, status: 200
     else
       render json: {

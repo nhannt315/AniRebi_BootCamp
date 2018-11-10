@@ -3,6 +3,7 @@ class Api::V1::ReviewsController < ApplicationController
   before_action :page_params, only: [:index, :get_by_anime]
   before_action :find_review, only: [:show, :destroy, :update, :like, :dislike]
   after_action :update_like, only: [:like, :dislike]
+  after_action :update_rating, only: [:create, :update, :destroy]
 
   def index
     @reviews = Review.all.page(@page).per(@per_page)
@@ -118,5 +119,11 @@ class Api::V1::ReviewsController < ApplicationController
     @review.like = @review.get_upvotes.size
     @review.dislike = @review.get_downvotes.size
     @review.save
+  end
+
+  def update_rating
+    @anime = @review.anime
+    @anime.rating = @anime.reviews.average(:rating)
+    @anime.save
   end
 end

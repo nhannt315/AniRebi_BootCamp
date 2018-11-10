@@ -1,4 +1,13 @@
 namespace :update do
+  desc "Update anime"
+  task anime: :environment do
+    puts "Updating Anime"
+    Anime.all.each do |f|
+      f.rating = f.reviews.average(:rating)
+    end
+    puts "Done"
+  end
+
   desc "Update review"
   task review: :environment do
     puts "Updating Review"
@@ -10,4 +19,7 @@ namespace :update do
     end
     puts "Done"
   end
+
+  desc "Update all"
+  task :all => [:anime, :review]
 end
