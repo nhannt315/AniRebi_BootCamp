@@ -1,6 +1,6 @@
 class Api::V1::AnimesController < ApplicationController
   before_action :find_anime, only: [:show, :update, :destroy]
-  before_action :page_params, only: [:index, :top_animes, :search_by_genre]
+  before_action :page_params, only: [:index, :top_animes, :search_by_genre, :recent_reviewed]
   before_action :find_genre, only: [:search_by_genre]
   before_action :order_param, only: [:search_by_genre]
 
@@ -71,6 +71,10 @@ class Api::V1::AnimesController < ApplicationController
       @animes_by_genre = @genre_to_find.animes.page(@page).per(@per_page)
     end
     render json: @animes_by_genre
+  end
+
+  def recent_reviewed
+    render json: Anime.includes(:reviews).order("reviews.created_at desc").page(@page).per(@per_page)
   end
 
   private
