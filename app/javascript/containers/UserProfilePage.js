@@ -118,11 +118,11 @@ class UserProfilePage extends Component{
 
 const mapStateToProps = state => {
   return {
-    isFetching: state.user.isFetching,
-    isUpdating: state.user.isUpdating,
-    userInfo: state.user.userInfo,
-    errors: state.user.errors,
-    isUpdated: state.user.updated
+    isFetching: state.auth.isFetching,
+    isUpdating: state.auth.isUpdating,
+    userInfo: state.auth.userInfo,
+    errors: state.auth.errors,
+    isUpdated: state.auth.updated
   };
 };
 
