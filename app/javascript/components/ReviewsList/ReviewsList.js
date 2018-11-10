@@ -1,9 +1,7 @@
-import { Icon, List, Rate } from 'antd';
+import { List } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import './ReviewsList.scss';
-import * as actions from '../../store/actions';
 import Review from '../Review/Review';
 
 class ReviewsList extends Component {
@@ -13,8 +11,20 @@ class ReviewsList extends Component {
     handleDeleteReview: PropTypes.func.isRequired
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      pageSize: 5
+    };
+  }
+
   handleImgError = e => {
     e.target.src = 'https://image.ibb.co/djfJJp/placeholder.png';
+  };
+
+  onShowSizeChange = (current, pageSize) => {
+    console.log(current, pageSize);
+    this.setState({ pageSize: pageSize });
   };
 
   render() {
@@ -22,6 +32,16 @@ class ReviewsList extends Component {
     return (
       <List
         dataSource={dataSource}
+        pagination={{
+          onChange: page => {
+            console.log(page);
+          },
+          size: 'small',
+          pageSize: this.state.pageSize,
+          pageSizeOptions: ['5', '10', '15'],
+          showSizeChanger: true,
+          onShowSizeChange: this.onShowSizeChange
+        }}
         renderItem={item => (
           <List.Item key={item.id}>
             <Review
@@ -31,6 +51,7 @@ class ReviewsList extends Component {
               reviewContent={item.content}
               votesFor={item.votes_for}
               userName={item.user_name}
+              userId={item.user_id}
               likeNo={item.like}
               dislikeNo={item.dislike}
               createdAt={item.created_at}

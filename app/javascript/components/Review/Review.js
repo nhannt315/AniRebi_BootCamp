@@ -12,14 +12,12 @@ import {
 } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import * as actions from '../../store/actions';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import './Review.scss';
-import { callbackify } from 'util';
 import axios from '../../axios_anime';
 import * as endpoints from '../../constants/endpoint_constants';
+import moment from 'moment';
 
 const confirm = Modal.confirm;
 
@@ -27,7 +25,8 @@ class Review extends Component {
   static propTypes = {
     reviewId: PropTypes.number.isRequired,
     userData: PropTypes.object.isRequired,
-    userName: PropTypes.string,
+    userName: PropTypes.string.isRequired,
+    userId: PropTypes.number.isRequired,
     reviewTitle: PropTypes.string.isRequired,
     reviewContent: PropTypes.string.isRequired,
     reviewScore: PropTypes.number.isRequired,
@@ -62,7 +61,7 @@ class Review extends Component {
   };
 
   toText = content => {
-    return <p dangerouslySetInnerHTML={{__html: content}}/>;
+    return <p dangerouslySetInnerHTML={{ __html: content }} />;
   };
 
   onTitleChange = e => {
@@ -137,10 +136,12 @@ class Review extends Component {
             dislikeNo: this.props.dislikeNo
           };
           this.props.handleEditReview(review, () => {
-            this.setState({
-              isEditFormOpen: false,
-              isSaveBtnDisabled: false
-            });
+            this.setState(
+              {
+                isEditFormOpen: false,
+                isSaveBtnDisabled: false
+              }
+            );
           });
         }
       );
@@ -176,7 +177,8 @@ class Review extends Component {
           console.log('unliked');
           this.setState({
             votesFor: this.state.votesFor.filter(
-              i => i.voter_id !== this.props.userData.id || i.vote_flag === false
+              i =>
+                i.voter_id !== this.props.userData.id || i.vote_flag === false
             ),
             likeNo: this.state.likeNo - 1
           });
@@ -214,8 +216,7 @@ class Review extends Component {
           console.log('undisliked');
           this.setState({
             votesFor: this.state.votesFor.filter(
-              i =>
-                i.voter_id !== this.props.userData.id || i.vote_flag === true
+              i => i.voter_id !== this.props.userData.id || i.vote_flag === true
             ),
             dislikeNo: this.state.dislikeNo - 1
           });
@@ -240,9 +241,11 @@ class Review extends Component {
       },
       () => {
         this.props.handleDeleteReview(review, () => {
-          this.setState({
-            isDeleteBtnDisabled: false
-          });
+          this.setState(
+            {
+              isDeleteBtnDisabled: false
+            }
+          );
         });
       }
     );
@@ -271,8 +274,7 @@ class Review extends Component {
       onOk() {
         context.handleDeleteClick();
       },
-      onCancel() {
-      }
+      onCancel() {}
     });
   };
 
@@ -287,9 +289,13 @@ class Review extends Component {
       onOk() {
         context.handleSaveClick();
       },
-      onCancel() {
-      }
+      onCancel() {}
     });
+  };
+
+  parseDate = date => {
+    var momentDate = moment(date);
+    return momentDate.toDate().toDateString();
   };
 
   render() {
@@ -300,13 +306,13 @@ class Review extends Component {
       dislikeNo,
       reviewScore
     } = this.state;
-    const {userData, userName} = this.props;
+    const { userData, userName, userId, createdAt } = this.props;
     if (!this.state.isEditFormOpen) {
       return (
-        <div className="Review" style={{width: '100%'}}>
+        <div className="Review" style={{ width: '100%' }}>
           <Row>
             <Col span={4}>
-              <div style={{width: '100%', textAlign: 'center'}}>
+              <div style={{ width: '100%', textAlign: 'center' }}>
                 <StyledAvatar
                   size={100}
                   style={{
@@ -314,7 +320,7 @@ class Review extends Component {
                     backgroundColor: '#fde3cf'
                   }}
                 >
-                  <span style={{fontSize: '40px'}}>
+                  <span style={{ fontSize: '40px' }}>
                     {userName != null && userName.charAt(0).toUpperCase()}
                   </span>
                 </StyledAvatar>
@@ -331,10 +337,10 @@ class Review extends Component {
             </Col>
             <Col span={19} offset={1}>
               <Row>
-                <Col span={15}>
+                <Col span={14}>
                   <div className="ReviewTitle">{reviewTitle}</div>
                 </Col>
-                <Col span={8} offset={1}>
+                <Col span={9} offset={1}>
                   <div
                     className="ReviewRating"
                     style={{
@@ -352,6 +358,7 @@ class Review extends Component {
                         fontSize: 'calc(1.5vw)'
                       }}
                       disabled
+                      allowHalf
                       defaultValue={reviewScore}
                     />
                     &nbsp;
@@ -359,118 +366,119 @@ class Review extends Component {
                   </div>
                 </Col>
               </Row>
-              <StyledDivider/>
-              <div style={{minHeight: '100px'}} className="ReviewContent">
+              <StyledDivider />
+              <div style={{ minHeight: '100px' }} className="ReviewContent">
                 {reviewContent}
               </div>
               &nbsp;
-              {userName !== userData.name && (
+              <div
+                style={{
+                  marginTop: '15px'
+                }}
+              >
                 <div
                   style={{
-                    marginTop: '15px'
+                    position: 'relative',
+                    display: 'inline-flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
                   }}
                 >
-                  <div
-                    style={{
-                      position: 'relative',
-                      display: 'inline-flex',
-                      justifyContent: 'center',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <Badge
-                      count={likeNo}
-                      style={{backgroundColor: '#52c41a'}}
+                  <Badge count={likeNo} style={{ backgroundColor: '#52c41a' }}>
+                    <LikeButton
+                      shape="circle"
+                      onClick={this.handleLikeClick}
+                      disabled={!this.props.isAuthenticated || this.checkUserDisliked()}
                     >
-                      <LikeButton
-                        shape="circle"
-                        onClick={this.handleLikeClick}
-                        disabled={!this.props.isAuthenticated}
-                      >
-                        <LikeIcon type="like" theme="filled"/>
-                      </LikeButton>
-                    </Badge>
-                  </div>
-                  <div
-                    style={{
-                      position: 'relative',
-                      display: 'inline-flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      marginLeft: '20px'
-                    }}
-                  >
-                    <Badge count={dislikeNo}>
-                      <DislikeButton
-                        shape="circle"
-                        onClick={this.handleDislikeClick}
-                        disabled={!this.props.isAuthenticated}
-                      >
-                        <DislikeIcon type="dislike" theme="filled"/>
-                      </DislikeButton>
-                    </Badge>
-                  </div>
+                      <LikeIcon type="like" theme="filled" />
+                    </LikeButton>
+                  </Badge>
                 </div>
-              )}
-              {userName === userData.name && (
-                <div>
-                  <div
-                    style={{
-                      position: 'relative',
-                      display: 'inline-flex',
-                      justifyContent: 'center',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <Button
-                      type="primary"
-                      disabled={this.state.isDeleteBtnDisabled}
-                      onClick={this.handleEditClick}
+                <div
+                  style={{
+                    position: 'relative',
+                    display: 'inline-flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginLeft: '20px'
+                  }}
+                >
+                  <Badge count={dislikeNo}>
+                    <DislikeButton
+                      shape="circle"
+                      onClick={this.handleDislikeClick}
+                      disabled={!this.props.isAuthenticated || this.checkUserLiked()}
                     >
-                      Edit
-                    </Button>
-                  </div>
-                  <div
-                    style={{
-                      position: 'relative',
-                      display: 'inline-flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      marginLeft: '20px'
-                    }}
-                  >
-                    <Button
-                      type="danger"
-                      disabled={this.state.isSaveBtnDisabled}
-                      loading={this.state.isDeleteBtnDisabled}
-                      onClick={this.showDeleteConfirm}
-                    >
-                      Delete
-                    </Button>
-                  </div>
+                      <DislikeIcon type="dislike" theme="filled" />
+                    </DislikeButton>
+                  </Badge>
                 </div>
-              )}
+                {userId === userData.id && (
+                  <span>
+                    <div
+                      style={{
+                        position: 'relative',
+                        display: 'inline-flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginLeft: '20px'
+                      }}
+                    >
+                      <Button
+                        type="primary"
+                        disabled={this.state.isDeleteBtnDisabled}
+                        onClick={this.handleEditClick}
+                        shape="circle"
+                        icon="form"
+                      />
+                    </div>
+                    <div
+                      style={{
+                        position: 'relative',
+                        display: 'inline-flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginLeft: '20px'
+                      }}
+                    >
+                      <Button
+                        type="danger"
+                        disabled={this.state.isSaveBtnDisabled}
+                        loading={this.state.isDeleteBtnDisabled}
+                        onClick={this.showDeleteConfirm}
+                        shape="circle"
+                        icon="delete"
+                      />
+                    </div>
+                  </span>
+                )}
+                <Metadata>
+                  <Icon type="edit" />
+                  &nbsp;
+                  {this.parseDate(createdAt)}
+                </Metadata>
+              </div>
             </Col>
           </Row>
         </div>
       );
     } else {
       return (
-        <div className="EditForm" style={{width: '100%'}}>
+        <div className="EditForm" style={{ width: '100%' }}>
           <Row>
             <Col span={4}>
-              <div style={{width: '100%', textAlign: 'center'}}>
+              <div style={{ width: '100%', textAlign: 'center' }}>
                 <StyledAvatar
                   size={100}
-                  style={{color: '#f56a00', backgroundColor: '#fde3cf'}}
+                  style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
                 >
-                  <span style={{fontSize: '40px'}}>
+                  <span style={{ fontSize: '40px' }}>
                     {userName.charAt(0).toUpperCase()}
                   </span>
                 </StyledAvatar>
               </div>
               &nbsp;
-              <div style={{textAlign: 'center', fontSize: 'calc(1.5vw)'}}>
+              <div style={{ textAlign: 'center', fontSize: 'calc(1.5vw)' }}>
                 {userName}
               </div>
             </Col>
@@ -495,7 +503,7 @@ class Review extends Component {
                 &nbsp;
                 <span>{reviewScore} star(s)</span>
               </div>
-              <StyledDivider/>
+              <StyledDivider />
               <span className="ReviewFormTitle">
                 <Input
                   placeholder="Enter review's title"
@@ -503,8 +511,8 @@ class Review extends Component {
                   onChange={this.onTitleChange}
                 />
               </span>
-              <StyledDivider/>
-              <div style={{minHeight: '100px'}} className="ReviewFormContent">
+              <StyledDivider />
+              <div style={{ minHeight: '100px' }} className="ReviewFormContent">
                 <Input.TextArea
                   placeholder="Enter review's content"
                   value={reviewContent}
@@ -524,6 +532,7 @@ class Review extends Component {
                     type="primary"
                     loading={this.state.isSaveBtnDisabled}
                     onClick={this.showEditConfirm}
+                    icon="save"
                   >
                     Save
                   </Button>
@@ -538,9 +547,9 @@ class Review extends Component {
                   }}
                 >
                   <Button
-                    type="default"
                     disabled={this.state.isSaveBtnDisabled}
                     onClick={this.handleCancelClick}
+                    icon="close"
                   >
                     Cancel
                   </Button>
@@ -565,6 +574,15 @@ const StyledDivider = styled(Divider)`
   margin-bottom: 8px !important;
 `;
 
+const Metadata = styled.span`
+  color: grey;
+  font-style: italic;
+  font-size: 13px;
+  text-align: right;
+  position: absolute;
+  right: 0;
+`;
+
 const LikeIcon = styled(Icon)``;
 
 const DislikeIcon = styled(Icon)``;
@@ -581,9 +599,7 @@ const mapStateToProps = state => {
   };
 };
 
-
 export default connect(
   mapStateToProps,
   null
-)(Review)
-;
+)(Review);
