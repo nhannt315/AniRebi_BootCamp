@@ -1,22 +1,12 @@
 namespace :update do
-  desc "Update user"
-  task user: :environment do
-    puts "Updating User"
-    User.find_each(&:save)
-    puts "Done"
-  end
-
   desc "Update anime"
   task anime: :environment do
     puts "Updating Anime"
-    Anime.find_each(&:save)
-    puts "Done"
-  end
-
-  desc "Update genre"
-  task genre: :environment do
-    puts "Updating Genre"
-    Genre.find_each(&:save)
+    Anime.all.each do |f|
+      f.rating = f.reviews.average(:rating) || 0
+      f.reviews_count = f.reviews.count
+      f.save
+    end
     puts "Done"
   end
 
@@ -33,5 +23,5 @@ namespace :update do
   end
 
   desc "Update all"
-  task :all => [:user, :anime, :genre, :review]
+  task :all => [:anime, :review]
 end

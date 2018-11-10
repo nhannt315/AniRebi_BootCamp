@@ -4,7 +4,6 @@ import createSagaMiddleware from 'redux-saga';
 import authReducer from './reducers/auth_reducer';
 import animeReducer from './reducers/anime_reducer';
 import searchReducer from './reducers/search_reducer';
-import userInfoReducer from './reducers/user_info_reducer';
 import genreReducer from './reducers/genre_reducer';
 import { watchAuth, watchAnime, watchSearch, watchGenre, watchUserProfile } from './sagas';
 
@@ -17,7 +16,6 @@ const rootReducer = combineReducers({
   auth: authReducer,
   anime: animeReducer,
   search: searchReducer,
-  user: userInfoReducer,
   genre: genreReducer
 });
 
@@ -31,7 +29,6 @@ const store = createStore(
 sagaMiddleware.run(watchAuth);
 sagaMiddleware.run(watchAnime);
 sagaMiddleware.run(watchSearch);
-sagaMiddleware.run(watchUserProfile);
 sagaMiddleware.run(watchGenre);
 
 export default store;

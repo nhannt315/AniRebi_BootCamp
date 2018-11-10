@@ -19,6 +19,7 @@ class Api::V1::UsersController < ApplicationController
         birthday: @user.birthday,
         slug: @user.slug,
         success: true,
+        admin: @user.admin,
         reviews: reviewsData
       }.to_json
     else
@@ -45,6 +46,7 @@ class Api::V1::UsersController < ApplicationController
         birthday: @user.birthday,
         slug: @user.slug,
         success: true,
+        admin: @user.admin,
         reviews: reviewsData
       }.to_json
     else
