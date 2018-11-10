@@ -43,7 +43,9 @@ Rails.application.routes.draw do
           get "recent"
         end
       end
-      resources :users
+      resources :users do
+        post "is_admin", to: :is_admin
+      end
     end
   end
   scope :admin do
