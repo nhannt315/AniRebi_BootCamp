@@ -38,7 +38,8 @@ export function* loginSaga(action) {
       email: response.data.data.email,
       birthday: response.data.data.birthday,
       name: response.data.data.name,
-      id: response.data.data.id
+      id: response.data.data.id,
+      admin: response.data.data.admin
     };
     if (isRemember) {
       localStorage.setItem(keys.TOKEN_DATA_LOCAL_KEY, JSON.stringify(tokenData));
@@ -72,7 +73,8 @@ export function* signUpSaga(action) {
       email: response.data.data.email,
       birthday: response.data.data.birthday,
       name: response.data.data.name,
-      id: response.data.data.id
+      id: response.data.data.id,
+      admin: response.data.data.admin
     };
     yield put(actions.signUpSuccess(userData, tokenData));
     yield put(actions.finishProcess());
@@ -110,6 +112,71 @@ export function* resetPasswordSaga(action) {
     yield put(actions.finishProcess());
   }catch (error) {
     yield put(actions.errorProcess(error.response));
+  }
+}
+
+export function* fetchUserInfo(action) {
+  const url = `${endpoints.USER_API}/${action.id}`;
+  try {
+    const response = yield axios.get(url);
+    if (response.data.success === false){
+      yield put(actions.getProfileFailue(response.data.errors));
+    } else {
+      yield put(actions.getProfileSuccess(response.data));
+    }
+  } catch (errors) {
+    yield put(actions.getProfileFailue(errors));
+  }
+}
+
+export function* updateUserInfo(action) {
+  const url = `${endpoints.USER_API}/${action.id}`;
+  const data = {
+    name: action.name,
+    email: action.email
+  };
+  
+  const tokenData = JSON.parse(localStorage.getItem(keys.TOKEN_DATA_LOCAL_KEY));
+
+  const headers =  {
+    "access-token": tokenData.accessToken,
+    "client": tokenData.client,
+    "uid": tokenData.uid
+  };
+  try {
+    const response = yield axios.patch(url, data, {
+      headers: headers
+    });
+    
+    const tokenDatas = {
+      accessToken: response.headers['access-token'],
+      client: response.headers['client'],
+      uid: response.headers['uid'],
+      tokenType: response.headers['token-type'],
+      expiry: response.headers['expiry']
+    };
+
+    if(tokenDatas.accessToken)
+      localStorage.setItem(keys.TOKEN_DATA_LOCAL_KEY, JSON.stringify(tokenDatas));
+    else {
+      tokenData.uid = response.data.email;
+      localStorage.setItem(keys.TOKEN_DATA_LOCAL_KEY, JSON.stringify(tokenData));
+    }
+    if (response.data.success === false){
+      yield put(actions.updateProfileFailue(response.data.errors));
+    } else {
+      const userData = {
+        birthday: response.data.birthday,
+        email: response.data.email,
+        id: response.data.id,
+        name: response.data.name,
+        admin: response.data.admin
+      }
+      localStorage.setItem(keys.USER_DATA_LOCAL_KEY, JSON.stringify(userData));
+      yield put(actions.updateProfileSuccess(response.data, userData, tokenData));
+    }
+  } catch (errors) {
+    yield put(actions.updateProfileFailue(errors));
   }
 }
 

@@ -15,7 +15,13 @@ export {
   finishProcess,
   authCheckState,
   resetPassword,
-  resetPasswordComplete
+  resetPasswordComplete,
+  getProfile,
+  getProfileSuccess,
+  getProfileFailue,
+  updateProfile,
+  updateProfileSuccess,
+  updateProfileFailue
 } from './auth_action';
 
 export {
@@ -54,15 +60,6 @@ export {
   clearSearchResult
 } from './search_action';
 
-
-export {
-  getProfile,
-  getProfileSuccess,
-  getProfileFailue,
-  updateProfile,
-  updateProfileSuccess,
-  updateProfileFailue
-} from './user_info_action';
 export {
   getGenreDetail,
   getGenreStart,
