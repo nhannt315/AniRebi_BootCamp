@@ -3,7 +3,9 @@ namespace :update do
   task anime: :environment do
     puts "Updating Anime"
     Anime.all.each do |f|
-      f.rating = f.reviews.average(:rating)
+      f.rating = f.reviews.average(:rating) || 0
+      f.reviews_count = f.reviews.count
+      f.save
     end
     puts "Done"
   end

@@ -18,6 +18,9 @@ class Api::V1::ReviewsController < ApplicationController
     @review = current_user.reviews.build(review_params)
     @review.user_name = current_user.name
     if @review.save
+      @anime = @review.anime
+      @anime.reviews_count += 1
+      @anime.save
       render json: {
           review: @review
       }, status: 200
@@ -31,6 +34,8 @@ class Api::V1::ReviewsController < ApplicationController
   def destroy
     if @review.user == current_user
       if @review.destroy
+        @anime.reviews_count -= 1
+        @anime.save
         render json: {
             message: "Review deleted"
         }, status: 200
@@ -113,6 +118,7 @@ class Api::V1::ReviewsController < ApplicationController
 
   def find_review
     @review = Review.find(params[:id])
+    @anime = @review.anime
   end
 
   def update_like
@@ -122,7 +128,6 @@ class Api::V1::ReviewsController < ApplicationController
   end
 
   def update_rating
-    @anime = @review.anime
     @anime.rating = @anime.reviews.average(:rating)
     @anime.save
   end

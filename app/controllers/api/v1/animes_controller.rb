@@ -14,7 +14,9 @@ class Api::V1::AnimesController < ApplicationController
     end
   end
 
-  def show; end
+  def show
+    render json: @anime, include: [genres: {only: [:id, :name]}]
+  end
 
   def create
     @anime = Anime.new(anime_params)
