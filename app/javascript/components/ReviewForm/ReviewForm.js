@@ -1,8 +1,7 @@
-import { Col, Row, Divider, Icon, Input, Rate, Button, Avatar } from 'antd';
+import { Col, Row, Divider, Input, Rate, Button, Avatar, message } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import CardBox from '../CardBox/CardBox';
-import * as actions from '../../store/actions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
@@ -76,9 +75,11 @@ class ReviewForm extends Component {
             dislikeNo: 0
           };
           this.props.handleNewReviewSubmit(review, () => {
-            this.setState({
-              isSubmitBtnDisabled: false
-            });
+            this.setState(
+              {
+                isSubmitBtnDisabled: false
+              }
+            );
           });
         }
       );
@@ -171,6 +172,7 @@ class ReviewForm extends Component {
                       type="primary"
                       loading={this.state.isSubmitBtnDisabled}
                       onClick={this.handleSubmitClick}
+                      icon="edit"
                     >
                       Submit
                     </Button>
@@ -184,7 +186,11 @@ class ReviewForm extends Component {
                       marginLeft: '20px'
                     }}
                   >
-                    <Button type="default" onClick={this.handleResetClick}>
+                    <Button
+                      type="default"
+                      icon="undo"
+                      onClick={this.handleResetClick}
+                    >
                       Reset
                     </Button>
                   </div>

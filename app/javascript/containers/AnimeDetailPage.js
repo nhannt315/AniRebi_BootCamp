@@ -6,7 +6,8 @@ import {
   Icon,
   Breadcrumb,
   Tag,
-  Rate
+  Rate,
+  message
 } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -124,6 +125,7 @@ class AnimeDetailPage extends Component {
             console.log(this.state.reviewsList);
             this.calculateAvgScore();
             callback();
+            message.success('Submitted successfully', 3);
           }
         );
       });
@@ -151,6 +153,7 @@ class AnimeDetailPage extends Component {
             console.log(this.state.reviewsList);
             this.calculateAvgScore();
             callback();
+            message.success('Deleted successfully', 3);
           }
         );
       });
@@ -194,7 +197,9 @@ class AnimeDetailPage extends Component {
           rating: review.reviewScore,
           user_name: review.userName,
           like: review.likeNo,
-          dislike: review.dislikeNo
+          dislike: review.dislikeNo,
+          created_at: review.createdAt,
+          updated_at: review.updatedAt,
         };
         console.log(newReviewsList);
         this.setState(
@@ -205,6 +210,7 @@ class AnimeDetailPage extends Component {
             console.log(this.state.reviewsList);
             this.calculateAvgScore();
             callback();
+            message.success('Edited successfully', 3);
           }
         );
       });
