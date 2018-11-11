@@ -3,7 +3,8 @@ namespace :update do
   task anime: :environment do
     puts "Updating Anime"
     Anime.all.each do |f|
-      f.rating = f.reviews.average(:rating) || 0
+      rating = f.reviews.average(:rating) || 0
+      f.rating = (rating * 2).round/2.0
       f.reviews_count = f.reviews.count
       f.save
     end

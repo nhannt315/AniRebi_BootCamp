@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_10_160829) do
+ActiveRecord::Schema.define(version: 2018_11_11_155516) do
 
   create_table "anime_genres", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "anime_id"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 2018_11_10_160829) do
     t.string "cover_medium"
     t.string "slug"
     t.integer "reviews_count", default: 0
+    t.boolean "seed"
   end
 
   create_table "friendly_id_slugs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
