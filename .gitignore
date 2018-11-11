@@ -28,6 +28,7 @@
 /config/database.yml
 /public/packs
 /public/packs-test
+/public/uploads
 /node_modules
 yarn-debug.log*
 .yarn-integrity

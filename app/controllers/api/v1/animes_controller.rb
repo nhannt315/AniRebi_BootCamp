@@ -1,6 +1,6 @@
 class Api::V1::AnimesController < ApplicationController
   before_action :find_anime, only: [:show, :update, :destroy]
-  before_action :page_params, only: [:index, :top_animes, :search_by_genre]
+  before_action :page_params, only: [:index, :top_animes, :search_by_genre, :recent_reviewed]
   before_action :find_genre, only: [:search_by_genre]
   before_action :order_param, only: [:search_by_genre]
 
@@ -14,17 +14,13 @@ class Api::V1::AnimesController < ApplicationController
     end
   end
 
-  def show
-    render json: @anime, include: [genres: {only: [:id, :name]}]
-  end
+  def show; end
 
   def create
-    @anime = Anime.new(anime_params)
+    @anime = Anime.create(anime_params)
+    @anime.seed = false
     if @anime.save
-      render json: {
-          anime: @anime,
-          message: "Ok"
-      }, status: 200
+      render status: 200
     else
       render json: {
           message: "Something went wrong.."
@@ -34,10 +30,7 @@ class Api::V1::AnimesController < ApplicationController
 
   def update
     if @anime.update_attributes(anime_params)
-      render json: {
-          anime: @anime,
-          message: "Ok"
-      }, status: 200
+      render status: 200
     else
       render json: {
           message: "Something went wrong.."
@@ -73,6 +66,10 @@ class Api::V1::AnimesController < ApplicationController
     render json: @animes_by_genre
   end
 
+  def recent_reviewed
+    render json: Anime.includes(:reviews).order("reviews.created_at desc").page(@page).per(@per_page)
+  end
+
   private
 
   def page_params
@@ -93,6 +90,6 @@ class Api::V1::AnimesController < ApplicationController
   end
 
   def anime_params
-    params.require(:anime).permit(:name, :status, :rating, :title_english, :banner, :cover_large, :cover_medium)
+    params.permit(:name, :info, :status, :title_english, :banner, :cover_large, :cover_medium)
   end
 end
