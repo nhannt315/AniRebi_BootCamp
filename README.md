@@ -14,6 +14,8 @@ Step to setup and run project
 
 * npm install (or) yarn install
 
+* rails update:all
+
 * foreman start -p 3000
 
 Run test before send pull request

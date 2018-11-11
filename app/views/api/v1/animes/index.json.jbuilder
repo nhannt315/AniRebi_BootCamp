@@ -7,8 +7,9 @@ json.animes @animes do |anime|
   json.rating anime.rating
   json.title_english anime.title_english
   json.title_native anime.title_native
-  json.banner anime.banner
-  json.cover_large anime.cover_large
-  json.cover_medium anime.cover_medium
+  json.banner anime.banner.url
+  json.cover_large anime.cover_large.url
+  json.cover_medium anime.cover_medium.url
   json.genres anime.genres
+  json.reviews_count anime.reviews_count
 end
