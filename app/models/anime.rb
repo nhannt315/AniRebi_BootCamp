@@ -4,6 +4,9 @@ class Anime < ApplicationRecord
   friendly_id :name, use: :slugged
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
+  mount_uploader :banner, AnimeUploader
+  mount_uploader :cover_large, AnimeUploader
+  mount_uploader :cover_medium, AnimeUploader
   has_many :reviews, dependent: :destroy
   has_many :anime_genres
   has_many :genres, through: :anime_genres
