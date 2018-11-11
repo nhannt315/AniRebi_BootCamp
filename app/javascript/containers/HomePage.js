@@ -1,4 +1,4 @@
-import { Button, Carousel, Col, Icon, Layout, Row } from 'antd';
+import { Button, Carousel, Col, Icon, Layout, Row, List } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -16,24 +16,36 @@ class HomePage extends Component {
     topAnimeData: PropTypes.array.isRequired,
     genresListData: PropTypes.array.isRequired,
     genreTopData: PropTypes.object.isRequired,
-    multipleGenreTopData: PropTypes.array.isRequired
+    multipleGenreTopData: PropTypes.array.isRequired,
+    recentlyReviewedAnimeData: PropTypes.array.isRequired,
+    recentReviewsData: PropTypes.array.isRequired
   };
 
   constructor(props) {
     super(props);
+    this.topAnimeRef = React.createRef();
     this.recentlyReviewedRef = React.createRef();
   }
 
-  handleNextBtnClick = e => {
+  handleNextTopAnimeBtnClick = e => {
+    this.topAnimeRef.current.next();
+  };
+
+  handlePrevTopAnimeBtnClick = e => {
+    this.topAnimeRef.current.prev();
+  };
+
+  handleNextRecentlyReviewedAnimeBtnClick = e => {
     this.recentlyReviewedRef.current.next();
   };
 
-  handlePrevBtnClick = e => {
+  handlePrevRecentlyReviewedAnimeBtnClick = e => {
     this.recentlyReviewedRef.current.prev();
   };
 
   handleBannerError = e => {
-    e.target.src = 'https://gazettereview.com/wp-content/uploads/2018/06/1-2.jpg';
+    e.target.src =
+      'https://gazettereview.com/wp-content/uploads/2018/06/1-2.jpg';
   };
 
   render() {
@@ -62,6 +74,15 @@ class HomePage extends Component {
     const SlicedTopAnimeData1 = this.props.topAnimeData.slice(0, 7);
     const SlicedTopAnimeData2 = this.props.topAnimeData.slice(7, 15);
 
+    const SlicedRecentlyReviewedAnimeData1 = this.props.recentlyReviewedAnimeData.slice(
+      0,
+      7
+    );
+    const SlicedRecentlyReviewedAnimeData2 = this.props.recentlyReviewedAnimeData.slice(
+      7,
+      15
+    );
+
     return (
       <StyledContent className="HomePageContent">
         <Row>
@@ -72,13 +93,49 @@ class HomePage extends Component {
         &nbsp;
         <Content style={{ padding: '0px 100px 50px' }}>
           <CardBox
+            title="Top Anime"
+            content={
+              <Row type="flex" justify="center" align="middle">
+                <PrevCarouselNavButton
+                  size="large"
+                  type="default"
+                  onClick={this.handlePrevTopAnimeBtnClick}
+                >
+                  <Icon
+                    theme="filled"
+                    type="caret-left"
+                    style={{ fontSize: '22px' }}
+                  />
+                </PrevCarouselNavButton>
+                <Col span={24}>
+                  <Carousel ref={this.topAnimeRef} dots={false}>
+                    <CustomHorizontalList dataSource={SlicedTopAnimeData1} />
+                    <CustomHorizontalList dataSource={SlicedTopAnimeData2} />
+                  </Carousel>
+                </Col>
+                <NextCarouselNavButton
+                  size="large"
+                  type="default"
+                  onClick={this.handleNextTopAnimeBtnClick}
+                >
+                  <Icon
+                    theme="filled"
+                    type="caret-right"
+                    style={{ fontSize: '22px' }}
+                  />
+                </NextCarouselNavButton>
+              </Row>
+            }
+          />
+          &nbsp;
+          <CardBox
             title="Recently Reviewed"
             content={
               <Row type="flex" justify="center" align="middle">
                 <PrevCarouselNavButton
                   size="large"
                   type="default"
-                  onClick={this.handlePrevBtnClick}
+                  onClick={this.handlePrevRecentlyReviewedAnimeBtnClick}
                 >
                   <Icon
                     theme="filled"
@@ -88,14 +145,18 @@ class HomePage extends Component {
                 </PrevCarouselNavButton>
                 <Col span={24}>
                   <Carousel ref={this.recentlyReviewedRef} dots={false}>
-                    <CustomHorizontalList dataSource={SlicedTopAnimeData1} />
-                    <CustomHorizontalList dataSource={SlicedTopAnimeData2} />
+                    <CustomHorizontalList
+                      dataSource={SlicedRecentlyReviewedAnimeData1}
+                    />
+                    <CustomHorizontalList
+                      dataSource={SlicedRecentlyReviewedAnimeData2}
+                    />
                   </Carousel>
                 </Col>
                 <NextCarouselNavButton
                   size="large"
                   type="default"
-                  onClick={this.handleNextBtnClick}
+                  onClick={this.handleNextRecentlyReviewedAnimeBtnClick}
                 >
                   <Icon
                     theme="filled"
@@ -113,7 +174,34 @@ class HomePage extends Component {
               <CardBox
                 title="Ranking"
                 content={
-                  <CustomVerticalList dataSource={this.props.topAnimeData} />
+                  <CustomVerticalList
+                    dataSource={this.props.topAnimeData.slice(0, 5)}
+                  />
+                }
+              />
+              &nbsp;
+              <CardBox
+                title="Recent Reviews"
+                content={
+                  <List
+                    dataSource={this.props.recentReviewsData.slice(0, 5)}
+                    renderItem={item => (
+                      <List.Item>
+                        <List.Item.Meta
+                          title={
+                            <RecentReviewTitle href={`/anime/${item.anime_id}`}>
+                              {item.title}
+                            </RecentReviewTitle>
+                          }
+                          description={
+                            <RecentReviewDescription>
+                              {item.content}
+                            </RecentReviewDescription>
+                          }
+                        />
+                      </List.Item>
+                    )}
+                  />
                 }
               />
             </Col>
@@ -129,13 +217,25 @@ const mapStateToProps = state => {
     topAnimeData: state.anime.topAnimeData,
     genresListData: state.anime.genresListData,
     genreTopData: state.anime.genreTopData,
-    multipleGenreTopData: state.anime.multipleGenreTopData
+    multipleGenreTopData: state.anime.multipleGenreTopData,
+    recentlyReviewedAnimeData: state.anime.recentlyReviewedAnimeData,
+    recentReviewsData: state.anime.recentReviewsData
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {};
 };
+
+const RecentReviewTitle = styled.a`
+  font-weight: bold;
+  font-size: calc(1.1vw);
+  color: rgba(0, 0, 0, 0.65) !important;
+`;
+
+const RecentReviewDescription = styled.div`
+  font-size: calc(1vw);
+`;
 
 const StyledImg = styled.img`
   width: 100%;

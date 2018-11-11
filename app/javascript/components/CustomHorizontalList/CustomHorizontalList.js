@@ -18,8 +18,8 @@ class CustomHorizontalList extends Component {
         key={item.id}
         title={item.name}
         cover={item.cover_large}
-        ratingNo="10,000"
-        score="5.0"
+        ratingNo={item.reviews_count}
+        score={item.rating}
       />
     ));
 

@@ -7,7 +7,8 @@ import {
   Breadcrumb,
   Tag,
   Rate,
-  message
+  message,
+  List
 } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -40,7 +41,8 @@ class AnimeDetailPage extends Component {
     reviewsByAnimeIsProcessing: PropTypes.bool.isRequired,
     isAuthenticated: PropTypes.bool.isRequired,
     userData: PropTypes.object.isRequired,
-    tokenData: PropTypes.object.isRequired
+    tokenData: PropTypes.object.isRequired,
+    recentReviewsData: PropTypes.array.isRequired
   };
 
   constructor(props) {
@@ -199,7 +201,7 @@ class AnimeDetailPage extends Component {
           like: review.likeNo,
           dislike: review.dislikeNo,
           created_at: review.createdAt,
-          updated_at: review.updatedAt,
+          updated_at: review.updatedAt
         };
         console.log(newReviewsList);
         this.setState(
@@ -421,18 +423,46 @@ class AnimeDetailPage extends Component {
                   }
                 />
                 &nbsp;
-                {isAuthenticated &&
-                  !this.checkUserReviewed() && (
-                    <ReviewForm
-                      handleNewReviewSubmit={this.handleNewReviewSubmit}
-                    />
-                  )}
+                {isAuthenticated && !this.checkUserReviewed() && (
+                  <ReviewForm
+                    handleNewReviewSubmit={this.handleNewReviewSubmit}
+                  />
+                )}
               </Col>
               <Col span={6} offset={1}>
                 <CardBox
                   title="Ranking"
                   content={
-                    <CustomVerticalList dataSource={this.props.topAnimeData} />
+                    <CustomVerticalList
+                      dataSource={this.props.topAnimeData.slice(0, 5)}
+                    />
+                  }
+                />
+                &nbsp;
+                <CardBox
+                  title="Recent Reviews"
+                  content={
+                    <List
+                      dataSource={this.props.recentReviewsData.slice(0, 5)}
+                      renderItem={item => (
+                        <List.Item>
+                          <List.Item.Meta
+                            title={
+                              <RecentReviewTitle
+                                href={`/anime/${item.anime_id}`}
+                              >
+                                {item.title}
+                              </RecentReviewTitle>
+                            }
+                            description={
+                              <RecentReviewDescription>
+                                {item.content}
+                              </RecentReviewDescription>
+                            }
+                          />
+                        </List.Item>
+                      )}
+                    />
                   }
                 />
               </Col>
@@ -458,7 +488,8 @@ const mapStateToProps = state => {
     reviewsByAnimeIsProcessing: state.anime.reviewsByAnimeIsProcessing,
     isAuthenticated: state.auth.isAuthenticated,
     userData: state.auth.userData,
-    tokenData: state.auth.tokenData
+    tokenData: state.auth.tokenData,
+    recentReviewsData: state.anime.recentReviewsData
   };
 };
 
@@ -476,6 +507,16 @@ const mapDispatchToProps = dispatch => {
 //   text-align: center;
 //   object-fit: cover;
 // `;
+
+const RecentReviewTitle = styled.a`
+  font-weight: bold;
+  font-size: calc(1.1vw);
+  color: rgba(0, 0, 0, 0.65) !important;
+`;
+
+const RecentReviewDescription = styled.div`
+  font-size: calc(1vw);
+`;
 
 const AnimeDetailCoverImg = styled.img`
   border-color: white;

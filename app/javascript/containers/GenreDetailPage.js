@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Breadcrumb, Col, Icon, Layout, Row } from 'antd';
+import { Breadcrumb, Col, Icon, Layout, Row, List } from 'antd';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -14,8 +14,7 @@ import CustomCard from '../components/CustomCard/CustomCard';
 import Loader from '../components/Loader';
 import AnimeItem from '../components/AnimeItemHorizontal';
 
-const {Content} = Layout;
-
+const { Content } = Layout;
 
 class GenreDetailPage extends Component {
   static propTypes = {
@@ -30,7 +29,8 @@ class GenreDetailPage extends Component {
     loading: PropTypes.bool,
     getAnimeList: PropTypes.func,
     totalAnime: PropTypes.number,
-    clearAnimeList: PropTypes.func
+    clearAnimeList: PropTypes.func,
+    recentReviewsData: PropTypes.array.isRequired
   };
 
   state = {
@@ -56,84 +56,101 @@ class GenreDetailPage extends Component {
   }
 
   changeLayout = () => {
-    this.setState(prevState => ({isGrid: !prevState.isGrid}));
+    this.setState(prevState => ({ isGrid: !prevState.isGrid }));
   };
 
   getAnimeList = () => {
-    const {getAnimeList, page} = this.props;
+    const { getAnimeList, page } = this.props;
     getAnimeList(this.state.genreId, page);
   };
 
   componentDidMount() {
     const genreId = this.props.match.params.id;
-    this.setState({genreId: genreId}, () => this.getAnimeList());
+    this.setState({ genreId: genreId }, () => this.getAnimeList());
   }
 
   render() {
-    const {topAnimeData, animeList, totalAnime, genreDetail} = this.props;
+    const {
+      topAnimeData,
+      animeList,
+      totalAnime,
+      genreDetail,
+      recentReviewsData
+    } = this.props;
     const gridList = (
       <GridWrapper>
-        {animeList && animeList.map(anime => (
-          <CustomCard
-            style={{margin: '0 4px 5px 4px'}}
-            id={anime.id}
-            key={anime.id}
-            title={anime.name}
-            cover={anime.cover_large}
-            ratingNo="10,000"
-            score="5.0"
-          />
-        ))}
+        {animeList &&
+          animeList.map(anime => (
+            <CustomCard
+              style={{ margin: '0 4px 5px 4px' }}
+              id={anime.id}
+              key={anime.id}
+              title={anime.name}
+              cover={anime.cover_large}
+              ratingNo="10,000"
+              score="5.0"
+            />
+          ))}
       </GridWrapper>
     );
     const horizontalList = (
       <ListWrapper>
-        {animeList && animeList.map(anime => (
-          <AnimeItem key={anime.id} anime={anime}/>
-        ))}
+        {animeList &&
+          animeList.map(anime => <AnimeItem key={anime.id} anime={anime} />)}
       </ListWrapper>
     );
     return (
       <StyledContent>
-        <Content style={{padding: '0px 100px 50px'}}>
+        <Content style={{ padding: '0px 100px 50px' }}>
           <Row>
             <Col span={17}>
               <CardBox
                 content={
                   <div>
-                    <Breadcrumb style={{float: 'left'}}>
+                    <Breadcrumb style={{ float: 'left' }}>
                       <StyledBreadcrumbItem href="/">
-                        <Icon type="home"/> Home
+                        <Icon type="home" /> Home
                       </StyledBreadcrumbItem>
                       <StyledBreadcrumbItem href="/anime">
-                        <Icon type="bars"/> Genre
+                        <Icon type="bars" /> Genre
                       </StyledBreadcrumbItem>
                       <StyledBreadcrumbItem href="">
                         {genreDetail && genreDetail.name}
                       </StyledBreadcrumbItem>
                     </Breadcrumb>
-                    {this.state.isGrid ?
-                      <Icon onClick={this.changeLayout} style={{float: 'right', fontSize: '24px'}} type="appstore" theme="outlined"/>
-                      :
-                      <Icon onClick={this.changeLayout} style={{float: 'right', fontSize: '24px'}} type="ordered-list" theme="outlined"/>}
+                    {this.state.isGrid ? (
+                      <Icon
+                        onClick={this.changeLayout}
+                        style={{ float: 'right', fontSize: '24px' }}
+                        type="appstore"
+                        theme="outlined"
+                      />
+                    ) : (
+                      <Icon
+                        onClick={this.changeLayout}
+                        style={{ float: 'right', fontSize: '24px' }}
+                        type="ordered-list"
+                        theme="outlined"
+                      />
+                    )}
 
-                    <span style={{clear: 'both', display: 'block'}}/>
+                    <span style={{ clear: 'both', display: 'block' }} />
                   </div>
                 }
               />
               &nbsp;
               <CardBox
-                style={{height: '100%'}}
+                style={{ height: '100%' }}
                 content={
                   <InfiniteScroll
                     pageStart={1}
                     loadMore={this.getAnimeList}
                     hasMore={animeList.length < totalAnime}
                     useWindow={true}
-                    loader={<Loader key="unique-key"/>}
+                    loader={<Loader key="unique-key" />}
                     style={{
                       height: '100%',
-                      overflow: 'visible',
+                      overflow: 'visible'
                     }}
                   >
                     {this.state.isGrid ? gridList : horizontalList}
@@ -145,7 +162,32 @@ class GenreDetailPage extends Component {
               <CardBox
                 title="Ranking"
                 content={
-                  <CustomVerticalList dataSource={topAnimeData} />
+                  <CustomVerticalList dataSource={topAnimeData.slice(0, 5)} />
+                }
+              />
+              &nbsp;
+              <CardBox
+                title="Recent Reviews"
+                content={
+                  <List
+                    dataSource={recentReviewsData.slice(0, 5)}
+                    renderItem={item => (
+                      <List.Item>
+                        <List.Item.Meta
+                          title={
+                            <RecentReviewTitle href={`/anime/${item.anime_id}`}>
+                              {item.title}
+                            </RecentReviewTitle>
+                          }
+                          description={
+                            <RecentReviewDescription>
+                              {item.content}
+                            </RecentReviewDescription>
+                          }
+                        />
+                      </List.Item>
+                    )}
+                  />
                 }
               />
             </Col>
@@ -156,7 +198,6 @@ class GenreDetailPage extends Component {
   }
 }
 
-
 const mapStateToProps = state => {
   return {
     genreDetail: state.genre.genreDetail,
@@ -166,14 +207,17 @@ const mapStateToProps = state => {
     page: state.genre.animeListPage,
     loading: state.genre.animeListLoading,
     totalAnime: state.genre.totalAnime,
-    topAnimeData: state.anime.topAnimeData
+    topAnimeData: state.anime.topAnimeData,
+    recentReviewsData: state.anime.recentReviewsData
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getGenreById: (id, page, perPage = 6) => dispatch(actions.getGenreDetail(id, page, perPage)),
-    getAnimeList: (id, page, perPage = 12) => dispatch(actions.getAnimeListGenre(id, page, perPage)),
+    getGenreById: (id, page, perPage = 6) =>
+      dispatch(actions.getGenreDetail(id, page, perPage)),
+    getAnimeList: (id, page, perPage = 12) =>
+      dispatch(actions.getAnimeListGenre(id, page, perPage)),
     clearAnimeList: () => dispatch(actions.clearAnimeListGenre())
   };
 };
@@ -204,9 +248,19 @@ const StyledBreadcrumbItem = styled(Breadcrumb.Item)`
   }
 `;
 
+const RecentReviewTitle = styled.a`
+  font-weight: bold;
+  font-size: calc(1.1vw);
+  color: rgba(0, 0, 0, 0.65) !important;
+`;
+
+const RecentReviewDescription = styled.div`
+  font-size: calc(1vw);
+`;
 
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(
-    GenreDetailPage
-  )
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(GenreDetailPage)
 );

@@ -52,12 +52,12 @@ class CustomVerticalList extends Component {
                 <span>
                   <span className="VerticalListItemNumberOfReviews">
                     <Icon type="message" theme="twoTone" />
-                    &nbsp;10,000
+                    &nbsp;{item.reviews_count}
                   </span>
                   &nbsp; &nbsp;
                   <span className="VerticalListItemScore">
                     <StyledIcon type="star" theme="filled" />
-                    &nbsp;5.0
+                    &nbsp;{item.rating}
                   </span>
                 </span>
               }
