@@ -18,6 +18,7 @@ Rails.application.routes.draw do
         collection do
           get "top_animes"
           get "search_by_genre"
+          get "recent_reviewed"
         end
       end
       resources :genres do
@@ -39,6 +40,7 @@ Rails.application.routes.draw do
           get "like"
           get "dislike"
           get "get_by_anime"
+          get "recent"
         end
       end
       resources :users

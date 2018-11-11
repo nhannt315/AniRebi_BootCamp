@@ -1,6 +1,6 @@
 class Api::V1::ReviewsController < ApplicationController
   before_action :authenticate_user!, only: [:create, :destroy, :update, :like, :dislike]
-  before_action :page_params, only: [:index, :get_by_anime]
+  before_action :page_params, only: [:index, :get_by_anime, :recent]
   before_action :find_review, only: [:show, :destroy, :update, :like, :dislike]
   after_action :update_like, only: [:like, :dislike]
   after_action :update_rating, only: [:create, :update, :destroy]
@@ -103,6 +103,10 @@ class Api::V1::ReviewsController < ApplicationController
   def get_by_anime
     @reviews = Anime.find(params[:id]).reviews.page(@page).per(@per_page)
     render json: @reviews, include: [votes_for: {only: [:voter_id, :vote_flag]}]
+  end
+
+  def recent
+    render json: Review.order(created_at: :desc).page(@page).per(@per_page)
   end
 
   private
