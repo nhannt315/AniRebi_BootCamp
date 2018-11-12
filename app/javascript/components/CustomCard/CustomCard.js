@@ -30,7 +30,7 @@ class CustomCard extends Component {
       <div className="CustomCard" {...rest}>
         <img
           className="CustomCardCover"
-          src={cover.url}
+          src={cover}
           onError={this.handleImgError}
           onClick={this.handleImgClick}
         />

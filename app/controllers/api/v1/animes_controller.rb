@@ -65,7 +65,7 @@ class Api::V1::AnimesController < ApplicationController
   end
 
   def recent_reviewed
-    render json: Anime.includes(:reviews).order("reviews.created_at desc").page(@page).per(@per_page)
+    @animes = Anime.includes(:reviews).order("reviews.created_at desc").page(@page).per(@per_page)
   end
 
   private
