@@ -52,7 +52,6 @@ class Api::V1::AnimesController < ApplicationController
 
   def top_animes
     @top_animes = Anime.order(rating: :desc).page(@page).per(@per_page)
-    render json: @top_animes
   end
 
   def search_by_genre
@@ -63,7 +62,6 @@ class Api::V1::AnimesController < ApplicationController
     else
       @animes_by_genre = @genre_to_find.animes.page(@page).per(@per_page)
     end
-    render json: @animes_by_genre
   end
 
   def recent_reviewed
