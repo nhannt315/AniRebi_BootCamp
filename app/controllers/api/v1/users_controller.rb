@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :authenticate_user!, only: [:update]
+  before_action :authenticate_user!, only: [:update, :is_admin]
 
   def show
     @user = User.find_by id: params[:id]
@@ -53,6 +53,13 @@ class Api::V1::UsersController < ApplicationController
       render json: {errors: "Can't update this user !",
                     success: false}.to_json
     end
+  end
+
+  def is_admin
+    @user = User.find_by id: params[:user_id]
+    render json: {
+      is_admin: @user.admin
+    }, status: 200
   end
 
   private
