@@ -7,7 +7,7 @@ import * as endpoints from '../../constants/endpoint_constants';
 export function* getTopAnime(action) {
   yield put(actions.getTopAnimeStart());
   try {
-    let url = endpoints.GET_TOP_ANIMES;
+    let url = endpoints.GET_TOP_ANIME;
     if (action.page) {
       url += `?page=${action.page}`;
     }
@@ -27,7 +27,7 @@ export function* getTopAnime(action) {
 export function* getAnimeById(action) {
   yield put(actions.getAnimeByIdStart());
   try {
-    let url = endpoints.GET_ANIMES_BY_ID + `/${action.id}`;
+    let url = endpoints.ANIME_API + `/${action.id}`;
     // console.log(url);
     const response = yield axios.get(url);
     // console.log(response.data);
@@ -35,6 +35,48 @@ export function* getAnimeById(action) {
   } catch (error) {
     console.log(error);
     yield put(actions.getAnimeByIdFailure(error.response.data.errors));
+  }
+}
+
+export function* getRecentlyReviewedAnime(action) {
+  yield put(actions.getRecentlyReviewedAnimeStart());
+  try {
+    let url = endpoints.GET_RECENTLY_REVIEWED_ANIME;
+    if (action.page) {
+      url += `?page=${action.page}`;
+    }
+    if (action.itemPerPage) {
+      url += `&item_per_page=${action.itemPerPage}`;
+    }
+    // console.log(url);
+    const response = yield axios.get(url);
+    // console.log(response.data);
+    yield put(actions.getRecentlyReviewedAnimeSuccess(response.data));
+  } catch (error) {
+    console.log(error);
+    yield put(
+      actions.getRecentlyReviewedAnimesFailure(error.response.data.errors)
+    );
+  }
+}
+
+export function* getRecentReviews(action) {
+  yield put(actions.getRecentReviewsStart());
+  try {
+    let url = endpoints.GET_RECENT_REVIEWS;
+    if (action.page) {
+      url += `?page=${action.page}`;
+    }
+    if (action.itemPerPage) {
+      url += `&item_per_page=${action.itemPerPage}`;
+    }
+    // console.log(url);
+    const response = yield axios.get(url);
+    // console.log(response.data);
+    yield put(actions.getRecentReviewsSuccess(response.data));
+  } catch (error) {
+    console.log(error);
+    yield put(actions.getRecentReviewsFailure(error.response.data.errors));
   }
 }
 
@@ -61,7 +103,7 @@ export function* getGenresList(action) {
 export function* getGenreTop(action) {
   yield put(actions.getGenreTopStart());
   try {
-    let url = endpoints.GET_GENRE_TOP + `/${action.id}`;
+    let url = endpoints.GENRE_API + `/${action.id}`;
     if (action.limit) {
       url += `?limit=${action.limit}`;
     }
@@ -80,7 +122,7 @@ export function* getMultipleGenreTop(action) {
   let data = [];
   try {
     for (var id in action.idArr) {
-      let url = endpoints.GET_GENRE_TOP + `/${action.idArr[id]}`;
+      let url = endpoints.GENRE_API + `/${action.idArr[id]}`;
       if (action.limit) {
         url += `?limit=${action.limit}`;
       }

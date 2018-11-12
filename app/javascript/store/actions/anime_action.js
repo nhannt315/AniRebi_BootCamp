@@ -55,6 +55,34 @@ export const getAnimeByIdFailure = errors => {
   };
 };
 
+export const getRecentlyReviewedAnime = (page, itemPerPage) => {
+  return {
+    type: actionTypes.GET_RECENTLY_REVIEWED_ANIME,
+    page: page,
+    itemPerPage: itemPerPage
+  };
+};
+
+export const getRecentlyReviewedAnimeStart = () => {
+  return {
+    type: actionTypes.GET_RECENTLY_REVIEWED_ANIME_START
+  };
+};
+
+export const getRecentlyReviewedAnimeSuccess = result => {
+  return {
+    type: actionTypes.GET_RECENTLY_REVIEWED_ANIME_SUCCESS,
+    data: result
+  };
+};
+
+export const getRecentlyReviewedAnimesFailure = errors => {
+  return {
+    type: actionTypes.GET_RECENTLY_REVIEWED_ANIME_FAILURE,
+    errors: errors
+  };
+};
+
 export const getGenresList = (page, itemPerPage) => {
   return {
     type: actionTypes.GET_GENRES_LIST,
@@ -162,6 +190,34 @@ export const getReviewsByAnimeSuccess = result => {
 export const getReviewsByAnimeFailure = errors => {
   return {
     type: actionTypes.GET_REVIEWS_BY_ANIME_FAILURE,
+    errors: errors
+  };
+};
+
+export const getRecentReviews = (page, itemPerPage) => {
+  return {
+    type: actionTypes.GET_RECENT_REVIEWS,
+    page: page,
+    itemPerPage: itemPerPage
+  };
+};
+
+export const getRecentReviewsStart = () => {
+  return {
+    type: actionTypes.GET_RECENT_REVIEWS_START
+  };
+};
+
+export const getRecentReviewsSuccess = result => {
+  return {
+    type: actionTypes.GET_RECENT_REVIEWS_SUCCESS,
+    data: result
+  };
+};
+
+export const getRecentReviewsFailure = errors => {
+  return {
+    type: actionTypes.GET_RECENT_REVIEWS_FAILURE,
     errors: errors
   };
 };

@@ -19,13 +19,14 @@ import {
   getGenresList,
   getGenreTop,
   getMultipleGenreTop,
-  getReviewsByAnime
+  getReviewsByAnime,
+  getRecentReviews,
+  getRecentlyReviewedAnime
 } from './anime_saga';
 
 import { searchAnimeSaga } from './search_saga';
 
 import { getGenreDetail, getAnimeListGenre } from './genre_saga';
-
 
 export function* watchAuth() {
   yield all([
@@ -47,7 +48,12 @@ export function* watchAnime() {
     takeLatest(actionTypes.GET_GENRES_LIST, getGenresList),
     takeLatest(actionTypes.GET_GENRE_TOP, getGenreTop),
     takeLatest(actionTypes.GET_MULTIPLE_GENRE_TOP, getMultipleGenreTop),
-    takeLatest(actionTypes.GET_REVIEWS_BY_ANIME, getReviewsByAnime)
+    takeLatest(actionTypes.GET_REVIEWS_BY_ANIME, getReviewsByAnime),
+    takeLatest(actionTypes.GET_RECENT_REVIEWS, getRecentReviews),
+    takeLatest(
+      actionTypes.GET_RECENTLY_REVIEWED_ANIME,
+      getRecentlyReviewedAnime
+    )
   ]);
 }
 

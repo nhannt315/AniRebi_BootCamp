@@ -29,7 +29,9 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.props.getTopAnime(2, 14);
+    this.props.getTopAnime(1, 14);
+    this.props.getRecentlyReviewedAnime(1, 14);
+    this.props.getRecentReviews();
     this.props.getGenresList();
     this.props.getMultipleGenreTop([1, 2, 3, 4, 5], 5);
   }
@@ -42,7 +44,9 @@ class App extends Component {
     if (
       !this.props.topAnimeIsProcessing &&
       !this.props.genresListIsProcessing &&
-      !this.props.multipleGenreTopIsProcessing
+      !this.props.multipleGenreTopIsProcessing &&
+      !this.props.recentlyReviewedAnimeIsProcessing &&
+      !this.props.recentReviewsIsProcessing
     ) {
       return (
         <Layout className="App">
@@ -147,6 +151,10 @@ App.propTypes = {
   getGenresList: PropTypes.func.isRequired,
   getGenreTop: PropTypes.func.isRequired,
   getMultipleGenreTop: PropTypes.func.isRequired,
+  getRecentlyReviewedAnime: PropTypes.func.isRequired,
+  getRecentReviews: PropTypes.func.isRequired,
+  recentlyReviewedAnimeIsProcessing: PropTypes.bool.isRequired,
+  recentReviewsIsProcessing: PropTypes.bool.isRequired,
   topAnimeIsProcessing: PropTypes.bool.isRequired,
   genresListIsProcessing: PropTypes.bool.isRequired,
   genreTopIsProcessing: PropTypes.bool.isRequired,
@@ -173,6 +181,9 @@ const mapStateToProps = state => {
     genreTopIsProcessing: state.anime.genreTopIsProcessing,
     multipleGenreTopIsProcessing: state.anime.multipleGenreTopIsProcessing,
     animeByIdIsProcessing: state.anime.animeByIdIsProcessing,
+    recentlyReviewedAnimeIsProcessing:
+      state.anime.recentlyReviewedAnimeIsProcessing,
+    recentReviewsIsProcessing: state.anime.recentReviewsIsProcessing,
     searchResult: state.search.searchResult,
     keywordSearch: state.search.keyword
   };
@@ -189,6 +200,10 @@ const mapDispatchToProps = dispatch => {
     getGenreTop: (id, limit) => dispatch(actions.getGenreTop(id, limit)),
     getMultipleGenreTop: (idArr, limit) =>
       dispatch(actions.getMultipleGenreTop(idArr, limit)),
+    getRecentlyReviewedAnime: (page, itemPerPage) =>
+      dispatch(actions.getRecentlyReviewedAnime(page, itemPerPage)),
+    getRecentReviews: (page, itemPerPage) =>
+      dispatch(actions.getRecentReviews(page, itemPerPage)),
     clearSearchResult: () => dispatch(actions.clearSearchResult()),
     searchAnime: payload => dispatch(actions.searchAnime(payload))
   };

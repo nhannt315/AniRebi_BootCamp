@@ -48,7 +48,15 @@ export {
   getReviewsByAnime,
   getReviewsByAnimeStart,
   getReviewsByAnimeSuccess,
-  getReviewsByAnimeFailure
+  getReviewsByAnimeFailure,
+  getRecentlyReviewedAnime,
+  getRecentlyReviewedAnimeStart,
+  getRecentlyReviewedAnimeSuccess,
+  getRecentlyReviewedAnimesFailure,
+  getRecentReviews,
+  getRecentReviewsStart,
+  getRecentReviewsSuccess,
+  getRecentReviewsFailure
 } from './anime_action';
 
 

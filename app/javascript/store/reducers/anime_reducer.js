@@ -7,13 +7,17 @@ const initialState = {
   multipleGenreTopData: [],
   animeByIdData: {},
   reviewsData: [],
+  recentReviewsData: [],
+  recentlyReviewedAnimeData: [],
   errors: [],
   topAnimeIsProcessing: true,
   genresListIsProcessing: true,
   genreTopIsProcessing: true,
   multipleGenreTopIsProcessing: true,
   animeByIdIsProcessing: true,
-  reviewsByAnimeIsProcessing: true
+  reviewsByAnimeIsProcessing: true,
+  recentlyReviewedAnimeIsProcessing: true,
+  recentReviewsIsProcessing: true
 };
 
 const reducer = (state = initialState, action) => {
@@ -30,6 +34,10 @@ const reducer = (state = initialState, action) => {
       return { ...state, multipleGenreTopIsProcessing: true };
     case actionTypes.GET_REVIEWS_BY_ANIME_START:
       return { ...state, reviewsByAnimeIsProcessing: true };
+    case actionTypes.GET_RECENTLY_REVIEWED_ANIME_START:
+      return { ...state, recentlyReviewedAnimeIsProcessing: true };
+    case actionTypes.GET_RECENT_REVIEWS_START:
+      return { ...state, recentReviewsIsProcessing: true };
     case actionTypes.GET_TOP_ANIME_SUCCESS:
       return {
         ...state,
@@ -65,6 +73,18 @@ const reducer = (state = initialState, action) => {
         ...state,
         reviewsData: action.data,
         reviewsByAnimeIsProcessing: false
+      };
+    case actionTypes.GET_RECENTLY_REVIEWED_ANIME_SUCCESS:
+      return {
+        ...state,
+        recentlyReviewedAnimeData: action.data,
+        recentlyReviewedAnimeIsProcessing: false
+      };
+    case actionTypes.GET_RECENT_REVIEWS_SUCCESS:
+      return {
+        ...state,
+        recentReviewsData: action.data,
+        recentReviewsIsProcessing: false
       };
     default:
       return state;
