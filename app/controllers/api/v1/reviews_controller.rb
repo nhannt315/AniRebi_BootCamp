@@ -55,6 +55,7 @@ class Api::V1::ReviewsController < ApplicationController
     if @review.user == current_user
       if @review.update_attributes(review_params)
         render json: {
+            review: @review,
             message: "Review updated"
         }, status: 200
       else
@@ -132,7 +133,8 @@ class Api::V1::ReviewsController < ApplicationController
   end
 
   def update_rating
-    @anime.rating = @anime.reviews.average(:rating)
+    rating = @anime.reviews.average(:rating) || 0
+    @anime.rating = (rating * 2).round / 2.0
     @anime.save
   end
 end
