@@ -18,7 +18,6 @@ class Api::V1::AnimesController < ApplicationController
 
   def create
     @anime = Anime.create(anime_params)
-    @anime.seed = false
     if @anime.save
       @anime.genre_ids = params[:genres] if params[:genres]
       render status: 200
