@@ -121,7 +121,7 @@ class AnimePage extends Component {
     bodyFormData.append('name', values.title);
     bodyFormData.append('title_native', values.jptitle);
     bodyFormData.append('info', values.description);
-    bodyFormData.append('genres', values.genres);
+    bodyFormData.append('genres', values.genres.map(String));
     if(this.state.bannerChange){
       bodyFormData.append('banner', values.banner.file);
     }

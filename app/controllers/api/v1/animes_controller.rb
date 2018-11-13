@@ -18,8 +18,10 @@ class Api::V1::AnimesController < ApplicationController
 
   def create
     @anime = Anime.create(anime_params)
+    genres = params[:genres].split(",").map{|s| s.to_i}
+    @anime.seed = false
     if @anime.save
-      @anime.genre_ids = params[:genres] if params[:genres]
+      @anime.genre_ids = genres
       render status: 200
     else
       render json: {
@@ -29,8 +31,9 @@ class Api::V1::AnimesController < ApplicationController
   end
 
   def update
+    genres = params[:genres].split(",").map{|s| s.to_i}
     if @anime.update_attributes(anime_params)
-      @anime.genre_ids = params[:genres] if params[:genres]
+      @anime.genre_ids = genres
       render status: 200
     else
       render json: {
