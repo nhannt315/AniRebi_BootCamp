@@ -13,6 +13,8 @@ class AnimePage extends Component {
   state = {
     animeList: [],
     genreList: [],
+    fileListCover: [],
+    fileListBanner: [],
     page: 1,
     perPage: 5,
     total: 0,
@@ -21,6 +23,10 @@ class AnimePage extends Component {
     listLoading: false,
     keyword: '',
     modalVisible: false,
+    isEdit: false,
+    animeDetail: null,
+    coverChange: false,
+    bannerChange: false
   };
 
   confirmDelete = (animeId) => {
@@ -35,16 +41,66 @@ class AnimePage extends Component {
           })
           .catch(error => console.log(error));
       },
-      onCancel() {},
+      onCancel() {
+      },
     });
   };
 
+
   showModal = () => {
-    this.setState({modalVisible: true});
+    this.setState({modalVisible: true, fileListCover: [], fileListBanner: [], isEdit: false});
+    const form = this.formRef.props.form;
+    form.resetFields();
   };
 
   handleCancel = () => {
     this.setState({modalVisible: false});
+  };
+
+  handleChangeCover = ({fileList}) => {
+    this.setState({fileListCover: fileList, coverChange: true});
+  };
+
+  handleChangeBanner = ({fileList}) => {
+    this.setState({fileListBanner: fileList, bannerChange: true});
+  };
+
+  editAnime = (anime) => {
+    this.setState({});
+    const form = this.formRef.props.form;
+    form.resetFields();
+    form.setFieldsValue({
+      title: anime.name,
+      jptitle: anime.title_native,
+      description: anime.info,
+      status: anime.status,
+      genres: anime.genres.map(genre => genre.id),
+      cover: {file: {
+        uid: '-1',
+        name: 'xxx.png',
+        url: anime.cover_large
+      }},
+      banner: {file: {
+        uid: '-1',
+        name: 'xxx.png',
+        url: anime.banner
+      }}
+    });
+    this.setState({
+      modalVisible: true,
+      isEdit: true,
+      animeDetail: anime,
+      fileListCover: [{
+        uid: '-1',
+        name: 'xxx.png',
+        url: anime.cover_large
+      }],
+      fileListBanner: [{
+        uid: '-1',
+        name: 'xxx.png',
+        url: anime.banner
+      }]
+    });
   };
 
   handleCreate = () => {
@@ -64,12 +120,38 @@ class AnimePage extends Component {
     let bodyFormData = new FormData();
     bodyFormData.append('name', values.title);
     bodyFormData.append('title_native', values.jptitle);
+    bodyFormData.append('info', values.description);
     bodyFormData.append('genres', values.genres);
-    bodyFormData.append('banner', values.banner.file);
-    bodyFormData.append('cover_large', values.cover.file);
-    bodyFormData.append('cover_medium', values.cover.file);
+    if(this.state.bannerChange){
+      bodyFormData.append('banner', values.banner.file);
+    }
+    if(this.state.coverChange){
+      bodyFormData.append('cover_large', values.cover.file);
+      bodyFormData.append('cover_medium', values.cover.file);
+    }
     bodyFormData.append('status', values.status);
-    console.log(bodyFormData);
+    console.log(values);
+    if(this.state.isEdit){
+      this.sendRequestUpdateAnime(bodyFormData);
+    }else{
+      this.sendRequestCreateAnime(bodyFormData);
+    }
+  };
+
+  sendRequestUpdateAnime = (bodyFormData) => {
+    axios.put(`/api/v1/animes/${this.state.animeDetail.id}`, bodyFormData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+      .then(() => {
+        message.success('Anime updated successfully!');
+        this.setState({isEdit: false, bannerChange: false, coverChange: false});
+        this.getAnimeList();
+      })
+      .catch(error => console.log(error));
+  };
+  sendRequestCreateAnime = (bodyFormData) => {
     axios.post('/api/v1/animes', bodyFormData, {
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -77,6 +159,7 @@ class AnimePage extends Component {
     })
       .then(() => {
         message.success('Anime created successfully!');
+        this.setState({isEdit: false, bannerChange: false, coverChange: false});
         this.getAnimeList();
       })
       .catch(error => console.log(error));
@@ -141,9 +224,15 @@ class AnimePage extends Component {
           <AnimeForm
             wrappedComponentRef={this.saveFormRef}
             visible={this.state.modalVisible}
+            isEdit={this.state.isEdit}
+            anime={this.state.animeDetail}
             onCancel={this.handleCancel}
             onCreate={this.handleCreate}
             genreList={this.state.genreList}
+            fileListCover={this.state.fileListCover}
+            fileListBanner={this.state.fileListBanner}
+            handleChangeCover={this.handleChangeCover}
+            handleChangeBanner={this.handleChangeBanner}
           />
           <Input.Search
             placeholder="Search for anime"
@@ -161,7 +250,7 @@ class AnimePage extends Component {
           renderItem={anime => (
             <List.Item key={anime.id}>
               <Skeleton loading={this.state.listLoading} active>
-                <AnimeItem anime={anime} confirmDelete={this.confirmDelete}/>
+                <AnimeItem anime={anime} confirmDelete={this.confirmDelete} editAnime={this.editAnime}/>
               </Skeleton>
             </List.Item>
           )}
