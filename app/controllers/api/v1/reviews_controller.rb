@@ -7,7 +7,8 @@ class Api::V1::ReviewsController < ApplicationController
 
   def index
     @reviews = Review.all.page(@page).per(@per_page)
-    render json: @reviews
+    @total = Review.all.count
+
   end
 
   def show
@@ -32,7 +33,7 @@ class Api::V1::ReviewsController < ApplicationController
   end
 
   def destroy
-    if @review.user == current_user
+    if @review.user == current_user || current_user.admin
       if @review.destroy
         @anime.reviews_count -= 1
         @anime.save
