@@ -7,35 +7,36 @@ const FormItem = Form.Item;
 class AnimeForm extends Component {
   state = {
     fileListCover: [],
-    fileListBanner: []
+    fileListBanner: [],
+    animeDetail: {},
+    isEdit: false
   };
+
+
   uploadFile = (file) => {
     console.log(file);
   };
 
-  handleChangeCover = ({fileList}) => {
-    this.setState({fileListCover: fileList});
-  };
-
-  handleChangeBanner = ({fileList}) => {
-    this.setState({fileListBanner: fileList});
+  closeModal = () => {
+    this.setState({fileListCover: [], fileListBanner: []}, () => this.props.onCancel());
   };
 
   render() {
-    const {visible, onCancel, onCreate, form, genreList} = this.props;
+    const {isEdit, visible, onCreate, form, genreList, fileListCover, fileListBanner, handleChangeCover, handleChangeBanner} = this.props;
+
     const {getFieldDecorator} = form;
     return (
       <Modal
         visible={visible}
         title="Create a new collection"
-        okText="Create"
-        onCancel={onCancel}
+        okText={isEdit ? 'Update' : 'Create'}
+        onCancel={this.closeModal}
         onOk={onCreate}
       >
         <Form layout="vertical">
           <FormItem label="Title">
             {getFieldDecorator('title', {
-              rules: [{required: true, message: 'Please input the title!'}],
+              rules: [{required: true, message: 'Please input the title!'}]
             })(
               <Input/>
             )}
@@ -63,7 +64,7 @@ class AnimeForm extends Component {
                 style={{width: '100%'}}
                 placeholder="Please select"
               >
-                {genreList.map(genre => <Select.Option key={genre.id}>{genre.name}</Select.Option>)}
+                {genreList.map(genre => <Select.Option key={genre.id} value={genre.id}>{genre.name}</Select.Option>)}
               </Select>
             )}
           </FormItem>
@@ -78,10 +79,10 @@ class AnimeForm extends Component {
                 data={this.uploadFile}
                 listType="picture-card"
                 beforeUpload={() => false}
-                fileList={this.state.fileListCover}
-                onChange={this.handleChangeCover}
+                fileList={fileListCover}
+                onChange={handleChangeCover}
               >
-                {this.state.fileListCover.length > 0 ? null : (
+                {fileListCover.length > 0 ? null : (
                   <Button>
                     <Icon type="upload"/> Click to Select
                   </Button>
@@ -100,10 +101,10 @@ class AnimeForm extends Component {
                 data={this.uploadFile}
                 beforeUpload={() => false}
                 listType="picture-card"
-                fileList={this.state.fileListBanner}
-                onChange={this.handleChangeBanner}
+                fileList={fileListBanner}
+                onChange={handleChangeBanner}
               >
-                {this.state.fileListBanner.length > 0 ? null : (
+                {fileListBanner.length > 0 ? null : (
                   <Button>
                     <Icon type="upload"/> Click to Select
                   </Button>
@@ -128,6 +129,19 @@ class AnimeForm extends Component {
   }
 }
 
-AnimeForm.propTypes = {};
+AnimeForm.propTypes = {
+  visible: PropTypes.bool,
+  onCancel: PropTypes.func,
+  onCreate: PropTypes.func,
+  form: PropTypes.object,
+  genreList: PropTypes.array,
+  isEdit: PropTypes.bool,
+  anime: PropTypes.object,
+  fileListCover: PropTypes.array,
+  fileListBanner: PropTypes.array,
+  handleChangeCover: PropTypes.func,
+  handleChangeBanner: PropTypes.func,
+  imageChange: PropTypes.func
+};
 
 export default Form.create()(AnimeForm);

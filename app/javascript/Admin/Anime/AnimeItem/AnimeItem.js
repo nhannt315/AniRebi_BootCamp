@@ -11,7 +11,7 @@ class AnimeItem extends Component {
     e.target.src = 'https://image.ibb.co/djfJJp/placeholder.png';
   };
   render() {
-    const {anime, confirmDelete} = this.props;
+    const {anime, confirmDelete, editAnime} = this.props;
     return (
       <div className="item">
         <div className="box-cover">
@@ -32,7 +32,10 @@ class AnimeItem extends Component {
           }</div>
           <p><b>Status</b> : <span>{anime.status}</span></p>
         </div>
-        <div style={{float: 'right', position: 'absolute', right: '10px', top: '10px'}}>
+        <div style={{float: 'right', position: 'absolute', display: 'inline-block', right: '10px', top: '10px'}}>
+          <Button style={{marginRight: '5px'}} type="primary" onClick={() => editAnime(anime)}>
+            <Icon type="edit" />
+          </Button>
           <Button type="danger" onClick={() => confirmDelete(anime.id)}>
             <Icon type="delete" />
           </Button>
@@ -44,7 +47,8 @@ class AnimeItem extends Component {
 
 AnimeItem.propTypes = {
   anime: PropTypes.object,
-  confirmDelete: PropTypes.func
+  confirmDelete: PropTypes.func,
+  editAnime: PropTypes.func
 };
 
 export default AnimeItem;
