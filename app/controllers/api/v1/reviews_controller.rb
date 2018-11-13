@@ -102,7 +102,7 @@ class Api::V1::ReviewsController < ApplicationController
   end
 
   def get_by_anime
-    @reviews = Anime.find(params[:id]).reviews.page(@page).per(@per_page)
+    @reviews = Anime.find(params[:id]).reviews.order(created_at: :desc).page(@page).per(@per_page)
     render json: @reviews, include: [votes_for: {only: [:voter_id, :vote_flag]}]
   end
 
