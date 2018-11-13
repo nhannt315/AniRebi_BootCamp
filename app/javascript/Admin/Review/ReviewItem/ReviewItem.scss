@@ -1,0 +1,39 @@
+.user-avatar-wrapper {
+  text-align: center;
+}
+
+.user-avatar {
+  color: #f56a00;
+  background-color: #fde3cf;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.user-name {
+  text-align: center;
+  font-size: calc(1.0vw);
+}
+
+.review-title {
+  font-weight: bold;
+}
+
+.review-rating {
+  font-size: calc(1.0vw);
+  line-height: .5;
+  position: absolute;
+  right: 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.metadata {
+  color: grey;
+  font-style: italic;
+  font-size: 11px;
+  text-align: right;
+  position: absolute;
+  right: 0;
+}

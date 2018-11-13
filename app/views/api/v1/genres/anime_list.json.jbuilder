@@ -1,2 +1,2 @@
 json.total @count
-json.array! @animes, partial: "shared/anime", as: :anime
+json.animes @animes, partial: "shared/anime", as: :anime
