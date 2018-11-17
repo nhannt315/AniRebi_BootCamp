@@ -250,17 +250,6 @@ class AnimeDetailPage extends Component {
 
       const { animeScore } = this.state;
 
-      // const FilteredBannerData = this.props.topAnimeData.filter(
-      //   item => item.banner != null
-      // );
-      // // const BannerImages = FilteredBannerData.map(item => (
-      // //   <StyledImg
-      // //     key={item.id}
-      // //     src={item.banner}
-      // //     onError={this.handleBannerError}
-      // //   />
-      // // ));
-
       const AnimeGenres = this.props.animeByIdData.genres.map(item => (
         <Tag key={item.id}>{item.name}</Tag>
       ));

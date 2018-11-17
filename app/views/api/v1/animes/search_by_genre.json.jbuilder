@@ -1,0 +1,1 @@
+json.animes @animes_by_genre, partial: "shared/anime", as: :anime

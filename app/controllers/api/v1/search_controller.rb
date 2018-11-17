@@ -13,7 +13,7 @@ class Api::V1::SearchController < ApplicationController
       end
       @animes &= @elasticsearch_animes
     end
-    render json: @animes.page(@page).per(@per_page)
+    @animes = @animes.page(@page).per(@per_page)
   end
 
   private

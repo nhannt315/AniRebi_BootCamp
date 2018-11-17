@@ -7,7 +7,8 @@ class Api::V1::ReviewsController < ApplicationController
 
   def index
     @reviews = Review.all.page(@page).per(@per_page)
-    render json: @reviews
+    @total = Review.all.count
+
   end
 
   def show
@@ -32,7 +33,7 @@ class Api::V1::ReviewsController < ApplicationController
   end
 
   def destroy
-    if @review.user == current_user
+    if @review.user == current_user || current_user.admin
       if @review.destroy
         @anime.reviews_count -= 1
         @anime.save
@@ -55,6 +56,7 @@ class Api::V1::ReviewsController < ApplicationController
     if @review.user == current_user
       if @review.update_attributes(review_params)
         render json: {
+            review: @review,
             message: "Review updated"
         }, status: 200
       else
@@ -101,7 +103,7 @@ class Api::V1::ReviewsController < ApplicationController
   end
 
   def get_by_anime
-    @reviews = Anime.find(params[:id]).reviews.page(@page).per(@per_page)
+    @reviews = Anime.find(params[:id]).reviews.order(created_at: :desc).page(@page).per(@per_page)
     render json: @reviews, include: [votes_for: {only: [:voter_id, :vote_flag]}]
   end
 
@@ -132,7 +134,8 @@ class Api::V1::ReviewsController < ApplicationController
   end
 
   def update_rating
-    @anime.rating = @anime.reviews.average(:rating)
+    rating = @anime.reviews.average(:rating) || 0
+    @anime.rating = (rating * 2).round / 2.0
     @anime.save
   end
 end

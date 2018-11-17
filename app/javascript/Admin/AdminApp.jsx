@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
-import { NavLink, Route, Link } from 'react-router-dom';
+import { NavLink, Route } from 'react-router-dom';
 
 import './AdminApp.scss';
 import GenrePage from './Genre';
 import AnimePage from './Anime';
+import ReviewPage from './Review';
 import NotFoundPage from '../containers/NotFoundPage';
 import { Switch } from 'react-router';
+import * as actions from '../store/actions';
 
 const {Header, Sider, Content} = Layout;
 
@@ -18,7 +20,7 @@ class AdminApp extends Component {
   };
 
   componentDidMount() {
-
+    this.props.tryAutoSignIn();
   }
 
   toggle = () => {
@@ -42,22 +44,22 @@ class AdminApp extends Component {
           </div>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
             <Menu.Item key="1">
-              <Link to="/admin/animes">
+              <NavLink to="/admin/animes">
                 <Icon type="ordered-list" theme="outlined"/>
                 <span>Anime</span>
-              </Link>
+              </NavLink>
             </Menu.Item>
             <Menu.Item key="2">
-              <Link to="/admin/user">
+              <NavLink to="/admin/reviews">
                 <Icon type="bar-chart" theme="outlined"/>
                 <span>Review</span>
-              </Link>
+              </NavLink>
             </Menu.Item>
             <Menu.Item key="3">
-              <Link to="/admin/genres">
+              <NavLink to="/admin/genres">
                 <Icon type="tag" theme="outlined"/>
                 <span>Genre</span>
-              </Link>
+              </NavLink>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -73,6 +75,7 @@ class AdminApp extends Component {
             <Switch>
               <Route path="/admin/genres" render={() => <GenrePage/>}/>
               <Route path="/admin/animes" render={() => <AnimePage/>}/>
+              <Route path="/admin/reviews" render={() => <ReviewPage/>}/>
               <Route render={() => <NotFoundPage/>}/>
             </Switch>
           </Content>
@@ -89,7 +92,11 @@ const mapStateToProps = state => {
   };
 };
 
+const mapDispatchToProps = dispatch => ({
+  tryAutoSignIn: () => dispatch(actions.authCheckState())
+});
+
 
 export default withRouter(
-  connect(mapStateToProps, null)(AdminApp)
+  connect(mapStateToProps, mapDispatchToProps)(AdminApp)
 );

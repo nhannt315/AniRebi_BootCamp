@@ -1,0 +1,1 @@
+json.array! @top_animes, partial: "shared/anime", as: :anime

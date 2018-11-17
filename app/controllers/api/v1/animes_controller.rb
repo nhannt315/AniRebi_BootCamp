@@ -18,8 +18,10 @@ class Api::V1::AnimesController < ApplicationController
 
   def create
     @anime = Anime.create(anime_params)
+    genres = params[:genres].split(",").map{|s| s.to_i}
     @anime.seed = false
     if @anime.save
+      @anime.genre_ids = genres
       render status: 200
     else
       render json: {
@@ -29,7 +31,9 @@ class Api::V1::AnimesController < ApplicationController
   end
 
   def update
+    genres = params[:genres].split(",").map{|s| s.to_i}
     if @anime.update_attributes(anime_params)
+      @anime.genre_ids = genres
       render status: 200
     else
       render json: {
@@ -52,7 +56,6 @@ class Api::V1::AnimesController < ApplicationController
 
   def top_animes
     @top_animes = Anime.order(rating: :desc).page(@page).per(@per_page)
-    render json: @top_animes
   end
 
   def search_by_genre
@@ -63,11 +66,10 @@ class Api::V1::AnimesController < ApplicationController
     else
       @animes_by_genre = @genre_to_find.animes.page(@page).per(@per_page)
     end
-    render json: @animes_by_genre
   end
 
   def recent_reviewed
-    render json: Anime.includes(:reviews).order("reviews.created_at desc").page(@page).per(@per_page)
+    @animes = Anime.includes(:reviews).order("reviews.created_at desc").page(@page).per(@per_page)
   end
 
   private
@@ -90,6 +92,6 @@ class Api::V1::AnimesController < ApplicationController
   end
 
   def anime_params
-    params.permit(:name, :info, :status, :title_english, :banner, :cover_large, :cover_medium)
+    params.permit(:name, :info, :status, :title_native, :banner, :cover_large, :cover_medium)
   end
 end
