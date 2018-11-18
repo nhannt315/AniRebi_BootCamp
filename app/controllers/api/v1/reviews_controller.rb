@@ -18,6 +18,7 @@ class Api::V1::ReviewsController < ApplicationController
   def create
     @review = current_user.reviews.build(review_params)
     @review.user_name = current_user.name
+    @review.anime_name = Anime.find(params[:id]).name
     if @review.save
       @anime = @review.anime
       @anime.reviews_count += 1

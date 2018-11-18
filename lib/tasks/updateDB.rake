@@ -16,6 +16,7 @@ namespace :update do
     puts "Updating Review"
     Review.all.each do |f|
       f.user_name = User.find(f.user_id).name
+      f.anime_name = f.anime.name
       f.like = f.get_upvotes.size
       f.dislike = f.get_downvotes.size
       f.save

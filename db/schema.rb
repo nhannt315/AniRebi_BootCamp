@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_10_150521) do
+ActiveRecord::Schema.define(version: 2018_11_18_155520) do
 
   create_table "anime_genres", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "anime_id"
@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(version: 2018_11_10_150521) do
     t.string "user_name"
     t.integer "like", default: 0
     t.integer "dislike", default: 0
+    t.string "anime_name"
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
