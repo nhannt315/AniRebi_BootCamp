@@ -362,7 +362,7 @@ class Review extends Component {
                       defaultValue={reviewScore}
                     />
                     &nbsp;
-                    <span>{reviewScore}</span>
+                    <span>{parseFloat(reviewScore).toFixed(1)}</span>
                   </div>
                 </Col>
               </Row>

@@ -1,4 +1,4 @@
-import { Button, Carousel, Col, Icon, Layout, Row, List } from 'antd';
+import { Button, Carousel, Col, Icon, Layout, Row, List, Rate } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -195,7 +195,16 @@ class HomePage extends Component {
                           }
                           description={
                             <RecentReviewDescription>
-                              {item.content}
+                              <Icon type="star" />
+                              &nbsp;
+                              <span>{parseFloat(item.rating).toFixed(1)}</span>
+                              <br />
+                              <Icon type="user" />
+                              &nbsp;
+                              {item.user_name}
+                              <br />
+                              <Icon type="desktop" />
+                              &nbsp;{item.anime_name}
                             </RecentReviewDescription>
                           }
                         />

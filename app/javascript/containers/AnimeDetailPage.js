@@ -257,7 +257,7 @@ class AnimeDetailPage extends Component {
       return (
         <StyledContent className="AnimePageContent">
           <Content style={{ padding: '0px 100px 50px' }}>
-            <Row>
+            <Row type="flex" justify="space-around" align="middle">
               <Col span={17}>
                 <CardBox
                   content={
@@ -294,10 +294,10 @@ class AnimeDetailPage extends Component {
                           <div
                             style={{
                               textAlign: 'center',
-                              fontSize: 'calc(1.5vw)'
+                              fontSize: 'calc(2vw)'
                             }}
                           >
-                            Rating
+                            Rating: {parseFloat(animeScore).toFixed(1)}
                           </div>
                           <div
                             style={{
@@ -319,7 +319,7 @@ class AnimeDetailPage extends Component {
                               fontSize: 'calc(1vw)'
                             }}
                           >
-                            {animeScore} star(s)
+                            <Icon type="user" /> Reviews: {this.props.reviewsData.length}
                           </div>
                         </Row>
                       </Col>
@@ -417,43 +417,6 @@ class AnimeDetailPage extends Component {
                     handleNewReviewSubmit={this.handleNewReviewSubmit}
                   />
                 )}
-              </Col>
-              <Col span={6} offset={1}>
-                <CardBox
-                  title="Ranking"
-                  content={
-                    <CustomVerticalList
-                      dataSource={this.props.topAnimeData.slice(0, 5)}
-                    />
-                  }
-                />
-                &nbsp;
-                <CardBox
-                  title="Recent Reviews"
-                  content={
-                    <List
-                      dataSource={this.props.recentReviewsData.slice(0, 5)}
-                      renderItem={item => (
-                        <List.Item>
-                          <List.Item.Meta
-                            title={
-                              <RecentReviewTitle
-                                href={`/anime/${item.anime_id}`}
-                              >
-                                {item.title}
-                              </RecentReviewTitle>
-                            }
-                            description={
-                              <RecentReviewDescription>
-                                {item.content}
-                              </RecentReviewDescription>
-                            }
-                          />
-                        </List.Item>
-                      )}
-                    />
-                  }
-                />
               </Col>
             </Row>
           </Content>
