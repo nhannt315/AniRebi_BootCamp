@@ -102,7 +102,7 @@ class GenreDetailPage extends Component {
     return (
       <StyledContent>
         <Content style={{ padding: '0px 100px 50px' }}>
-          <Row>
+          <Row type="flex" justify="space-around" align="middle">
             <Col span={17}>
               <CardBox
                 content={
@@ -155,39 +155,6 @@ class GenreDetailPage extends Component {
                   >
                     {this.state.isGrid ? gridList : horizontalList}
                   </InfiniteScroll>
-                }
-              />
-            </Col>
-            <Col span={6} offset={1}>
-              <CardBox
-                title="Ranking"
-                content={
-                  <CustomVerticalList dataSource={topAnimeData.slice(0, 5)} />
-                }
-              />
-              &nbsp;
-              <CardBox
-                title="Recent Reviews"
-                content={
-                  <List
-                    dataSource={recentReviewsData.slice(0, 5)}
-                    renderItem={item => (
-                      <List.Item>
-                        <List.Item.Meta
-                          title={
-                            <RecentReviewTitle href={`/anime/${item.anime_id}`}>
-                              {item.title}
-                            </RecentReviewTitle>
-                          }
-                          description={
-                            <RecentReviewDescription>
-                              {item.content}
-                            </RecentReviewDescription>
-                          }
-                        />
-                      </List.Item>
-                    )}
-                  />
                 }
               />
             </Col>
