@@ -44,8 +44,8 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "elasticsearch-model"
-gem "elasticsearch-rails"
 gem "ffaker"
 gem "graphql-client"
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem "pg"
+gem "pg_search"
