@@ -3,6 +3,7 @@ class Api::V1::AnimesController < ApplicationController
   before_action :page_params, only: [:index, :top_animes, :search_by_genre, :recent_reviewed]
   before_action :find_genre, only: [:search_by_genre]
   before_action :order_param, only: [:search_by_genre]
+  before_action :suggest_anime, only: [:show]
 
   def index
     @total = Anime.count
@@ -18,7 +19,7 @@ class Api::V1::AnimesController < ApplicationController
 
   def create
     @anime = Anime.create(anime_params)
-    genres = params[:genres].split(",").map{|s| s.to_i}
+    genres = params[:genres].split(",").map {|s| s.to_i}
     @anime.seed = false
     if @anime.save
       @anime.genre_ids = genres
@@ -31,7 +32,7 @@ class Api::V1::AnimesController < ApplicationController
   end
 
   def update
-    genres = params[:genres].split(",").map{|s| s.to_i}
+    genres = params[:genres].split(",").map {|s| s.to_i}
     if @anime.update_attributes(anime_params)
       @anime.genre_ids = genres
       render status: 200
@@ -93,5 +94,18 @@ class Api::V1::AnimesController < ApplicationController
 
   def anime_params
     params.permit(:name, :info, :status, :title_native, :banner, :cover_large, :cover_medium)
+  end
+
+  def suggest_anime
+    genres = @anime.genres
+    if genres.present?
+      animes = genres.first.animes.order(rating: :desc).limit(5)
+      genres.all[1..-1].each do |f|
+        if f.animes.present?
+          animes.merge f.animes.order(rating: :desc).limit(5)
+        end
+      end
+      @suggest_animes = animes.order(rating: :desc).limit(5)
+    end
   end
 end
