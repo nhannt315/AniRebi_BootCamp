@@ -104,7 +104,21 @@ class Api::V1::ReviewsController < ApplicationController
   end
 
   def get_by_anime
-    @reviews = Anime.find(params[:id]).reviews.order(created_at: :desc).page(@page).per(@per_page)
+    if params[:order] == "like"
+      @reviews = Anime.find(params[:id]).reviews.order(like: :desc).page(@page).per(@per_page)
+    elsif params[:order] == "dislike"
+      @reviews = Anime.find(params[:id]).reviews.order(dislike: :desc).page(@page).per(@per_page)
+    elsif params[:order] == "newest"
+      @reviews = Anime.find(params[:id]).reviews.order(created_at: :desc).page(@page).per(@per_page)
+    elsif params[:order] == "latest"
+      @reviews = Anime.find(params[:id]).reviews.order(created_at: :asc).page(@page).per(@per_page)
+    elsif params[:order] == "rating_highest"
+      @reviews = Anime.find(params[:id]).reviews.order(rating: :desc).page(@page).per(@per_page)
+    elsif params[:order] == "rating_lowest"
+      @reviews = Anime.find(params[:id]).reviews.order(rating: :asc).page(@page).per(@per_page)
+    else
+      @reviews = Anime.find(params[:id]).reviews.order(created_at: :desc).page(@page).per(@per_page)
+    end
     render json: @reviews, include: [votes_for: {only: [:voter_id, :vote_flag]}]
   end
 

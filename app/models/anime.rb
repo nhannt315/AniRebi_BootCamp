@@ -1,9 +1,13 @@
-require "elasticsearch/model"
 class Anime < ApplicationRecord
+  include PgSearch
+  pg_search_scope :pg_search,
+                  :against => [:name, :title_english, :title_native, :info],
+                  :using => {
+                    :tsearch => { prefix: true}
+                  }
+
   extend FriendlyId
   friendly_id :name, use: :slugged
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
   mount_uploader :banner, AnimeUploader
   mount_uploader :cover_large, AnimeUploader
   mount_uploader :cover_medium, AnimeUploader
@@ -11,11 +15,4 @@ class Anime < ApplicationRecord
   has_many :anime_genres
   has_many :genres, through: :anime_genres
 
-  # Anime.import force: true
-  settings do
-    mappings dynamic: false do
-      indexes :name, type: :text
-      indexes :title_english, type: :text
-    end
-  end
 end

@@ -26,6 +26,13 @@ user_list.each do |user|
   User.create(user)
 end
 
+User.create(
+        email: "admin@gmail.com",
+        password: "admin123",
+        password_confirmation: "admin123",
+        admin: true
+)
+
 for i in 1..review_count
   lang = rand(1..4)
   case lang
