@@ -37,7 +37,7 @@ SET default_with_oids = false;
 -- Name: anime_genres; Type: TABLE; Schema: public; Owner: root
 --
 
-CREATE TABLE public.anime_genres (
+CREATE TABLE IF NOT EXISTS public.anime_genres (
     id bigint NOT NULL,
     anime_id integer,
     genre_id integer,
@@ -52,7 +52,7 @@ ALTER TABLE public.anime_genres OWNER TO root;
 -- Name: anime_genres_id_seq; Type: SEQUENCE; Schema: public; Owner: root
 --
 
-CREATE SEQUENCE public.anime_genres_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.anime_genres_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -73,7 +73,7 @@ ALTER SEQUENCE public.anime_genres_id_seq OWNED BY public.anime_genres.id;
 -- Name: animes; Type: TABLE; Schema: public; Owner: root
 --
 
-CREATE TABLE public.animes (
+CREATE TABLE IF NOT EXISTS public.animes (
     id bigint NOT NULL,
     name character varying,
     info text,
@@ -98,7 +98,7 @@ ALTER TABLE public.animes OWNER TO root;
 -- Name: animes_id_seq; Type: SEQUENCE; Schema: public; Owner: root
 --
 
-CREATE SEQUENCE public.animes_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.animes_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -119,7 +119,7 @@ ALTER SEQUENCE public.animes_id_seq OWNED BY public.animes.id;
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: root
 --
 
-CREATE TABLE public.ar_internal_metadata (
+CREATE TABLE IF NOT EXISTS public.ar_internal_metadata (
     key character varying NOT NULL,
     value character varying,
     created_at timestamp without time zone NOT NULL,
@@ -133,7 +133,7 @@ ALTER TABLE public.ar_internal_metadata OWNER TO root;
 -- Name: friendly_id_slugs; Type: TABLE; Schema: public; Owner: root
 --
 
-CREATE TABLE public.friendly_id_slugs (
+CREATE TABLE IF NOT EXISTS public.friendly_id_slugs (
     id integer NOT NULL,
     slug character varying NOT NULL,
     sluggable_id integer NOT NULL,
@@ -149,7 +149,7 @@ ALTER TABLE public.friendly_id_slugs OWNER TO root;
 -- Name: friendly_id_slugs_id_seq; Type: SEQUENCE; Schema: public; Owner: root
 --
 
-CREATE SEQUENCE public.friendly_id_slugs_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.friendly_id_slugs_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -171,7 +171,7 @@ ALTER SEQUENCE public.friendly_id_slugs_id_seq OWNED BY public.friendly_id_slugs
 -- Name: genres; Type: TABLE; Schema: public; Owner: root
 --
 
-CREATE TABLE public.genres (
+CREATE TABLE IF NOT EXISTS public.genres (
     id bigint NOT NULL,
     name character varying,
     created_at timestamp without time zone NOT NULL,
@@ -207,7 +207,7 @@ ALTER SEQUENCE public.genres_id_seq OWNED BY public.genres.id;
 -- Name: review_actions; Type: TABLE; Schema: public; Owner: root
 --
 
-CREATE TABLE public.review_actions (
+CREATE TABLE IF NOT EXISTS public.review_actions (
     id bigint NOT NULL,
     user_id integer,
     review_id integer,
@@ -223,7 +223,7 @@ ALTER TABLE public.review_actions OWNER TO root;
 -- Name: review_actions_id_seq; Type: SEQUENCE; Schema: public; Owner: root
 --
 
-CREATE SEQUENCE public.review_actions_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.review_actions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -244,7 +244,7 @@ ALTER SEQUENCE public.review_actions_id_seq OWNED BY public.review_actions.id;
 -- Name: reviews; Type: TABLE; Schema: public; Owner: root
 --
 
-CREATE TABLE public.reviews (
+CREATE TABLE IF NOT EXISTS public.reviews (
     id bigint NOT NULL,
     user_id integer,
     anime_id integer,
@@ -266,7 +266,7 @@ ALTER TABLE public.reviews OWNER TO root;
 -- Name: reviews_id_seq; Type: SEQUENCE; Schema: public; Owner: root
 --
 
-CREATE SEQUENCE public.reviews_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.reviews_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -298,7 +298,7 @@ ALTER TABLE public.schema_migrations OWNER TO root;
 -- Name: users; Type: TABLE; Schema: public; Owner: root
 --
 
-CREATE TABLE public.users (
+CREATE TABLE IF NOT EXISTS public.users (
     id bigint NOT NULL,
     provider character varying DEFAULT 'email'::character varying NOT NULL,
     uid character varying DEFAULT ''::character varying NOT NULL,
@@ -335,7 +335,7 @@ ALTER TABLE public.users OWNER TO root;
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: root
 --
 
-CREATE SEQUENCE public.users_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.users_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -356,7 +356,7 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 -- Name: votes; Type: TABLE; Schema: public; Owner: root
 --
 
-CREATE TABLE public.votes (
+CREATE TABLE IF NOT EXISTS public.votes (
     id integer NOT NULL,
     votable_type character varying,
     votable_id integer,
@@ -376,7 +376,7 @@ ALTER TABLE public.votes OWNER TO root;
 -- Name: votes_id_seq; Type: SEQUENCE; Schema: public; Owner: root
 --
 
-CREATE SEQUENCE public.votes_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.votes_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
