@@ -3,17 +3,20 @@ class Api::V1::SearchController < ApplicationController
   before_action :page_params, only: [:search]
 
   def search
-    if params[:arr].nil?
-      @animes = @pgsearch_animes
-    else
-      @arr = Array(params[:arr])
-      @animes = Genre.find(@arr[0]).animes.all
-      for i in 1..(@arr.length - 1)
-        @animes &= Genre.find(@arr[i]).animes.all
+    @animes = []
+    if params[:q]
+      if params[:arr].nil?
+        @animes = @pgsearch_animes
+      else
+        @arr = Array(params[:arr])
+        @animes = Genre.find(@arr[0]).animes.all
+        for i in 1..(@arr.length - 1)
+          @animes &= Genre.find(@arr[i]).animes.all
+        end
+        @animes &= @pgsearch_animes
       end
-      @animes &= @pgsearch_animes
+      Anime.where(id: @animes.map(&:id)).page(@page).per(@per_page)
     end
-    Anime.where(id: @animes.map(&:id)).page(@page).per(@per_page)
   end
 
   private
@@ -25,9 +28,9 @@ class Api::V1::SearchController < ApplicationController
 
   def search_anime
     @pgsearch_animes = if params[:q].nil?
-                              []
-                            else
-                              (Anime.pg_search params[:q]).records
-                            end
+                         []
+                       else
+                         Anime.search params[:q]
+                       end
   end
 end

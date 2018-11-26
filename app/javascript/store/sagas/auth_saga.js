@@ -6,10 +6,17 @@ import * as endpoints from '../../constants/endpoint_constants';
 import * as keys from '../../constants/key_constants';
 
 export function* logoutSaga() {
+  const tokenData = JSON.parse(localStorage.getItem(keys.TOKEN_DATA_LOCAL_KEY));
+  const headers = {
+    'access-token': tokenData.accessToken,
+    'token-type': tokenData.tokenType,
+    uid: tokenData.uid,
+    client: tokenData.client
+  };
   localStorage.removeItem(keys.USER_DATA_LOCAL_KEY);
   localStorage.removeItem(keys.TOKEN_DATA_LOCAL_KEY);
   try {
-    yield axios.delete(endpoints.LOGOUT_URL);
+    yield axios.delete(endpoints.LOGOUT_URL, {id: '1'}, {headers: headers});
     yield put(actions.logoutSuccess());
   } catch (error) {
     yield put(actions.logoutFail());
