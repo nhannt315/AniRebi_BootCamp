@@ -29,14 +29,14 @@ class App extends Component {
 
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
     this.props.getTopAnime(1, 14);
     this.props.getRecentlyReviewedAnime(1, 14);
     this.props.getRecentReviews();
     this.props.getGenresList();
     this.props.getMultipleGenreTop([1, 2, 3, 4, 5], 5);
-  }
-
-  componentDidMount() {
     this.props.tryAutoSignIn();
   }
 
@@ -183,8 +183,7 @@ const mapStateToProps = state => {
     genreTopIsProcessing: state.anime.genreTopIsProcessing,
     multipleGenreTopIsProcessing: state.anime.multipleGenreTopIsProcessing,
     animeByIdIsProcessing: state.anime.animeByIdIsProcessing,
-    recentlyReviewedAnimeIsProcessing:
-      state.anime.recentlyReviewedAnimeIsProcessing,
+    recentlyReviewedAnimeIsProcessing: state.anime.recentlyReviewedAnimeIsProcessing,
     recentReviewsIsProcessing: state.anime.recentReviewsIsProcessing,
     searchResult: state.search.searchResult,
     keywordSearch: state.search.keyword,
@@ -212,7 +211,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default withRouter(
+export default (
   connect(
     mapStateToProps,
     mapDispatchToProps
