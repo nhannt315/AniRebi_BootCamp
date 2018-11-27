@@ -20,6 +20,15 @@ class Api::V1::SearchController < ApplicationController
         @time_start = params[:start].to_datetime
         @time_end = params[:end].to_datetime
         @animes = @animes.where( created_at: @time_start..@time_end)
+      else
+        if params[:start]
+          @time_start = params[:start].to_datetime
+          @animes = @animes.where('created_at > ?', @time_start)
+        end
+        if params[:end]
+          @time_end = params[:end].to_datetime
+          @animes = @animes.where('created_at < ?', @time_end)
+        end
       end
       if params[:status]
         @status = params[:status]
