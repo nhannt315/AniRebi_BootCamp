@@ -32,7 +32,7 @@ class AdvanceSearchBox extends Component {
       createdDate: [],
       createdDateString: []
     });
-    this.prop.submit(
+    this.props.submit(
       this.state.createdDateString,
       this.state.checkedGenreList,
       this.state.status,

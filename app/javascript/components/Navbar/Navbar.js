@@ -53,6 +53,7 @@ class Navbar extends Component {
     }
     this.setState({term});
     term = term.replace(/\s+/g, '+');
+    console.log(this.props.searchConditions);
     return this.debounceSearch({
       q: term,
       page: 1,

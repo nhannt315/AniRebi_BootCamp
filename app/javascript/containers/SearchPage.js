@@ -36,6 +36,14 @@ class SearchPage extends Component {
     this.props.setSearchConditions({createdDate, genreList, status});
     if (!reset) {
       this.hideAdvanceSearch();
+      this.props.searchAnime({
+        q: this.props.keyword,
+        page: 1,
+        itemPerPage: 20,
+        conditions: {createdDate, genreList, status}
+      });
+    }else{
+      this.props.clearConditions();
     }
   };
 
@@ -62,8 +70,8 @@ class SearchPage extends Component {
                   key={anime.id}
                   title={anime.name}
                   cover={anime.cover_large}
-                  ratingNo="10,000"
-                  score="5.0"
+                  ratingNo={5}
+                  score={5}
                 />
               )}
             </StyledList>
@@ -129,7 +137,8 @@ SearchPage.propTypes = {
   isFetching: PropTypes.bool,
   searchResult: PropTypes.array,
   genresListData: PropTypes.array,
-  setSearchConditions: PropTypes.func
+  setSearchConditions: PropTypes.func,
+  clearConditions: PropTypes.func
 };
 
 const mapStateToProps = state => {
@@ -146,7 +155,8 @@ const mapDispatchToProps = dispatch => {
   return {
     searchAnime: (payload) => dispatch(actions.searchAnime(payload)),
     clearSearchResult: () => dispatch(actions.clearSearchResult()),
-    setSearchConditions: (conditions) => dispatch(actions.setSearchAdvanceConditions({conditions}))
+    setSearchConditions: (conditions) => dispatch(actions.setSearchAdvanceConditions({conditions})),
+    clearConditions: () => dispatch(actions.clearSearchConditions())
   };
 };
 
