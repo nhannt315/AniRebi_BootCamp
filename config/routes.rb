@@ -19,6 +19,8 @@ Rails.application.routes.draw do
           get "top_animes"
           get "search_by_genre"
           get "recent_reviewed"
+          get "filter_by_time"
+          get "filter_by_status"
         end
       end
       resources :genres do
