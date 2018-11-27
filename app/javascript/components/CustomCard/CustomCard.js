@@ -7,12 +7,12 @@ import './CustomCard.scss';
 
 class CustomCard extends Component {
   static propTypes = {
-    title: PropTypes.string.isRequired,
-    cover: PropTypes.string.isRequired,
-    ratingNo: PropTypes.string.isRequired,
-    score: PropTypes.string.isRequired,
+    title: PropTypes.string,
+    cover: PropTypes.string,
+    ratingNo: PropTypes.number,
+    score: PropTypes.number,
     history: PropTypes.object,
-    id: PropTypes.number.isRequired
+    id: PropTypes.number
   };
 
   handleImgError = e => {

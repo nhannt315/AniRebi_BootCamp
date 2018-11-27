@@ -30,7 +30,7 @@ class Api::V1::SearchController < ApplicationController
           @animes = @animes.where('created_at < ?', @time_end)
         end
       end
-      if params[:status]
+      if params[:status] && params[:status] != "all"
         @status = params[:status]
         @animes = @animes.where('lower(status) = ?', @status.downcase)
       end
