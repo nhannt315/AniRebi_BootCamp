@@ -2,33 +2,54 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Breadcrumb, Col, Icon, Layout, Row, Spin } from 'antd';
+import { Breadcrumb, Col, Icon, Layout, Row, Spin, Popover } from 'antd';
 import * as actions from '../store/actions';
 import styled from 'styled-components';
 import BGImage from '../assets/images/background_home.png';
 import CardBox from '../components/CardBox';
 import CustomVerticalList from '../components/CustomVerticalList';
 import CustomCard from '../components/CustomCard/CustomCard';
+import AdvanceSearchBox from '../components/AdvanceSearchBox';
 
 const {Content} = Layout;
 
 class SearchPage extends Component {
 
+  state = {
+    advanceVisible: false
+  };
+
+  hideAdvanceSearch = () => {
+    this.setState({advanceVisible: false});
+  };
+
+  handleVisibileChange = (visible) => {
+    this.setState({advanceVisible: visible});
+  };
+
   componentWillUnmount() {
     this.props.clearSearchResult();
   }
 
+  handleAdvanceSearch = (createdDate, genreList, status, reset = false) => {
+    console.log(createdDate, genreList, status);
+    this.props.setSearchConditions({createdDate, genreList, status});
+    if (!reset) {
+      this.hideAdvanceSearch();
+    }
+  };
+
   render() {
-    const {topAnimeData, keyword, searchResult, isFetching} = this.props;
+    const {topAnimeData, keyword, searchResult, isFetching, genresListData} = this.props;
     const message = searchResult.length > 0 ? `Search results for keyword : ${keyword}` : 'No anime found!';
     let resultBox = null;
-    if(isFetching){
+    if (isFetching) {
       resultBox = (
         <div>
-          <Spin />
+          <Spin/>
         </div>
       );
-    }else {
+    } else {
       resultBox = (
         <CardBox
           title={message}
@@ -57,17 +78,29 @@ class SearchPage extends Component {
             <Col span={17}>
               <CardBox
                 content={
-                  <Breadcrumb>
-                    <StyledBreadcrumbItem href="/">
-                      <Icon type="home" /> Home
-                    </StyledBreadcrumbItem>
-                    <StyledBreadcrumbItem href="/anime">
-                      <Icon type="bars" /> Anime
-                    </StyledBreadcrumbItem>
-                    <StyledBreadcrumbItem href="">
-                      Search with keyword : {keyword}
-                    </StyledBreadcrumbItem>
-                  </Breadcrumb>
+                  <div>
+                    <Breadcrumb style={{float: 'left'}}>
+                      <StyledBreadcrumbItem href="/">
+                        <Icon type="home"/> Home
+                      </StyledBreadcrumbItem>
+                      <StyledBreadcrumbItem href="/anime">
+                        <Icon type="bars"/> Anime
+                      </StyledBreadcrumbItem>
+                      <StyledBreadcrumbItem href="">
+                        Search with keyword : {keyword}
+                      </StyledBreadcrumbItem>
+                    </Breadcrumb>
+                    <Popover
+                      content={<AdvanceSearchBox genreList={genresListData} submit={this.handleAdvanceSearch}/>}
+                      trigger="click"
+                      placement="left"
+                      visible={this.state.advanceVisible}
+                      onVisibleChange={this.handleVisibileChange}
+                    >
+                      <Icon type="search" style={{float: 'right', fontSize: '24px'}}/>
+                    </Popover>
+                    <span style={{clear: 'both', display: 'block'}}/>
+                  </div>
                 }
               />
               &nbsp;
@@ -77,7 +110,7 @@ class SearchPage extends Component {
               <CardBox
                 title="Ranking"
                 content={
-                  <CustomVerticalList dataSource={topAnimeData} />
+                  <CustomVerticalList dataSource={topAnimeData}/>
                 }
               />
             </Col>
@@ -94,7 +127,9 @@ SearchPage.propTypes = {
   clearSearchResult: PropTypes.func,
   searchAnime: PropTypes.func,
   isFetching: PropTypes.bool,
-  searchResult: PropTypes.array
+  searchResult: PropTypes.array,
+  genresListData: PropTypes.array,
+  setSearchConditions: PropTypes.func
 };
 
 const mapStateToProps = state => {
@@ -102,14 +137,16 @@ const mapStateToProps = state => {
     topAnimeData: state.anime.topAnimeData,
     keyword: state.search.keyword,
     isFetching: state.search.isFetching,
-    searchResult: state.search.searchResult
+    searchResult: state.search.searchResult,
+    genresListData: state.anime.genresListData
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     searchAnime: (payload) => dispatch(actions.searchAnime(payload)),
-    clearSearchResult: () => dispatch(actions.clearSearchResult())
+    clearSearchResult: () => dispatch(actions.clearSearchResult()),
+    setSearchConditions: (conditions) => dispatch(actions.setSearchAdvanceConditions({conditions}))
   };
 };
 
@@ -124,6 +161,7 @@ const StyledList = styled.div`
 const StyledContent = styled(Content)`
   padding-top: 10px;
   background-image: url(${BGImage});
+  min-height: 95vh;
 `;
 
 const StyledBreadcrumbItem = styled(Breadcrumb.Item)`

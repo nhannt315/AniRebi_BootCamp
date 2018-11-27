@@ -7,6 +7,7 @@ import * as actions from '../actions/index';
 import * as endpoints from '../../constants/endpoint_constants';
 
 export function* searchAnimeSaga({payload}) {
+  console.log(payload.conditions);
   yield put(actions.searchAnimeStart(payload));
   const query = {
     q: payload.q,

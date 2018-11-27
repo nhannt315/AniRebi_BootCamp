@@ -21,7 +21,8 @@ class Navbar extends Component {
     keyword: PropTypes.string,
     history: PropTypes.object,
     location: PropTypes.object,
-    genreList: PropTypes.array
+    genreList: PropTypes.array,
+    searchConditions: PropTypes.object
   };
 
   state = {
@@ -55,7 +56,8 @@ class Navbar extends Component {
     return this.debounceSearch({
       q: term,
       page: 1,
-      itemPerPage: 20
+      itemPerPage: 20,
+      conditions: this.props.searchConditions
     });
   };
 

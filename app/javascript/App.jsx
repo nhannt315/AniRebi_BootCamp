@@ -46,7 +46,7 @@ class App extends Component {
       !this.props.genresListIsProcessing &&
       !this.props.multipleGenreTopIsProcessing &&
       !this.props.recentlyReviewedAnimeIsProcessing &&
-      !this.props.recentReviewsIsProcessingz
+      !this.props.recentReviewsIsProcessing
     ) {
       return (
         <Layout className="App">
@@ -62,6 +62,7 @@ class App extends Component {
             history={this.props.history}
             location={this.props.location}
             genreList={this.props.genresListData}
+            searchConditions={this.props.searchConditions}
           />
           <div className="main-page">
             <Switch>
@@ -166,7 +167,8 @@ App.propTypes = {
   searchAnime: PropTypes.func,
   keywordSearch: PropTypes.string,
   genresListData: PropTypes.array,
-  location: PropTypes.object
+  location: PropTypes.object,
+  searchConditions: PropTypes.object
 };
 
 const mapStateToProps = state => {
@@ -185,7 +187,8 @@ const mapStateToProps = state => {
       state.anime.recentlyReviewedAnimeIsProcessing,
     recentReviewsIsProcessing: state.anime.recentReviewsIsProcessing,
     searchResult: state.search.searchResult,
-    keywordSearch: state.search.keyword
+    keywordSearch: state.search.keyword,
+    searchConditions: state.search.conditions
   };
 };
 

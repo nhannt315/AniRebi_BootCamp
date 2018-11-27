@@ -65,7 +65,8 @@ export {
   searchAnimeStart,
   searchAnimeSuccess,
   searchAnimeFalure,
-  clearSearchResult
+  clearSearchResult,
+  setSearchAdvanceConditions
 } from './search_action';
 
 export {
