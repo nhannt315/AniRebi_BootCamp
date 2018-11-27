@@ -1,4 +1,4 @@
-import { Button, Carousel, Col, Icon, Layout, Row, List, Rate } from 'antd';
+import { Button, Carousel, Col, Icon, Layout, Row, List } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';

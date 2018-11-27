@@ -167,10 +167,11 @@ export const getMultipleGenreTopFailure = errors => {
   };
 };
 
-export const getReviewsByAnime = id => {
+export const getReviewsByAnime = (id, order) => {
   return {
     type: actionTypes.GET_REVIEWS_BY_ANIME,
-    id: id
+    id: id,
+    order: order
   };
 };
 

@@ -8,7 +8,10 @@ import {
   Tag,
   Rate,
   message,
-  List
+  Select,
+  Button,
+  Alert,
+  Spin
 } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -25,6 +28,7 @@ import axios from '../axios_anime';
 import * as endpoints from '../constants/endpoint_constants';
 
 const { Content } = Layout;
+const Option = Select.Option;
 
 class AnimeDetailPage extends Component {
   static propTypes = {
@@ -54,7 +58,13 @@ class AnimeDetailPage extends Component {
     this.state = {
       reviewsList: [],
       animeScore: 0,
-      isSubmitBtnDisabled: false
+      isSubmitBtnDisabled: false,
+      orderQuery: 'newest',
+      orderSelect: 'date',
+      orderIcon: 'caret-down',
+      orderIconDisabled: false,
+      orderBtnText: 'DESC',
+      reviewsCount: 0
     };
   }
 
@@ -62,7 +72,8 @@ class AnimeDetailPage extends Component {
     if (this.state.reviewsList !== nextProps.reviewsData) {
       this.setState(
         {
-          reviewsList: nextProps.reviewsData.slice()
+          reviewsList: nextProps.reviewsData.slice(),
+          reivewsCount: nextProps.reviewsData.length
         },
         () => {
           this.calculateAvgScore();
@@ -71,7 +82,17 @@ class AnimeDetailPage extends Component {
     }
     if (this.props.animeByIdData.id !== nextProps.animeByIdData.id) {
       var splits = this.props.history.location.pathname.split('/');
-      this.props.getReviewsByAnime(splits[2]);
+      this.setState(
+        {
+          orderQuery: 'newest',
+          orderSelect: 'date',
+          orderIcon: 'caret-down',
+          orderIconDisabled: false
+        },
+        () => {
+          this.props.getReviewsByAnime(splits[2]);
+        }
+      );
     }
   }
 
@@ -121,7 +142,8 @@ class AnimeDetailPage extends Component {
         response.data.review = { ...response.data.review, votes_for: [] };
         this.setState(
           {
-            reviewsList: [...this.state.reviewsList, response.data.review]
+            reviewsList: [...this.state.reviewsList, response.data.review],
+            reviewsCount: this.state.reviewsCount + 1
           },
           () => {
             console.log(this.state.reviewsList);
@@ -149,7 +171,8 @@ class AnimeDetailPage extends Component {
           {
             reviewsList: this.state.reviewsList.filter(
               i => i.id !== review.reviewId
-            )
+            ),
+            reviewsCount: this.state.reviewsCount - 1
           },
           () => {
             console.log(this.state.reviewsList);
@@ -241,6 +264,55 @@ class AnimeDetailPage extends Component {
     }
   };
 
+  handleReviewsOrderChange = orderQuery => {
+    console.log(orderQuery);
+    var splits = this.props.history.location.pathname.split('/');
+    this.props.getReviewsByAnime(splits[2], orderQuery);
+  };
+
+  onOrderIconClick = () => {
+    if (this.state.orderIcon === 'caret-down') {
+      this.setState({ orderIcon: 'caret-up', orderBtnText: 'ASC' }, () => {
+        this.onOrderSelectChange(this.state.orderSelect);
+      });
+    } else {
+      this.setState({ orderIcon: 'caret-down', orderBtnText: 'DESC' }, () => {
+        this.onOrderSelectChange(this.state.orderSelect);
+      });
+    }
+  };
+
+  onOrderSelectChange = value => {
+    var temp = value;
+    if (value === 'date') {
+      temp = this.state.orderIcon === 'caret-down' ? 'newest' : 'latest';
+    } else if (value === 'rating') {
+      temp =
+        this.state.orderIcon === 'caret-down'
+          ? value + '_highest'
+          : value + '_lowest';
+    }
+    this.setState(
+      {
+        orderQuery: temp,
+        orderSelect: value,
+        orderIconDisabled:
+          value === 'dislike' || value === 'like' ? true : false,
+        orderIcon:
+          value === 'dislike' || value === 'like'
+            ? 'caret-down'
+            : this.state.orderIcon,
+        orderBtnText:
+          value === 'dislike' || value === 'like'
+            ? 'DESC'
+            : this.state.orderBtnText
+      },
+      () => {
+        this.handleReviewsOrderChange(this.state.orderQuery);
+      }
+    );
+  };
+
   render() {
     if (
       !this.props.animeByIdIsProcessing &&
@@ -248,7 +320,7 @@ class AnimeDetailPage extends Component {
     ) {
       const { animeByIdData, isAuthenticated } = this.props;
 
-      const { animeScore } = this.state;
+      const { animeScore, reviewsCount } = this.state;
 
       const AnimeGenres = this.props.animeByIdData.genres.map(item => (
         <Tag key={item.id}><Link to={`/genre/${item.id}`}>{item.name}</Link></Tag>
@@ -257,7 +329,7 @@ class AnimeDetailPage extends Component {
       return (
         <StyledContent className="AnimePageContent">
           <Content style={{ padding: '0px 100px 50px' }}>
-            <Row type="flex" justify="space-around" align="middle">
+            <Row>
               <Col span={17}>
                 <CardBox
                   content={
@@ -319,7 +391,7 @@ class AnimeDetailPage extends Component {
                               fontSize: 'calc(1vw)'
                             }}
                           >
-                            <Icon type="user" /> Reviews: {this.props.reviewsData.length}
+                            <Icon type="user" /> Reviews: {reviewsCount}
                           </div>
                         </Row>
                       </Col>
@@ -403,10 +475,32 @@ class AnimeDetailPage extends Component {
                   title="Reviews"
                   content={
                     <div>
+                      Sort by:{' '}
+                      <Select
+                        value={this.state.orderSelect}
+                        style={{ width: 100 }}
+                        onChange={this.onOrderSelectChange}
+                      >
+                        <Option value="date">Date</Option>
+                        <Option value="rating">Rating</Option>
+                        <Option value="like">Like</Option>
+                        <Option value="dislike">Dislike</Option>
+                      </Select>
+                      &nbsp;
+                      <Button
+                        disabled={this.state.orderIconDisabled}
+                        size="small"
+                        onClick={this.onOrderIconClick}
+                      >
+                        {this.state.orderBtnText}
+                        <Icon type={this.state.orderIcon} />
+                      </Button>
+                      <br /> <br />
                       <ReviewsList
                         dataSource={this.state.reviewsList}
                         handleDeleteReview={this.handleDeleteReview}
                         handleEditReview={this.handleEditReview}
+                        handleReviewsOrderChange={this.handleReviewsOrderChange}
                       />
                     </div>
                   }
@@ -418,12 +512,49 @@ class AnimeDetailPage extends Component {
                   />
                 )}
               </Col>
+              <Col span={6} offset={1}>
+                <CardBox
+                  title="Suggested Anime"
+                  content={
+                    <CustomVerticalList
+                      dataSource={animeByIdData.suggest_animes}
+                    />
+                  }
+                />
+              </Col>
             </Row>
           </Content>
         </StyledContent>
       );
     } else {
-      return null;
+      return (
+        <StyledContent className="AnimePageContent">
+          <Content style={{ padding: '0px 100px 50px' }}>
+            <div style={{ height: '100vh', position: 'relative' }}>
+              <Alert
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)'
+                }}
+                message="Please wait"
+                description="Page is loading..."
+                type="info"
+                showIcon
+                icon={
+                  <Spin
+                    size="large"
+                    indicator={
+                      <Icon type="loading" style={{ fontSize: 24 }} spin />
+                    }
+                  />
+                }
+              />
+            </div>
+          </Content>
+        </StyledContent>
+      );
     }
   }
 }
@@ -448,7 +579,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getAnimeById: id => dispatch(actions.getAnimeById(id)),
-    getReviewsByAnime: id => dispatch(actions.getReviewsByAnime(id))
+    getReviewsByAnime: (id, order) =>
+      dispatch(actions.getReviewsByAnime(id, order))
   };
 };
 

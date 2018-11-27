@@ -46,7 +46,7 @@ class App extends Component {
       !this.props.genresListIsProcessing &&
       !this.props.multipleGenreTopIsProcessing &&
       !this.props.recentlyReviewedAnimeIsProcessing &&
-      !this.props.recentReviewsIsProcessing
+      !this.props.recentReviewsIsProcessingz
     ) {
       return (
         <Layout className="App">

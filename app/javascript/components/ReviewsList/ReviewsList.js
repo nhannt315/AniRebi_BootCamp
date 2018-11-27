@@ -1,20 +1,23 @@
-import { List } from 'antd';
+import { List, Select, Button } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './ReviewsList.scss';
 import Review from '../Review/Review';
 
+const Option = Select.Option;
+
 class ReviewsList extends Component {
   static propTypes = {
     dataSource: PropTypes.array.isRequired,
     handleEditReview: PropTypes.func.isRequired,
-    handleDeleteReview: PropTypes.func.isRequired
+    handleDeleteReview: PropTypes.func.isRequired,
+    handleReviewsOrderChange: PropTypes.func.isRequired
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      pageSize: 5
+      pageSize: 5,
     };
   }
 
