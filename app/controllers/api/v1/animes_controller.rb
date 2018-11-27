@@ -1,6 +1,6 @@
 class Api::V1::AnimesController < ApplicationController
   before_action :find_anime, only: [:show, :update, :destroy]
-  before_action :page_params, only: [:index, :top_animes, :search_by_genre, :recent_reviewed, :filter_by_time, :filter_by_status]
+  before_action :page_params, only: [:index, :top_animes, :search_by_genre, :recent_reviewed]
   before_action :find_genre, only: [:search_by_genre]
   before_action :order_param, only: [:search_by_genre, :top_animes]
   before_action :suggest_anime, only: [:show]
@@ -75,19 +75,6 @@ class Api::V1::AnimesController < ApplicationController
 
   def recent_reviewed
     @animes = Anime.includes(:reviews).order("reviews.created_at desc").page(@page).per(@per_page)
-  end
-
-  def filter_by_time
-    @time_start = params[:start].to_datetime
-    @time_end = params[:end].to_datetime
-    @animes = Anime.where( created_at: @time_start..@time_end).order(created_at: :desc)
-    render json: @animes.page(@page).per(@per_page)
-  end
-
-  def filter_by_status
-    @status = params[:status]
-    @animes = Anime.where('lower(status) = ?', @status.downcase).order(created_at: :desc)
-    render json: @animes.page(@page).per(@per_page)
   end
 
   private

@@ -14,9 +14,19 @@ class Api::V1::SearchController < ApplicationController
           @animes &= Genre.find(@arr[i]).animes.all
         end
         @animes &= @pgsearch_animes
+        @animes = Anime.where(id: @animes.map(&:id))
       end
-      Anime.where(id: @animes.map(&:id)).page(@page).per(@per_page)
+      if params[:start] && params[:end]
+        @time_start = params[:start].to_datetime
+        @time_end = params[:end].to_datetime
+        @animes = @animes.where( created_at: @time_start..@time_end)
+      end
+      if params[:status]
+        @status = params[:status]
+        @animes = @animes.where('lower(status) = ?', @status.downcase)
+      end
     end
+    @animes = @animes.order(created_at: :desc).page(@page).per(@per_page)
   end
 
   private
