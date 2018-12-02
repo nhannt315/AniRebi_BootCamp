@@ -11,7 +11,8 @@ class ReviewsList extends Component {
     dataSource: PropTypes.array.isRequired,
     handleEditReview: PropTypes.func.isRequired,
     handleDeleteReview: PropTypes.func.isRequired,
-    handleReviewsOrderChange: PropTypes.func.isRequired
+    handleReviewsOrderChange: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -59,8 +60,11 @@ class ReviewsList extends Component {
               dislikeNo={item.dislike}
               createdAt={item.created_at}
               updatedAt={item.updated_at}
+              animeName = {item.anime_name}
+              animeId = {item.anime_id}
               handleEditReview={handleEditReview}
               handleDeleteReview={handleDeleteReview}
+              history = {this.props.history}
             />
           </List.Item>
         )}
