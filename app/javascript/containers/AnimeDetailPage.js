@@ -73,7 +73,7 @@ class AnimeDetailPage extends Component {
       this.setState(
         {
           reviewsList: nextProps.reviewsData.slice(),
-          reivewsCount: nextProps.reviewsData.length
+          reviewsCount: nextProps.reviewsData.length
         },
         () => {
           this.calculateAvgScore();
@@ -139,19 +139,12 @@ class AnimeDetailPage extends Component {
       )
       .then(response => {
         console.log(response);
-        response.data.review = { ...response.data.review, votes_for: [] };
-        this.setState(
-          {
-            reviewsList: [...this.state.reviewsList, response.data.review],
-            reviewsCount: this.state.reviewsCount + 1
-          },
-          () => {
-            console.log(this.state.reviewsList);
-            this.calculateAvgScore();
-            callback();
-            message.success('Submitted successfully', 3);
-          }
-        );
+        var splits = this.props.history.location.pathname.split('/');
+        this.props.getReviewsByAnime(splits[2]);
+        console.log(this.state.reviewsList);
+        this.calculateAvgScore();
+        callback();
+        message.success('Submitted successfully', 3);
       });
   };
 
@@ -166,21 +159,13 @@ class AnimeDetailPage extends Component {
         }
       })
       .then(response => {
-        console.log(review.reviewId);
-        this.setState(
-          {
-            reviewsList: this.state.reviewsList.filter(
-              i => i.id !== review.reviewId
-            ),
-            reviewsCount: this.state.reviewsCount - 1
-          },
-          () => {
-            console.log(this.state.reviewsList);
-            this.calculateAvgScore();
-            callback();
-            message.success('Deleted successfully', 3);
-          }
-        );
+        console.log(response);
+        var splits = this.props.history.location.pathname.split('/');
+        this.props.getReviewsByAnime(splits[2]);
+        console.log(this.state.reviewsList);
+        this.calculateAvgScore();
+        callback();
+        message.success('Deleted successfully', 3);
       });
   };
 
@@ -210,34 +195,12 @@ class AnimeDetailPage extends Component {
       )
       .then(response => {
         console.log(response);
-        var newReviewsList = this.state.reviewsList.slice();
-        var index = newReviewsList.findIndex(el => el.id === review.reviewId);
-        console.log(index);
-        newReviewsList[index] = {
-          id: review.reviewId,
-          user_id: this.props.userData.id,
-          anime_id: this.props.animeByIdData.id,
-          title: review.reviewTitle,
-          content: review.reviewContent,
-          rating: review.reviewScore,
-          user_name: review.userName,
-          like: review.likeNo,
-          dislike: review.dislikeNo,
-          created_at: review.createdAt,
-          updated_at: review.updatedAt
-        };
-        console.log(newReviewsList);
-        this.setState(
-          {
-            reviewsList: newReviewsList
-          },
-          () => {
-            console.log(this.state.reviewsList);
-            this.calculateAvgScore();
-            callback();
-            message.success('Edited successfully', 3);
-          }
-        );
+        var splits = this.props.history.location.pathname.split('/');
+        this.props.getReviewsByAnime(splits[2]);
+        console.log(this.state.reviewsList);
+        this.calculateAvgScore();
+        callback();
+        message.success('Edited successfully', 3);
       });
   };
 
@@ -314,16 +277,15 @@ class AnimeDetailPage extends Component {
   };
 
   render() {
-    if (
-      !this.props.animeByIdIsProcessing &&
-      !this.props.reviewsByAnimeIsProcessing
-    ) {
+    if (!this.props.animeByIdIsProcessing) {
       const { animeByIdData, isAuthenticated } = this.props;
 
       const { animeScore, reviewsCount } = this.state;
 
       const AnimeGenres = this.props.animeByIdData.genres.map(item => (
-        <Tag key={item.id}><Link to={`/genre/${item.id}`}>{item.name}</Link></Tag>
+        <Tag key={item.id}>
+          <Link to={`/genre/${item.id}`}>{item.name}</Link>
+        </Tag>
       ));
 
       return (
@@ -496,12 +458,24 @@ class AnimeDetailPage extends Component {
                         <Icon type={this.state.orderIcon} />
                       </Button>
                       <br /> <br />
-                      <ReviewsList
-                        dataSource={this.state.reviewsList}
-                        handleDeleteReview={this.handleDeleteReview}
-                        handleEditReview={this.handleEditReview}
-                        handleReviewsOrderChange={this.handleReviewsOrderChange}
-                      />
+                      {!this.props.reviewsByAnimeIsProcessing && (
+                        <ReviewsList
+                          dataSource={this.state.reviewsList}
+                          handleDeleteReview={this.handleDeleteReview}
+                          handleEditReview={this.handleEditReview}
+                          handleReviewsOrderChange={
+                            this.handleReviewsOrderChange
+                          }
+                        />
+                      )}
+                      {this.props.reviewsByAnimeIsProcessing && (
+                        <div style={{ textAlign: 'center' }}>
+                          <Spin
+                            size="large"
+                            indicator={<Icon type="loading" spin />}
+                          />
+                        </div>
+                      )}
                     </div>
                   }
                 />
