@@ -7,6 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 require 'ffaker'
+require 'net/http'
 
 user_count = 50
 review_count = 400
@@ -56,4 +57,21 @@ end
 
 review_list.each do |review|
   Review.create(review)
+end
+
+animes = Anime.all
+default = "https://www.youtube.com/watch?v=4m3h7BvXo54"
+animes.each_with_index do |anime, index|
+  url = URI.parse("https://www.googleapis.com/youtube/v3/search?part=id&q=#{URI.encode(anime.name.gsub(' ','+'))}&type=video&maxResults=1&key=AIzaSyBakDUD7ArGiGyLpoVf09dzaMPmH7Kfe90")
+  puts "Fetch video for anime[#{index}]"
+  req = Net::HTTP::Get.new(url.to_s)
+  res = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme == 'https') {|http|
+    http.request(req)
+  }
+  hash = JSON.parse res.body
+  if hash['items'].length > 0
+    anime.update_attribute :video_url, "https://www.youtube.com/watch?v=#{hash['items'][0]['id']['videoId']}"
+  else 
+    anime.update_attribute :video_url, default
+  end
 end
