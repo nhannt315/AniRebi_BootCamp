@@ -1,9 +1,9 @@
 class Anime < ApplicationRecord
   include PgSearch
-  pg_search_scope :pg_search,
-                  :against => [:name, :title_english, :title_native, :info],
-                  :using => {
-                    :tsearch => { prefix: true}
+  pg_search_scope :search,
+                  against: [:name, :title_english, :title_native, :info],
+                  using: {
+                      tsearch: {prefix: true}
                   }
 
   extend FriendlyId

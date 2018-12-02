@@ -21,7 +21,8 @@ class Navbar extends Component {
     keyword: PropTypes.string,
     history: PropTypes.object,
     location: PropTypes.object,
-    genreList: PropTypes.array
+    genreList: PropTypes.array,
+    searchConditions: PropTypes.object
   };
 
   state = {
@@ -31,37 +32,39 @@ class Navbar extends Component {
   };
 
   constructor(props) {
-    const { keyword, searchAnime } = props;
+    const {keyword, searchAnime} = props;
     super(props);
     this.debounceSearch = debounce(searchAnime, 300);
     if (keyword.length > 0) {
-      this.setState({ term: keyword });
+      this.setState({term: keyword});
     }
   }
 
   handleGenreClick = e => {
     e.preventDefault();
-    this.setState(prevState => ({ showGenreList: !prevState.showGenreList }));
+    this.setState(prevState => ({showGenreList: !prevState.showGenreList}));
   };
 
   handleOnChange = e => {
     let term = e.target.value;
     if (!term) {
       this.props.clearSearchResult();
-      return this.setState({ term: '' });
+      return this.setState({term: ''});
     }
-    this.setState({ term });
+    this.setState({term});
     term = term.replace(/\s+/g, '+');
+    console.log(this.props.searchConditions);
     return this.debounceSearch({
       q: term,
       page: 1,
-      itemPerPage: 20
+      itemPerPage: 20,
+      conditions: this.props.searchConditions
     });
   };
 
   handleSearchFormSubmit = e => {
     e.preventDefault();
-    let { term } = this.state;
+    let {term} = this.state;
     if (!term) {
       this.props.clearSearchResult();
       return;
@@ -98,7 +101,7 @@ class Navbar extends Component {
           <Menu.Item key="2">
             <a href="#">Settings</a>
           </Menu.Item>
-          <Menu.Divider />
+          <Menu.Divider/>
           <Menu.Item key="3" onClick={logout}>
             Logout
           </Menu.Item>
@@ -114,9 +117,9 @@ class Navbar extends Component {
             <div>
               <StyledAvatar
                 size="large"
-                style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
+                style={{color: '#f56a00', backgroundColor: '#fde3cf'}}
               >
-                {userData.name.charAt(0).toUpperCase()}
+                {userData.name && userData.name.charAt(0).toUpperCase()}
               </StyledAvatar>
               <span className="user-name">{` ${userData.name}`}</span>
             </div>
@@ -127,10 +130,10 @@ class Navbar extends Component {
       authDiv = (
         <div className="auth-btns">
           <Link to="/login" className="animating_link">
-            <Icon type="login" theme="outlined" /> Log In
+            <Icon type="login" theme="outlined"/> Log In
           </Link>
           <Link to="/register" className="animating_link">
-            <Icon type="user" theme="outlined" /> Sign Up
+            <Icon type="user" theme="outlined"/> Sign Up
           </Link>
         </div>
       );
@@ -143,7 +146,7 @@ class Navbar extends Component {
         </div>
         <div className="searchBar">
           <div className="search-wrapper">
-            <Icon type="search" theme="outlined" />
+            <Icon type="search" theme="outlined"/>
             <form onSubmit={this.handleSearchFormSubmit}>
               <input
                 type="text"
@@ -154,13 +157,13 @@ class Navbar extends Component {
             </form>
           </div>
           {searchResult.length > 0 &&
-            this.props.location.pathname !== '/search' && (
-              <SearchMenu
-                history={this.props.history}
-                searchResult={searchResult}
-                clearSearchResult={clearSearchResult}
-              />
-            )}
+          this.props.location.pathname !== '/search' && (
+            <SearchMenu
+              history={this.props.history}
+              searchResult={searchResult}
+              clearSearchResult={clearSearchResult}
+            />
+          )}
         </div>
         <div className="navRight">
           <ul className="nav-menu">
@@ -170,16 +173,7 @@ class Navbar extends Component {
                 className="animating_link"
                 activeclassname="nav-menu-link-active"
               >
-                <Icon type="home" /> Home
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/anime"
-                className="animating_link"
-                activeclassname="nav-menu-link-active"
-              >
-                <Icon type="bars" theme="outlined" /> Anime
+                <Icon type="home"/> Home
               </Link>
             </li>
             <li>
@@ -192,13 +186,13 @@ class Navbar extends Component {
                 }
                 activeclassname="nav-menu-link-active"
               >
-                <Icon type="tags" theme="outlined" /> Genre
+                <Icon type="tags" theme="outlined"/> Genre
               </Link>
               {genreList.length > 0 && (
                 <GenreListMenu
                   show={this.state.showGenreList}
                   genreList={genreList}
-                  hideList={() => this.setState({ showGenreList: false })}
+                  hideList={() => this.setState({showGenreList: false})}
                 />
               )}
             </li>

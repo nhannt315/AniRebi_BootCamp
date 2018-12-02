@@ -16,7 +16,7 @@ import {
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import BGImage from '../assets/images/background_home.png';
 import CardBox from '../components/CardBox/CardBox';
@@ -323,7 +323,7 @@ class AnimeDetailPage extends Component {
       const { animeScore, reviewsCount } = this.state;
 
       const AnimeGenres = this.props.animeByIdData.genres.map(item => (
-        <Tag key={item.id}>{item.name}</Tag>
+        <Tag key={item.id}><Link to={`/genre/${item.id}`}>{item.name}</Link></Tag>
       ));
 
       return (

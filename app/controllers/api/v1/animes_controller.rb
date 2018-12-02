@@ -2,7 +2,7 @@ class Api::V1::AnimesController < ApplicationController
   before_action :find_anime, only: [:show, :update, :destroy]
   before_action :page_params, only: [:index, :top_animes, :search_by_genre, :recent_reviewed]
   before_action :find_genre, only: [:search_by_genre]
-  before_action :order_param, only: [:search_by_genre]
+  before_action :order_param, only: [:search_by_genre, :top_animes]
   before_action :suggest_anime, only: [:show]
 
   def index
@@ -56,7 +56,11 @@ class Api::V1::AnimesController < ApplicationController
   end
 
   def top_animes
-    @top_animes = Anime.order(rating: :desc).page(@page).per(@per_page)
+    if @order == "rating"
+      @top_animes = Anime.order(rating: :desc).page(@page).per(@per_page)
+    elsif @order == "reviews"
+      @top_animes = Anime.order(reviews_count: :desc).page(@page).per(@per_page)
+    end
   end
 
   def search_by_genre

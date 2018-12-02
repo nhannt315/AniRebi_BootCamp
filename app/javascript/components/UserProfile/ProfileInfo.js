@@ -24,7 +24,7 @@ export class ProfileInfo extends Component{
           renderItem={item => (
             <List.Item>
               <List.Item.Meta
-                avatar={<Avatar src={item.anime.cover} onError={this.handleImgError} />}
+                avatar={<Avatar src={item.anime.cover.url} onError={this.handleImgError} />}
                 title={<Link to={`/anime/${item.review.anime_id}`}>{item.review.title}</Link>}
                 description={item.review.content}
               />

@@ -35,3 +35,17 @@ export const clearSearchResult = (payload) => {
     payload: payload
   };
 };
+
+export const setSearchAdvanceConditions = (payload) => {
+  return {
+    type: actionTypes.SET_SEARCH_ADVANCE_CONDITION,
+    payload: payload
+  };
+};
+
+export const clearSearchConditions = (payload) => {
+  return {
+    type: actionTypes.CLEAR_SEARCH_CONDITION,
+    payload: payload
+  };
+};

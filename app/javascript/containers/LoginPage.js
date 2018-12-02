@@ -27,7 +27,7 @@ class LoginPage extends Component {
     if(isAuthenticated){
       this.props.history.push('/');
     }
-    if(errors.length > 0){
+    if(errors && errors.length > 0){
       const messageContent = errors.join(' ');
       message.error(messageContent);
     }
