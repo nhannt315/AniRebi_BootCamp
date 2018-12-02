@@ -35,9 +35,15 @@ class Api::V1::SearchController < ApplicationController
         @animes = @animes.where('lower(status) = ?', @status.downcase)
       end
     end
-    if params[:order]
-      if params[:order] == "rating"
+    if params[:sort] && params[:order]
+      if params[:sort] == "rating" && params[:order] == "desc"
         @animes = @animes.reorder(rating: :desc).page(@page).per(@per_page)
+      elsif params[:sort] == "rating" && params[:order] == "asc"
+        @animes = @animes.reorder(rating: :asc).page(@page).per(@per_page)
+      elsif params[:sort] == "time" && params[:order] == "desc"
+        @animes = @animes.reorder(created_at: :desc).page(@page).per(@per_page)
+      elsif params[:sort] == "time" && params[:order] == "asc"
+        @animes = @animes.reorder(created_at: :asc).page(@page).per(@per_page)
       end
     else
       @animes = @animes.reorder(created_at: :desc).page(@page).per(@per_page)
