@@ -35,7 +35,13 @@ class Api::V1::SearchController < ApplicationController
         @animes = @animes.where('lower(status) = ?', @status.downcase)
       end
     end
-    @animes = @animes.order(created_at: :desc).page(@page).per(@per_page)
+    if params[:order]
+      if params[:order] == "rating"
+        @animes = @animes.reorder(rating: :desc).page(@page).per(@per_page)
+      end
+    else
+      @animes = @animes.reorder(created_at: :desc).page(@page).per(@per_page)
+    end
   end
 
   private
