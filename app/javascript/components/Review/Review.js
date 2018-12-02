@@ -10,6 +10,7 @@ import {
   Badge,
   Modal
 } from 'antd';
+import { FacebookShareButton, FacebookIcon } from 'react-share';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -38,7 +39,9 @@ class Review extends Component {
     handleDeleteReview: PropTypes.func.isRequired,
     votesFor: PropTypes.array.isRequired,
     tokenData: PropTypes.object.isRequired,
-    isAuthenticated: PropTypes.bool.isRequired
+    isAuthenticated: PropTypes.bool.isRequired,
+    animeName: PropTypes.string.isRequired,
+    animeId: PropTypes.number.isRequired
   };
 
   constructor(props) {
@@ -88,8 +91,8 @@ class Review extends Component {
       reviewTitle: this.props.reviewTitle,
       reviewContent: this.props.reviewContent,
       reviewScore: this.props.reviewScore,
-      likeNo: this.props.likeNo,
-      dislikeNo: this.props.dislikeNo
+      likeNo: this.state.likeNo,
+      dislikeNo: this.state.dislikeNo
     });
   };
 
@@ -136,12 +139,10 @@ class Review extends Component {
             dislikeNo: this.props.dislikeNo
           };
           this.props.handleEditReview(review, () => {
-            this.setState(
-              {
-                isEditFormOpen: false,
-                isSaveBtnDisabled: false
-              }
-            );
+            this.setState({
+              isEditFormOpen: false,
+              isSaveBtnDisabled: false
+            });
           });
         }
       );
@@ -241,11 +242,9 @@ class Review extends Component {
       },
       () => {
         this.props.handleDeleteReview(review, () => {
-          this.setState(
-            {
-              isDeleteBtnDisabled: false
-            }
-          );
+          this.setState({
+            isDeleteBtnDisabled: false
+          });
         });
       }
     );
@@ -315,10 +314,7 @@ class Review extends Component {
               <div style={{ width: '100%', textAlign: 'center' }}>
                 <StyledAvatar
                   size={100}
-                  style={{
-                    color: '#f56a00',
-                    backgroundColor: '#fde3cf'
-                  }}
+                  style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
                 >
                   <span style={{ fontSize: '40px' }}>
                     {userName != null && userName.charAt(0).toUpperCase()}
@@ -326,12 +322,7 @@ class Review extends Component {
                 </StyledAvatar>
               </div>
               &nbsp;
-              <div
-                style={{
-                  textAlign: 'center',
-                  fontSize: 'calc(1.5vw)'
-                }}
-              >
+              <div style={{ textAlign: 'center', fontSize: 'calc(1.5vw)' }}>
                 {userName}
               </div>
             </Col>
@@ -354,9 +345,7 @@ class Review extends Component {
                     }}
                   >
                     <Rate
-                      style={{
-                        fontSize: 'calc(1.5vw)'
-                      }}
+                      style={{ fontSize: 'calc(1.5vw)' }}
                       disabled
                       allowHalf
                       defaultValue={reviewScore}
@@ -371,11 +360,7 @@ class Review extends Component {
                 {reviewContent}
               </div>
               &nbsp;
-              <div
-                style={{
-                  marginTop: '15px'
-                }}
-              >
+              <div style={{ marginTop: '15px' }}>
                 <div
                   style={{
                     position: 'relative',
@@ -388,7 +373,9 @@ class Review extends Component {
                     <LikeButton
                       shape="circle"
                       onClick={this.handleLikeClick}
-                      disabled={!this.props.isAuthenticated || this.checkUserDisliked()}
+                      disabled={
+                        !this.props.isAuthenticated || this.checkUserDisliked()
+                      }
                     >
                       <LikeIcon type="like" theme="filled" />
                     </LikeButton>
@@ -407,7 +394,9 @@ class Review extends Component {
                     <DislikeButton
                       shape="circle"
                       onClick={this.handleDislikeClick}
-                      disabled={!this.props.isAuthenticated || this.checkUserLiked()}
+                      disabled={
+                        !this.props.isAuthenticated || this.checkUserLiked()
+                      }
                     >
                       <DislikeIcon type="dislike" theme="filled" />
                     </DislikeButton>
@@ -449,6 +438,26 @@ class Review extends Component {
                         shape="circle"
                         icon="delete"
                       />
+                    </div>
+                    <div
+                      style={{
+                        position: 'relative',
+                        display: 'inline-flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginLeft: '20px'
+                      }}
+                    >
+                      <FacebookShareButton
+                        url={`${window.location.origin}/anime/${
+                          this.props.animeId
+                        }`}
+                        quote={`Check out my review of ${
+                          this.props.animeName
+                        }: ${this.state.reviewTitle}`}
+                      >
+                        <Button type="primary" shape="circle" icon="facebook" />
+                      </FacebookShareButton>
                     </div>
                   </span>
                 )}
