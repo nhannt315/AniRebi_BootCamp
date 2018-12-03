@@ -7,10 +7,7 @@ import searchReducer from './reducers/search_reducer';
 import genreReducer from './reducers/genre_reducer';
 import { watchAuth, watchAnime, watchSearch, watchGenre, watchUserProfile } from './sagas';
 
-const composeEnhancers =
-  process.env.NODE_ENV === 'development'
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    : null || compose;
+const composeEnhancers = compose;
 
 const rootReducer = combineReducers({
   auth: authReducer,

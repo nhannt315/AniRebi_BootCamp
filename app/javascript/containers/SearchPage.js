@@ -29,6 +29,7 @@ class SearchPage extends Component {
 
   componentWillUnmount() {
     this.props.clearSearchResult();
+    this.props.clearConditions();
   }
 
   handleAdvanceSearch = (createdDate, genreList, status, reset = false) => {
@@ -46,6 +47,7 @@ class SearchPage extends Component {
       this.props.clearConditions();
     }
   };
+
 
   render() {
     const {topAnimeData, keyword, searchResult, isFetching, genresListData} = this.props;
