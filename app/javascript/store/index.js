@@ -1,6 +1,6 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
-
+import {composeWithDevTools} from 'redux-devtools-extension';
 import authReducer from './reducers/auth_reducer';
 import animeReducer from './reducers/anime_reducer';
 import searchReducer from './reducers/search_reducer';
@@ -20,7 +20,7 @@ const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(
   rootReducer,
-  composeEnhancers(applyMiddleware(sagaMiddleware))
+  composeWithDevTools(applyMiddleware(sagaMiddleware))
 );
 
 sagaMiddleware.run(watchAuth);

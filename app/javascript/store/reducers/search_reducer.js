@@ -6,7 +6,9 @@ const initialState = {
   isFetching: false,
   error: null,
   conditions: {
-    createdDate: []
+    createdDate: [],
+    order: 'rating',
+    sort: 'desc'
   }
 };
 
@@ -23,7 +25,7 @@ const reducer = (state = initialState, {type, payload}) => {
     case actionTypes.SET_SEARCH_ADVANCE_CONDITION:
       return {...state, conditions: payload.conditions};
     case actionTypes.CLEAR_SEARCH_CONDITION:
-      return {...state, conditions: {createdDate: []}};
+      return {...state, conditions: {createdDate: [], order: 'rate', sort: 'desc'}};
     default:
       return state;
   }
