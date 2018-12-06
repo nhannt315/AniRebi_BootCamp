@@ -26,6 +26,7 @@ import ReviewsList from '../components/ReviewsList/ReviewsList';
 import ReviewForm from '../components/ReviewForm/ReviewForm';
 import axios from '../axios_anime';
 import * as endpoints from '../constants/endpoint_constants';
+import YouTube from 'react-youtube';
 
 const { Content } = Layout;
 const Option = Select.Option;
@@ -311,125 +312,149 @@ class AnimeDetailPage extends Component {
                 &nbsp;
                 <CardBox
                   content={
-                    <Row>
-                      <Col span={8}>
-                        <Row>
-                          <div
-                            className="AnimeDetailCoverImgContainer"
-                            style={{ overflow: 'hidden' }}
-                          >
-                            <AnimeDetailCoverImg
-                              className="AnimeDetailCoverImg"
-                              src={animeByIdData.cover_large}
-                              onError={this.handleImgError}
-                            />
-                          </div>
-                          &nbsp;
-                          <div
-                            style={{
-                              textAlign: 'center',
-                              fontSize: 'calc(2vw)'
-                            }}
-                          >
-                            Rating: {parseFloat(animeScore).toFixed(1)}
-                          </div>
-                          <div
-                            style={{
-                              textAlign: 'center'
-                            }}
-                          >
-                            <Rate
-                              disabled
-                              value={animeScore}
-                              allowHalf={true}
+                    <div>
+                      <Row>
+                        <Col span={8}>
+                          <Row>
+                            <div
+                              className="AnimeDetailCoverImgContainer"
+                              style={{ overflow: 'hidden' }}
+                            >
+                              <AnimeDetailCoverImg
+                                className="AnimeDetailCoverImg"
+                                src={animeByIdData.cover_large}
+                                onError={this.handleImgError}
+                              />
+                            </div>
+                            &nbsp;
+                            <div
+                              style={{
+                                textAlign: 'center',
+                                fontSize: 'calc(2vw)'
+                              }}
+                            >
+                              Rating: {parseFloat(animeScore).toFixed(1)}
+                            </div>
+                            <div
+                              style={{
+                                textAlign: 'center'
+                              }}
+                            >
+                              <Rate
+                                disabled
+                                value={animeScore}
+                                allowHalf={true}
+                                style={{
+                                  fontSize: 'calc(2.5vw)'
+                                }}
+                              />
+                            </div>
+                            <div
+                              style={{
+                                textAlign: 'center',
+                                fontSize: 'calc(1vw)'
+                              }}
+                            >
+                              <Icon type="user" /> Reviews: {reviewsCount}
+                            </div>
+                          </Row>
+                        </Col>
+
+                        <Col span={15} offset={1}>
+                          <div>
+                            <strong
                               style={{
                                 fontSize: 'calc(2.5vw)'
                               }}
-                            />
+                            >
+                              {animeByIdData.name}
+                            </strong>
                           </div>
-                          <div
-                            style={{
-                              textAlign: 'center',
-                              fontSize: 'calc(1vw)'
-                            }}
-                          >
-                            <Icon type="user" /> Reviews: {reviewsCount}
-                          </div>
-                        </Row>
-                      </Col>
-
-                      <Col span={15} offset={1}>
-                        <div>
-                          <strong
-                            style={{
-                              fontSize: 'calc(2.5vw)'
-                            }}
-                          >
+                          &nbsp;
+                          <div>
+                            <strong>
+                              <Icon
+                                type="desktop"
+                                style={{ color: 'blue' }}
+                                theme="outlined"
+                              />{' '}
+                              ENGLISH TITLE:{' '}
+                            </strong>
                             {animeByIdData.name}
-                          </strong>
-                        </div>
-                        &nbsp;
-                        <div>
-                          <strong>
-                            <Icon
-                              type="desktop"
-                              style={{ color: 'blue' }}
-                              theme="outlined"
-                            />{' '}
-                            ENGLISH TITLE:{' '}
-                          </strong>
-                          {animeByIdData.name}
-                        </div>
-                        <StyledDivider dashed />
-                        <div>
-                          <strong>
-                            <Icon
-                              type="copy"
-                              style={{ color: 'orange' }}
-                              theme="outlined"
-                            />{' '}
-                            JAPANESE TITLE:{' '}
-                          </strong>
-                          {animeByIdData.title_native}
-                        </div>
-                        <StyledDivider dashed />
-                        <div>
-                          <strong>
-                            <Icon
-                              type="tags"
-                              style={{ color: 'red' }}
-                              theme="outlined"
-                            />{' '}
-                            GENRE(S):{' '}
-                          </strong>
-                          {AnimeGenres}
-                        </div>
-                        <StyledDivider dashed />
-                        <div>
-                          <strong>
-                            <Icon
-                              type="info-circle"
-                              style={{ color: 'teal' }}
-                              theme="outlined"
-                            />{' '}
-                            STATUS:{' '}
-                          </strong>
-                          {animeByIdData.status}
-                        </div>
+                          </div>
+                          <StyledDivider dashed />
+                          <div>
+                            <strong>
+                              <Icon
+                                type="copy"
+                                style={{ color: 'orange' }}
+                                theme="outlined"
+                              />{' '}
+                              JAPANESE TITLE:{' '}
+                            </strong>
+                            {animeByIdData.title_native}
+                          </div>
+                          <StyledDivider dashed />
+                          <div>
+                            <strong>
+                              <Icon
+                                type="tags"
+                                style={{ color: 'red' }}
+                                theme="outlined"
+                              />{' '}
+                              GENRE(S):{' '}
+                            </strong>
+                            {AnimeGenres}
+                          </div>
+                          <StyledDivider dashed />
+                          <div>
+                            <strong>
+                              <Icon
+                                type="info-circle"
+                                style={{ color: 'teal' }}
+                                theme="outlined"
+                              />{' '}
+                              STATUS:{' '}
+                            </strong>
+                            {animeByIdData.status}
+                          </div>
+                          <StyledDivider dashed />
+                          <div style={{ whiteSpace: 'pre-line' }}>
+                            <strong>
+                              <Icon
+                                type="read"
+                                style={{ color: 'green' }}
+                                theme="outlined"
+                              />{' '}
+                              PLOT SYNOPSIS:{' '}
+                            </strong>
+                            {this.toText(animeByIdData.info)}
+                          </div>
+                        </Col>
+                      </Row>
+                      <Row>
                         <StyledDivider dashed />
                         <div style={{ whiteSpace: 'pre-line' }}>
                           <strong>
                             <Icon
-                              type="read"
-                              style={{ color: 'green' }}
+                              type="play-circle"
+                              style={{ color: 'maroon' }}
                               theme="outlined"
                             />{' '}
-                            PLOT SYNOPSIS:{' '}
+                            PREVIEW:{' '}
                           </strong>
-                          {this.toText(animeByIdData.info)}
+                          <br />
+                          <br />
+                          <div>
+                            <YouTube
+                              videoId={
+                                this.props.animeByIdData.video_url.split('=')[1]
+                              }
+                            />
+                          </div>
                         </div>
-                      </Col>
-                    </Row>
+                      </Row>
+                    </div>
                   }
                 />
                 &nbsp;

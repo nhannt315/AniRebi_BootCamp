@@ -8,9 +8,11 @@ import {
   Button,
   Input,
   Badge,
-  Modal
+  Modal,
+  Popover,
+  Menu
 } from 'antd';
-import { FacebookShareButton, FacebookIcon } from 'react-share';
+import { FacebookShareButton, TwitterShareButton } from 'react-share';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -448,16 +450,38 @@ class Review extends Component {
                         marginLeft: '20px'
                       }}
                     >
-                      <FacebookShareButton
-                        url={`${window.location.origin}/anime/${
-                          this.props.animeId
-                        }`}
-                        quote={`Check out my review of ${
-                          this.props.animeName
-                        }: ${this.state.reviewTitle}`}
+                      <Popover
+                        title="Share on"
+                        content={
+                          <div>
+                            <FacebookShareButton
+                              url={`${window.location.origin}/anime/${
+                                this.props.animeId
+                              }`}
+                              quote={`Check out my review of ${
+                                this.props.animeName
+                              }: ${this.state.reviewTitle}`}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              <Icon type="facebook" /> Facebook
+                            </FacebookShareButton>
+                            <StyledDivider />
+                            <TwitterShareButton
+                              url={`${window.location.origin}/anime/${
+                                this.props.animeId
+                              }`}
+                              quote={`Check out my review of ${
+                                this.props.animeName
+                              }: ${this.state.reviewTitle}`}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              <Icon type="twitter" /> Twitter
+                            </TwitterShareButton>
+                          </div>
+                        }
                       >
-                        <Button type="primary" shape="circle" icon="facebook" />
-                      </FacebookShareButton>
+                        <Button icon="share-alt" shape="circle" />
+                      </Popover>
                     </div>
                   </span>
                 )}
