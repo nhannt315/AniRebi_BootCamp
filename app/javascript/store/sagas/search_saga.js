@@ -7,7 +7,6 @@ import * as actions from '../actions/index';
 import * as endpoints from '../../constants/endpoint_constants';
 
 export function* searchAnimeSaga({payload}) {
-  console.log(payload.conditions);
   yield put(actions.searchAnimeStart(payload));
   let query = {
     q: payload.q,
@@ -20,11 +19,12 @@ export function* searchAnimeSaga({payload}) {
       arr: payload.conditions.genreList,
       start: payload.conditions.createdDate[0],
       end: payload.conditions.createdDate[1],
-      status: payload.conditions.status
+      status: payload.conditions.status,
+      order: payload.conditions.sort,
+      sort: payload.conditions.order
     };
   }
   const url = `${endpoints.SEARCH_ANIME}?${queryString.stringify(query)}`;
-  console.log(url);
   try {
     const response = yield axios.get(url);
     yield put(actions.searchAnimeSuccess({searchResult: response.data}));

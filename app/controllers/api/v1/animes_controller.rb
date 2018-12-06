@@ -93,7 +93,7 @@ class Api::V1::AnimesController < ApplicationController
   end
 
   def order_param
-    @order = params[:order]
+    @order = params[:order] || "rating"
   end
 
   def anime_params

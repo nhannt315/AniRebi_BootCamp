@@ -87,8 +87,8 @@ class GenreDetailPage extends Component {
               key={anime.id}
               title={anime.name}
               cover={anime.cover_large}
-              ratingNo="10,000"
-              score="5.0"
+              ratingNo={anime.reviews_count}
+              score={anime.rating}
             />
           ))}
       </GridWrapper>

@@ -2,7 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Breadcrumb, Col, Icon, Layout, Row, Spin, Popover } from 'antd';
+import {
+  Breadcrumb,
+  Col,
+  Icon,
+  Layout,
+  Row,
+  Spin,
+  Popover,
+  Button,
+  Select
+} from 'antd';
 import * as actions from '../store/actions';
 import styled from 'styled-components';
 import BGImage from '../assets/images/background_home.png';
@@ -11,115 +21,195 @@ import CustomVerticalList from '../components/CustomVerticalList';
 import CustomCard from '../components/CustomCard/CustomCard';
 import AdvanceSearchBox from '../components/AdvanceSearchBox';
 
-const {Content} = Layout;
+const { Content } = Layout;
+const Option = Select.Option;
 
 class SearchPage extends Component {
-
   state = {
-    advanceVisible: false
+    advanceVisible: false,
+    conditions: {
+      createdDate: [],
+      order: 'rating',
+      sort: 'desc'
+    }
   };
 
   hideAdvanceSearch = () => {
-    this.setState({advanceVisible: false});
+    this.setState({ advanceVisible: false });
   };
 
-  handleVisibileChange = (visible) => {
-    this.setState({advanceVisible: visible});
+  handleVisibileChange = visible => {
+    this.setState({ advanceVisible: visible });
   };
 
   componentWillUnmount() {
     this.props.clearSearchResult();
+    this.props.clearConditions();
   }
+
+  handleOrderSelectChange = value => {
+    const {createdDate, genreList, status, sort} = this.state.conditions;
+    this.searchAdvance(createdDate, genreList, status, value, sort);
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        conditions: {
+          ...prevState.conditions,
+          order: value
+        }
+      };
+    });
+  };
+
+  handleSortSelectChange = value => {
+    const {createdDate, genreList, status, order} = this.state.conditions;
+    this.searchAdvance(createdDate, genreList, status, order, value);
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        conditions: {
+          ...prevState.conditions,
+          sort: value
+        }
+      };
+    });
+  };
 
   handleAdvanceSearch = (createdDate, genreList, status, reset = false) => {
     console.log(createdDate, genreList, status);
-    this.props.setSearchConditions({createdDate, genreList, status});
-    if (!reset) {
+    this.setState(prevState => ({
+      ...prevState,
+      conditions: {
+        ...prevState.conditions,
+        createdDate,
+        genreList,
+        status
+      }
+    }));
+    this.searchAdvance(createdDate, genreList, status, this.state.conditions.order, this.state.conditions.sort, reset);
+  };
+
+  searchAdvance = (createdDate, genreList, status, order, sort, isClear = false) => {
+    this.props.setSearchConditions({createdDate, genreList, status, order, sort});
+    if (!isClear) {
       this.hideAdvanceSearch();
       this.props.searchAnime({
         q: this.props.keyword,
         page: 1,
         itemPerPage: 20,
-        conditions: {createdDate, genreList, status}
+        conditions: { createdDate, genreList, status, order, sort }
       });
     }else{
       this.props.clearConditions();
     }
-  };
+  }
 
   render() {
-    const {topAnimeData, keyword, searchResult, isFetching, genresListData} = this.props;
-    const message = searchResult.length > 0 ? `Search results for keyword : ${keyword}` : 'No anime found!';
+    const {
+      topAnimeData,
+      keyword,
+      searchResult,
+      isFetching,
+      genresListData
+    } = this.props;
     let resultBox = null;
     if (isFetching) {
       resultBox = (
         <div>
-          <Spin/>
+          <Spin />
         </div>
       );
     } else {
       resultBox = (
-        <CardBox
-          title={message}
-          content={
-            <StyledList>
-              {searchResult.length > 0 && searchResult.map(anime =>
-                <CustomCard
-                  style={{margin: '0 4px 5px 4px'}}
-                  id={anime.id}
-                  key={anime.id}
-                  title={anime.name}
-                  cover={anime.cover_large}
-                  ratingNo={5}
-                  score={5}
-                />
-              )}
-            </StyledList>
-          }
-        />
+        <StyledList>
+          {searchResult.length > 0 &&
+            searchResult.map(anime => (
+              <CustomCard
+                style={{ margin: '0 4px 5px 4px' }}
+                id={anime.id}
+                key={anime.id}
+                title={anime.name}
+                cover={anime.cover_large}
+                ratingNo={anime.reviews_count}
+                score={anime.rating}
+              />
+            ))}
+        </StyledList>
       );
     }
     return (
       <StyledContent>
-        <Content style={{padding: '0px 100px 50px'}}>
+        <Content style={{ padding: '0px 100px 50px' }}>
           <Row>
             <Col span={17}>
               <CardBox
                 content={
                   <div>
-                    <Breadcrumb style={{float: 'left'}}>
+                    <Breadcrumb style={{ float: 'left' }}>
                       <StyledBreadcrumbItem href="/">
-                        <Icon type="home"/> Home
+                        <Icon type="home" /> Home
                       </StyledBreadcrumbItem>
                       <StyledBreadcrumbItem href="/anime">
-                        <Icon type="bars"/> Anime
+                        <Icon type="bars" /> Anime
                       </StyledBreadcrumbItem>
                       <StyledBreadcrumbItem href="">
                         Search with keyword : {keyword}
                       </StyledBreadcrumbItem>
                     </Breadcrumb>
                     <Popover
-                      content={<AdvanceSearchBox genreList={genresListData} submit={this.handleAdvanceSearch}/>}
+                      content={
+                        <AdvanceSearchBox
+                          genreList={genresListData}
+                          submit={this.handleAdvanceSearch}
+                        />
+                      }
                       trigger="click"
                       placement="left"
                       visible={this.state.advanceVisible}
                       onVisibleChange={this.handleVisibileChange}
                     >
-                      <Icon type="search" style={{float: 'right', fontSize: '24px'}}/>
+                      <Button style={{ float: 'right' }}>
+                        <Icon type="search" />
+                        <span>Search Advance</span>
+                      </Button>
                     </Popover>
-                    <span style={{clear: 'both', display: 'block'}}/>
+                    <span style={{ clear: 'both', display: 'block' }} />
                   </div>
                 }
               />
               &nbsp;
-              {resultBox}
+              <CardBox
+                content={
+                  <React.Fragment>
+                    <div style={{marginBottom: '10px'}}>
+                      {'Filter : '}
+                      <Select
+                        value={this.state.conditions.order}
+                        onChange={this.handleOrderSelectChange}
+                        style={{ width: 100 }}
+                      >
+                        <Option value="rating">Rate</Option>
+                        <Option value="time">Created date</Option>
+                      </Select>
+                      &nbsp;
+                      <Select
+                        value={this.state.conditions.sort}
+                        onChange={this.handleSortSelectChange}
+                        style={{ width: 100 }}
+                      >
+                        <Option value="desc">Desc</Option>
+                        <Option value="asc">Asc</Option>
+                      </Select>
+                    </div>
+                    {resultBox}
+                  </React.Fragment>
+                }
+              />
             </Col>
             <Col span={6} offset={1}>
               <CardBox
                 title="Ranking"
-                content={
-                  <CustomVerticalList dataSource={topAnimeData}/>
-                }
+                content={<CustomVerticalList dataSource={topAnimeData} />}
               />
             </Col>
           </Row>
@@ -153,9 +243,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    searchAnime: (payload) => dispatch(actions.searchAnime(payload)),
+    searchAnime: payload => dispatch(actions.searchAnime(payload)),
     clearSearchResult: () => dispatch(actions.clearSearchResult()),
-    setSearchConditions: (conditions) => dispatch(actions.setSearchAdvanceConditions({conditions})),
+    setSearchConditions: conditions =>
+      dispatch(actions.setSearchAdvanceConditions({ conditions })),
     clearConditions: () => dispatch(actions.clearSearchConditions())
   };
 };
@@ -182,5 +273,8 @@ const StyledBreadcrumbItem = styled(Breadcrumb.Item)`
 `;
 
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(SearchPage)
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(SearchPage)
 );
