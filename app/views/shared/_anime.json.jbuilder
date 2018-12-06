@@ -2,6 +2,7 @@ json.id anime.id
 json.name anime.name
 json.info anime.info
 json.status anime.status
+json.video_url anime.video_url
 json.rating anime.rating
 json.title_english anime.title_english
 json.title_native anime.title_native
