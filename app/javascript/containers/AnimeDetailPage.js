@@ -300,9 +300,6 @@ class AnimeDetailPage extends Component {
                       <StyledBreadcrumbItem href="/">
                         <Icon type="home" /> Home
                       </StyledBreadcrumbItem>
-                      <StyledBreadcrumbItem href="/anime">
-                        <Icon type="bars" /> Anime
-                      </StyledBreadcrumbItem>
                       <StyledBreadcrumbItem href="">
                         {animeByIdData.name}
                       </StyledBreadcrumbItem>
@@ -445,7 +442,7 @@ class AnimeDetailPage extends Component {
                           </strong>
                           <br />
                           <br />
-                          <div>
+                          <div style={{textAlign: 'center'}}>
                             <YouTube
                               videoId={
                                 this.props.animeByIdData.video_url.split('=')[1]

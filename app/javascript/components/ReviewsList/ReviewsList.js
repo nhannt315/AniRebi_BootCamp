@@ -12,7 +12,7 @@ class ReviewsList extends Component {
     handleEditReview: PropTypes.func.isRequired,
     handleDeleteReview: PropTypes.func.isRequired,
     handleReviewsOrderChange: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object
   };
 
   constructor(props) {

@@ -62,8 +62,9 @@ end
 animes = Anime.all
 default = "https://www.youtube.com/watch?v=4m3h7BvXo54"
 animes.each_with_index do |anime, index|
-  url = URI.parse("https://www.googleapis.com/youtube/v3/search?part=id&q=#{URI.encode(anime.name.gsub(' ','+'))}&type=video&maxResults=1&key=AIzaSyBakDUD7ArGiGyLpoVf09dzaMPmH7Kfe90")
-  puts "Fetch video for anime[#{index}]"
+  # url = URI.parse("https://www.googleapis.com/youtube/v3/search?part=id&q=#{URI.encode(anime.name.gsub(' ','+'))}&type=video&maxResults=1&key=AIzaSyBakDUD7ArGiGyLpoVf09dzaMPmH7Kfe90")
+  url = URI.parse("https://www.googleapis.com/youtube/v3/search?part=id&q=#{URI.encode("#{anime.name} trailer".gsub(' ','+'))}&type=video&maxResults=1&key=AIzaSyBakDUD7ArGiGyLpoVf09dzaMPmH7Kfe90")
+  puts "Fetch video for anime[#{index} : #{anime.name}]"
   req = Net::HTTP::Get.new(url.to_s)
   res = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme == 'https') {|http|
     http.request(req)

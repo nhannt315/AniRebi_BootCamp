@@ -149,9 +149,6 @@ class SearchPage extends Component {
                       <StyledBreadcrumbItem href="/">
                         <Icon type="home" /> Home
                       </StyledBreadcrumbItem>
-                      <StyledBreadcrumbItem href="/anime">
-                        <Icon type="bars" /> Anime
-                      </StyledBreadcrumbItem>
                       <StyledBreadcrumbItem href="">
                         Search with keyword : {keyword}
                       </StyledBreadcrumbItem>
@@ -189,7 +186,7 @@ class SearchPage extends Component {
                         style={{ width: 100 }}
                       >
                         <Option value="rating">Rate</Option>
-                        <Option value="time">Created date</Option>
+                        <Option value="time">Date</Option>
                       </Select>
                       &nbsp;
                       <Select
