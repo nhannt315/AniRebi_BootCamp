@@ -41,6 +41,7 @@
     "react-share": "^2.4.0",
     "react-tooltip": "^3.9.0",
     "react-transition-group": "^2.5.0",
+    "react-youtube": "^7.8.0",
     "redux": "^4.0.0",
     "redux-devtools-extension": "^2.13.7",
     "redux-saga": "^0.16.0",
