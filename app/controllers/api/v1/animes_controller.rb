@@ -109,7 +109,7 @@ class Api::V1::AnimesController < ApplicationController
           animes.merge f.animes.order(rating: :desc).limit(5)
         end
       end
-      @suggest_animes = animes.order(rating: :desc).limit(5)
+      @suggest_animes = animes.where.not(id: @anime.id).order(rating: :desc).limit(5)
     end
   end
 end
